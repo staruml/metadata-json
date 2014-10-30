@@ -22,13 +22,31 @@ define(function (require, exports, module) {
 
     var rules = [
         {
-            id: "UML003",
-            message: "Duplicated names in attributes.",
-            appliesTo: [ "UMLClassifier" ],
+            id: "UML001",
+            message: "Name expected.",
+            appliesTo: [ "UMLModelElement" ],
+            exceptions: [ "UMLParameter", "UMLDirectedRelationship", "UMLRelationshipEnd", "UMLUndirectedRelationship", "UMLAssociationClassLink", "UMLRegion", "UMLPseudostate", "UMLFinalState", "UMLControlNode", "UMLEndpoint", "UMLGate", "UMLImage" ],
             constraint: function (elem) {
-                var attributeNames = _.map(elem.attributes, function (attr) { return attr.name; });
-                var uniq = _.uniq(attributeNames);
-                return (attributeNames.length === uniq.length);
+                return (elem.name && elem.name.length > 0);
+            }
+        },
+        {
+            id: "UML002",
+            message: "Name is already defined.",
+            appliesTo: [ "UMLModelElement" ],
+            exceptions: [ "UMLOperation" ],
+            constraint: function (elem) {
+                var parent   = elem._parent,
+                    field    = elem.getParentField(),
+                    siblings = parent[field],
+                    i, len;
+                for (i = 0, len = siblings.length; i < len; i++) {
+                    var sibling = siblings[i];
+                    if (elem !== sibling && elem.name.length > 0 && elem.name === sibling.name) {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
     ];

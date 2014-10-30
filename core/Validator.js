@@ -42,12 +42,26 @@ define(function (require, exports, module) {
 
     /**
      * Validate
+     * @return {Array.<Object>}
      */
     function validate() {
         var failed = [];
 
         _.each(_global.rules, function (rule) {
+
+            // Get instances of types in rule.appliesTo
             var targets = Repository.getInstancesOf(rule.appliesTo);
+
+            // Rejects instances of types in rule.exceptions
+            if (rule.exceptions && rule.exceptions.length > 0) {
+                targets = _.reject(targets, function (target) {
+                    return _.some(rule.exceptions, function (exception) {
+                        return target instanceof _global.type[exception];
+                    });
+                });
+            }
+
+            // Check constraints
             _.each(targets, function (target) {
                 if (!rule.constraint(target)) {
                     var item = {

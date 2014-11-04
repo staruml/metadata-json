@@ -76,10 +76,10 @@ define(function (require, exports, module) {
     }
 
     function drawRange(canvas, x1, y1, x2, y2, kind, showEnds) {
-        if (kind == null) {
+        if (!kind) {
             kind = "rect";
         }
-        if (showEnds == null) {
+        if (!showEnds) {
             showEnds = false;
         }
 

@@ -838,6 +838,15 @@ define(function (require, exports, module) {
     }
 
     /**
+     * Return true if the given parameter is an element in this Repository.
+     * @param {Element} elem
+     * @return {boolean}
+     */
+    function isElement(elem) {
+        return (elem && elem._id && get(elem._id));
+    }
+
+    /**
      * Return element by id.
      * @param {string} id Identifier of element.
      * @return {Element} Element of id.
@@ -1070,6 +1079,7 @@ define(function (require, exports, module) {
     exports.clear               = clear;
     exports.isModified          = isModified;
     exports.setModified         = setModified;
+    exports.isElement           = isElement;
     exports.get                 = get;
     exports.getInstancesOf      = getInstancesOf;
     exports.find                = find;

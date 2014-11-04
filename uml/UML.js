@@ -12,14 +12,15 @@
  *
  */
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
+/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true, loopfunc: true */
 /*global define, $, _, window, appshell, meta, type */
 
 define(function (require, exports, module) {
     "use strict";
 
     var Core             = require("core/Core"),
-        MetaModelManager = require("core/MetaModelManager");
+        MetaModelManager = require("core/MetaModelManager"),
+        Repository       = require("core/Repository");
 
     /**************************************************************************
      *                                                                        *
@@ -631,6 +632,104 @@ define(function (require, exports, module) {
         return "";
     };
 
+    UMLClassifier.prototype.getGeneralElements = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLGeneralization) && (r.source === self);
+            });
+        return _.map(rels, function (g) { return g.target; });
+    };
+
+    UMLClassifier.prototype.getSpecialElements = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLGeneralization) && (r.target === self);
+            });
+        return _.map(rels, function (g) { return g.source; });
+    };
+
+    UMLClassifier.prototype.getAncestors = function (elem) {
+        var ancestors = this.getGeneralElements(),
+            size = 0;
+        do {
+            size = ancestors.length;
+            _.each(ancestors, function (e) {
+                ancestors = _.union(ancestors, e.getGeneralElements());
+            });
+        } while (size < ancestors.length);
+        return ancestors;
+    };
+
+    UMLClassifier.prototype.getDescendants = function (elem) {
+        var descendants = this.getSpecialElements(),
+            size = 0;
+        do {
+            size = descendants.length;
+            _.each(descendants, function (e) {
+                descendants = _.union(descendants, e.getSpecialElements());
+            });
+        } while (size < descendants.length);
+        return descendants;
+    };
+
+    UMLClassifier.prototype.isGeneralElement = function (elem) {
+        return _.contains(this.getGeneralElements(), elem);
+    };
+
+    UMLClassifier.prototype.isSpecialElement = function (elem) {
+        return _.contains(this.getSpecialElements(), elem);
+    };
+
+    UMLClassifier.prototype.isAncestor = function (elem) {
+        return _.contains(this.getAncestors(), elem);
+    };
+
+    UMLClassifier.prototype.isDescendant = function (elem) {
+        return _.contains(this.getDescendants(), elem);
+    };
+
+    UMLClassifier.prototype.getInheritedAttributes = function (elem) {
+        var ancestors = this.getAncestors(),
+            inherited = [];
+        _.each(ancestors, function (e) {
+            if (Array.isArray(e.attributes)) {
+                Array.prototype.push.apply(inherited, e.attributes);
+            }
+        });
+        return inherited;
+    };
+
+    UMLClassifier.prototype.getInheritedOperations = function (elem) {
+        var ancestors = this.getAncestors(),
+            inherited = [];
+        _.each(ancestors, function (e) {
+            if (Array.isArray(e.operations)) {
+                Array.prototype.push.apply(inherited, e.operations);
+            }
+        });
+        return inherited;
+    };
+
+    UMLClassifier.prototype.getRealizingInterfaces = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLInterfaceRealization) && (r.source === self);
+            });
+        return _.map(rels, function (g) { return g.target; });
+    };
+
+    UMLClassifier.prototype.getAssociationEnds = function (counterpart) {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) { return (r instanceof type.UMLAssociation); }),
+            ends = _.map(rels, function (r) {
+                if (counterpart === true) {
+                    return (r.end1.reference === self ? r.end2 : r.end1);
+                } else {
+                    return (r.end1.reference === self ? r.end1 : r.end2);
+                }
+            });
+        return ends;
+    };
 
     /**
      * UMLDirectedRelationship
@@ -1364,6 +1463,33 @@ define(function (require, exports, module) {
     UMLUseCase.prototype = Object.create(UMLClassifier.prototype);
     UMLUseCase.prototype.constructor = UMLUseCase;
 
+    UMLUseCase.prototype.getIncludingUseCases = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLInclude) && (r.source === self);
+            });
+        return _.map(rels, function (g) { return g.target; });
+    };
+
+    UMLUseCase.prototype.getExtendingUseCases = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLExtend) && (r.target === self);
+            });
+        return _.map(rels, function (g) { return g.source; });
+    };
+
+    UMLUseCase.prototype.getAllIncludingUseCases = function () {
+        var includings = this.getIncludingUseCases(),
+            size = 0;
+        do {
+            size = includings.length;
+            _.each(includings, function (e) {
+                includings = _.union(includings, e.getIncludingUseCases());
+            });
+        } while (size < includings.length);
+        return includings;
+    };
 
     /**
      * UMLActor
@@ -1464,6 +1590,21 @@ define(function (require, exports, module) {
     UMLVertex.prototype = Object.create(UMLModelElement.prototype);
     UMLVertex.prototype.constructor = UMLVertex;
 
+    UMLVertex.prototype.getIncomingTransitions = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLTransition) && (r.target === self);
+            });
+        return rels;
+    };
+
+    UMLVertex.prototype.getOutgoingTransitions = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLTransition) && (r.source === self);
+            });
+        return rels;
+    };
 
     /**
      * UMLPseudostate
@@ -1661,6 +1802,22 @@ define(function (require, exports, module) {
     // inherits from UMLModelElement
     UMLActivityNode.prototype = Object.create(UMLModelElement.prototype);
     UMLActivityNode.prototype.constructor = UMLActivityNode;
+
+    UMLActivityNode.prototype.getIncomingEdges = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLActivityEdge) && (r.target === self);
+            });
+        return rels;
+    };
+
+    UMLActivityNode.prototype.getOutgoingEdges = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLActivityEdge) && (r.source === self);
+            });
+        return rels;
+    };
 
 
     /**
@@ -2210,6 +2367,7 @@ define(function (require, exports, module) {
     function UMLStereotype() {
         UMLClass.apply(this, arguments);
         this.icon = new UMLImage();
+        this.icon._parent = this;
     }
     // inherits from UMLClass
     UMLStereotype.prototype = Object.create(UMLClass.prototype);

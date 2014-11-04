@@ -63,13 +63,18 @@ define(function (require, exports, module) {
 
             // Check constraints
             _.each(targets, function (target) {
-                if (!rule.constraint(target)) {
-                    var item = {
-                        id: target._id,
-                        ruleId: rule.id,
-                        message: rule.message
-                    };
-                    failed.push(item);
+                try {
+                    if (!rule.constraint(target)) {
+                        var item = {
+                            id: target._id,
+                            ruleId: rule.id,
+                            message: rule.message
+                        };
+                        failed.push(item);
+                    }
+                } catch (err) {
+                    console.log("[Validator] Failed to apply the rule (" + rule.id + ") on ", target);
+                    console.error(err);
                 }
             });
         });

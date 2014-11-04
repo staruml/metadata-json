@@ -470,6 +470,17 @@ define(function (require, exports, module) {
     };
 
     /**
+     * Traverse up along with the _parent chain.
+     * @param {function} fun
+     */
+    Element.prototype.traverseUp = function (fun) {
+        fun(this);
+        if (this._parent) {
+            this._parent.traverseUp(fun);
+        };
+    };
+
+    /**
      * 요소 데이터를 Reader로부터 읽어들임.
      *
      * @param {Reader} reader

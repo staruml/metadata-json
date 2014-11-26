@@ -477,7 +477,7 @@ define(function (require, exports, module) {
         fun(this);
         if (this._parent) {
             this._parent.traverseUp(fun);
-        };
+        }
     };
 
     /**
@@ -1194,6 +1194,9 @@ define(function (require, exports, module) {
         this.parentStyle = false;
 
         /** @member {boolean} */
+        this.showShadow = true;
+                
+        /** @member {boolean} */
         this.containerChangeable = false;
 
         /** @member {boolean} */
@@ -1201,7 +1204,6 @@ define(function (require, exports, module) {
 
         /** @member {number} */
         this.zIndex = 0;
-
     }
     // View inherits Element
     View.prototype = Object.create(Element.prototype);
@@ -2511,6 +2513,10 @@ define(function (require, exports, module) {
      */
     function NodeLabelView() {
         NodeParasiticView.apply(this, arguments);
+
+        /** @member {string} */
+        this.underline = false;
+        
         this.enabled = true;
         this.movable = MM_FREE;
         this.sizable = SZ_NONE;
@@ -2548,7 +2554,7 @@ define(function (require, exports, module) {
      */
     NodeLabelView.prototype.draw = function (canvas) {
         this.assignStyleToCanvas(canvas);
-        canvas.textOut(this.left, this.top, this.text);
+        canvas.textOut(this.left, this.top, this.text, 0, false, this.underline);
     };
 
 
@@ -2559,6 +2565,10 @@ define(function (require, exports, module) {
      */
     function EdgeLabelView() {
         EdgeParasiticView.apply(this, arguments);
+
+        /** @member {string} */
+        this.underline = false;
+        
         this.enabled = true;
         this.movable = MM_FREE;
         this.sizable = SZ_NONE;
@@ -2595,7 +2605,7 @@ define(function (require, exports, module) {
      */
     EdgeLabelView.prototype.draw = function (canvas) {
         this.assignStyleToCanvas(canvas);
-        canvas.textOut(this.left, this.top, this.text);
+        canvas.textOut(this.left, this.top, this.text, 0, false, this.underline);
         // EdgeParasiticView.prototype.draw.call(this, canvas);
     };
 
@@ -2756,9 +2766,12 @@ define(function (require, exports, module) {
                 view.update(canvas);
                 view.size(canvas);
                 view.arrange(canvas);
-                view.drawShadow(canvas);
-                view.draw(canvas);
+                if (view.showShadow) {
+                    view.drawShadow(canvas);
+                }
+                view.draw(canvas);            
             } catch (err) {
+                // console.log(view);
                 console.error(err);
             }
         }
@@ -3083,7 +3096,7 @@ define(function (require, exports, module) {
             return;
         }
         if (!_.isString(value) && !_.isNumber(value) && !_.isBoolean(value) && value !== null) {
-            console.error("Writer.write(): type of 'value' parameter should be one of string, number or boolean");
+            console.error("Writer.write(): type of 'value' parameter should be one of string, number or boolean.", name + " = ", value);
             return;
         }
         this.current[name] = value;
@@ -3123,7 +3136,7 @@ define(function (require, exports, module) {
             return;
         }
         if (!_.isArray(value)) {
-            console.error("Writer.writeObjArray(): type of 'value' parameter should be an array");
+            console.error("Writer.writeObjArray(): type of 'value' parameter should be an array.", name + " = ", value);
             return;
         }
         var temp = this.current;
@@ -3137,7 +3150,7 @@ define(function (require, exports, module) {
                 o.save(this);
                 array.push(this.current);
             } else {
-                console.error("Writer.writeObjArray(): one of 'value' array is not instanceof Core.Element");
+                console.error("Writer.writeObjArray(): one of 'value' array is not instanceof Core.Element.", o);
                 return;
             }
         }
@@ -3159,7 +3172,7 @@ define(function (require, exports, module) {
             if (value instanceof Element) {
                 this.current[name] = { $ref: value._id };
             } else {
-                console.error("Writer.writeRef(): 'value' parameter is not instanceof Core.Element");
+                console.error("Writer.writeRef(): 'value' parameter is not instanceof Core.Element.", name + " = ", value);
                 return;
             }
         } else {
@@ -3179,7 +3192,7 @@ define(function (require, exports, module) {
             return;
         }
         if (!_.isArray(value)) {
-            console.error("Writer.writeRefArray(): type of 'value' parameter should be an array");
+            console.error("Writer.writeRefArray(): type of 'value' parameter should be an array.", name + " = ", value);
             return;
         }
         var temp = this.current;
@@ -3192,7 +3205,7 @@ define(function (require, exports, module) {
                 var ref = { $ref: o._id };
                 array.push(ref);
             } else {
-                console.error("Writer.writeRefArray(): one of 'value' array is not instanceof Core.Element");
+                console.error("Writer.writeRefArray(): one of 'value' array is not instanceof Core.Element.", o);
                 return;
             }
         }
@@ -3217,7 +3230,7 @@ define(function (require, exports, module) {
         } else if (_.isString(value) || _.isNumber(value) || _.isBoolean(value)) {
             this.current[name] = value;
         } else {
-            console.error("Writer.writeVariant(): invalid type of parameter: value");
+            console.error("Writer.writeVariant(): invalid type of parameter: value.", name + " = ", value);
         }
     };
 
@@ -3236,7 +3249,7 @@ define(function (require, exports, module) {
             if (_.isFunction(value.__write)) {
                 this.current[name] = value.__write();
             } else {
-                console.error("Writer.writeCustom(): the 'value' parameter should have '__write' function");
+                console.error("Writer.writeCustom(): the 'value' parameter should have '__write' function", name + " = ", value);
                 return;
             }
         } else {
@@ -3278,7 +3291,7 @@ define(function (require, exports, module) {
         if (typeof value !== "undefined") {
             // Check type of data to be read
             if (!_.isString(value) && !_.isNumber(value) && !_.isBoolean(value) && value !== null) {
-                console.error("Reader.read(): type of data to be read should be one of number, string, boolean, or null");
+                console.error("Reader.read(): type of data to be read should be one of number, string, boolean, or null.", name + " = ", value);
                 return;
             }
             return this.current[name];
@@ -3302,11 +3315,11 @@ define(function (require, exports, module) {
         if (typeof value !== "undefined") {
             // Check type of data to be read
             if (!_.isObject(value)) {
-                console.error("Reader.readObj(): type of data to be read should be an Object");
+                console.error("Reader.readObj(): type of data to be read should be an Object.", name + " = ", value);
                 return;
             }
             if (!value._type) {
-                console.error("Reader.readObj(): '_type' field is not found to instantiate an Object");
+                console.error("Reader.readObj(): '_type' field is not found to instantiate an Object.", name + " = ", value);
                 return;
             }
             if (!_.isFunction(this.ctors[value._type])) {
@@ -3344,7 +3357,7 @@ define(function (require, exports, module) {
         if (typeof value !== "undefined") {
             // Check type of data to be read
             if (!_.isArray(value)) {
-                console.error("Reader.readObjArray(): type of data to be read should be an array");
+                console.error("Reader.readObjArray(): type of data to be read should be an array.", name + " = ", value);
                 return;
             }
 
@@ -3355,11 +3368,11 @@ define(function (require, exports, module) {
 
                 // Check type of an element of array
                 if (!_.isObject(o)) {
-                    console.error("Reader.readObjArray(): one of array elements is not Object");
+                    console.error("Reader.readObjArray(): one of array elements is not Object.", o);
                     continue;
                 }
                 if (!o._type) {
-                    console.error("Reader.readObjArray(): '_type' field is not found to instantiate an Object");
+                    console.error("Reader.readObjArray(): '_type' field is not found to instantiate an Object.", o);
                     continue;
                 }
                 if (!_.isFunction(this.ctors[o._type])) {
@@ -3398,7 +3411,7 @@ define(function (require, exports, module) {
         if (typeof value !== "undefined") {
             // Check type of data to be read
             if (value && !_.isString(value.$ref)) {
-                console.error("Reader.readRef(): data is not a reference ('$ref' not found)");
+                console.error("Reader.readRef(): data is not a reference ('$ref' not found).", name + " = ", value);
                 return;
             }
 
@@ -3423,7 +3436,7 @@ define(function (require, exports, module) {
         if (typeof value !== "undefined") {
             // Check type of data to be read
             if (!_.isArray(value)) {
-                console.error("Reader.readRefArray(): type of data to be read should be an array");
+                console.error("Reader.readRefArray(): type of data to be read should be an array.", name + " = ", value);
                 return;
             }
 
@@ -3434,11 +3447,11 @@ define(function (require, exports, module) {
 
                 // Check type of an element of array
                 if (!_.isObject(_refObj)) {
-                    console.error("Reader.readRefArray(): one of array elements is not Object");
+                    console.error("Reader.readRefArray(): one of array elements is not Object.", _refObj);
                     return;
                 }
                 if (!_.isString(_refObj.$ref)) {
-                    console.error("Reader.readRefArray(): data is not a reference ('$ref' not found)");
+                    console.error("Reader.readRefArray(): data is not a reference ('$ref' not found).", _refObj);
                     return;
                 }
 
@@ -3465,7 +3478,7 @@ define(function (require, exports, module) {
         if (typeof value !== "undefined") {
             // Check type of data to be read
             if (!_.isString(value) && !_.isNumber(value) && !_.isBoolean(value) && value !== null && !_.isString(value.$ref)) {
-                console.error("Reader.readVariant(): type of data to be read should be one of number, string, boolean, null, or reference");
+                console.error("Reader.readVariant(): type of data to be read should be one of number, string, boolean, null, or reference.", name + " = ", value);
                 return;
             }
 
@@ -3497,7 +3510,7 @@ define(function (require, exports, module) {
             var custom = new this.ctors[typeName]();
 
             if (!_.isFunction(custom.__read)) {
-                console.error("Reader.readCustom(): Object of type." + typeName + " should have '__read' function");
+                console.error("Reader.readCustom(): Object of type." + typeName + " should have '__read' function.", custom);
                 return;
             }
 

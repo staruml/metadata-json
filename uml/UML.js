@@ -376,10 +376,12 @@ define(function (require, exports, module) {
     UMLStructuralFeature.prototype.constructor = UMLStructuralFeature;
 
     UMLStructuralFeature.prototype.getTypeString = function () {
-        if (_.isString(this.type) && (this.type.length > 0)) {
-            return this.type;
-        } else if ((this.type !== null) && (this.type.name)) {
-            return this.type.name;
+        if (this.type) {
+            if (_.isString(this.type) && (this.type.length > 0)) {
+                return this.type;
+            } else if ((this.type !== null) && (this.type.name)) {
+                return this.type.name;
+            }
         }
         return null;
     };
@@ -396,6 +398,22 @@ define(function (require, exports, module) {
         return "";
     };
 
+    UMLStructuralFeature.prototype.getString = function (options) {
+        var text = "";
+        text += this.name;
+        if (options && options.showType) {
+            text += (this.getTypeString() !== null ? ": " + this.getTypeString() : "");
+        }
+        if (options && options.showMultiplicity) {
+            text += (this.multiplicity.length > 0 ? "[" + this.multiplicity + "]" : "");
+        }
+        text += (this.defaultValue.length > 0 ? " = " + this.defaultValue : "");
+        if (options && options.showProperty) {
+            var prop = this.getPropertyString();
+            text += (prop.length > 0 ? " " + prop : "");
+        }
+        return text;
+    };
 
     /**
      * UMLParameter
@@ -648,7 +666,7 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.source; });
     };
 
-    UMLClassifier.prototype.getAncestors = function (elem) {
+    UMLClassifier.prototype.getAncestors = function () {
         var ancestors = this.getGeneralElements(),
             size = 0;
         do {
@@ -660,7 +678,7 @@ define(function (require, exports, module) {
         return ancestors;
     };
 
-    UMLClassifier.prototype.getDescendants = function (elem) {
+    UMLClassifier.prototype.getDescendants = function () {
         var descendants = this.getSpecialElements(),
             size = 0;
         do {
@@ -688,7 +706,7 @@ define(function (require, exports, module) {
         return _.contains(this.getDescendants(), elem);
     };
 
-    UMLClassifier.prototype.getInheritedAttributes = function (elem) {
+    UMLClassifier.prototype.getInheritedAttributes = function () {
         var ancestors = this.getAncestors(),
             inherited = [];
         _.each(ancestors, function (e) {
@@ -699,7 +717,7 @@ define(function (require, exports, module) {
         return inherited;
     };
 
-    UMLClassifier.prototype.getInheritedOperations = function (elem) {
+    UMLClassifier.prototype.getInheritedOperations = function () {
         var ancestors = this.getAncestors(),
             inherited = [];
         _.each(ancestors, function (e) {

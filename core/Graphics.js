@@ -1441,11 +1441,16 @@ define(function (require, exports, module) {
      * @param {number} x
      * @param {number} y
      * @param {text} text
-     * @param {number} rotation - rotation angle (degree)
+     * @param {boolean} rotate
+     * @param {boolean} wordWrap
+     * @param {boolean} underline
      */
-    Canvas.prototype.textOut = function (x, y, text, rotation) {
+    Canvas.prototype.textOut = function (x, y, text, rotation, wordWrap, underline) {
         var r = new Rect(x, y, x, y);
-        this.textOut2(r, text, AL_LEFT, AL_TOP);
+        rotation  = rotation ? rotation : 0;
+        wordWrap  = wordWrap ? wordWrap : false;
+        underline = underline ? underline : false;
+        this.textOut2(r, text, AL_LEFT, AL_TOP, rotation, wordWrap, underline);
     };
 
     /**

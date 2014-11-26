@@ -19,7 +19,8 @@ define(function (require, exports, module) {
     "use strict";
 
     var MetaModelManager  = require("core/MetaModelManager");
-
+    require("core/Core-meta");
+    
     var metaModel = {
         "UMLVisibilityKind": {
             "kind": "enum",

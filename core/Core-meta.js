@@ -102,6 +102,7 @@ define(function (require, exports, module) {
                 { "name": "fontColor",           "kind": "prim",   "type": "String" },
                 { "name": "font",                "kind": "custom", "type": "Font" },
                 { "name": "parentStyle",         "kind": "prim",   "type": "Boolean", "default": false },
+                { "name": "showShadow",          "kind": "prim",   "type": "Boolean", "default": true },
                 { "name": "containerChangeable", "kind": "prim",   "type": "Boolean", "default": false },
                 { "name": "containerExtending",  "kind": "prim",   "type": "Boolean", "default": true }
             ]
@@ -166,6 +167,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeParasiticView",
             "attributes": [
+                { "name": "underline",           "kind": "prim", "type": "Boolean", "default": false },
                 { "name": "text",                "kind": "prim", "type": "String" },
                 { "name": "horizontalAlignment", "kind": "prim", "type": "Integer", "default": 2 },
                 { "name": "verticalAlignment",   "kind": "prim", "type": "Integer", "default": 5 }
@@ -175,6 +177,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "EdgeParasiticView",
             "attributes": [
+                { "name": "underline",           "kind": "prim", "type": "Boolean", "default": false },
                 { "name": "text",                "kind": "prim", "type": "String" },
                 { "name": "horizontalAlignment", "kind": "prim", "type": "Integer", "default": 2 },
                 { "name": "verticalAlignment",   "kind": "prim", "type": "Integer", "default": 5 }

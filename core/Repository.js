@@ -741,6 +741,20 @@ define(function (require, exports, module) {
                     _addRefsOf(obj);
                 }
             }
+            
+            // Fix problems in the file
+            // TODO: Remove this enough time after 
+            for (id in reader.idMap) {
+                if (reader.idMap.hasOwnProperty(id)) {
+                    obj = _idMap[id];
+                    
+                    // Fix _parent of Image owned by Stereotype
+                    if (obj instanceof type.UMLStereotype && obj.icon instanceof type.UMLImage) {
+                        obj.icon._parent = obj;
+                    }
+                    
+                }
+            }
         }
         return element;
     }

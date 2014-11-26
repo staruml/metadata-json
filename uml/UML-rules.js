@@ -157,7 +157,13 @@ define(function (require, exports, module) {
             appliesTo: [ "UMLClassifier" ],
             constraint: function (elem) {
                 var ends  = elem.getAssociationEnds(true), // get counterpart ends.
-                    names = _.map(ends, function (e) { return e.name; });
+                    names = [];
+                _.each(ends, function (e) {
+                    if (e.navigable && e.name) {
+                        names.push(e.name);
+                    }
+                });
+                _.map(ends, function (e) { return e.name; });
                 return (names.length === _.uniq(names).length);
             }
         },

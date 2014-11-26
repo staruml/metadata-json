@@ -1187,13 +1187,13 @@ define(function (require, exports, module) {
                 return cp[i];
             }
         }
-    }
+    };
 
     UMLFloatingNodeView.prototype.arrange = function (canvas) {
         this.nameLabel.visible = (this.nameLabel.text.length > 0);
         this.stereotypeLabel.visible = (this.stereotypeLabel.text.length > 0);
         NodeView.prototype.arrange.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -4444,10 +4444,23 @@ define(function (require, exports, module) {
         UMLFloatingNodeView.apply(this, arguments);
         this.sizable = Core.SZ_NONE;
     }
-    // inherits from LabelView
+    // inherits from UMLFloatingNodeView
     UMLPinView.prototype = Object.create(UMLFloatingNodeView.prototype);
     UMLPinView.prototype.constructor = UMLPinView;
 
+    UMLPinView.prototype.update = function (canvas) {
+        UMLFloatingNodeView.prototype.update.call(this, canvas);
+        var options = {
+            showProperty      : true,
+            showType          : true,
+            showMultiplicity  : true
+        };
+        if (this.model) {
+            this.nameLabel.text = this.model.getString(options);
+            this.nameLabel.underline = (this.model.isStatic === true);
+        }
+    };
+    
     UMLPinView.prototype.sizeObject = function (canvas) {
         UMLFloatingNodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = PIN_MINWIDTH;
@@ -5910,7 +5923,7 @@ define(function (require, exports, module) {
         this.frameTypeLabel.top = this.top + COMPARTMENT_TOP_PADDING;
         this.frameTypeLabel.setRight(this.frameTypeLabel.left + this.frameTypeLabel.minWidth);
         if (this.frameTypeLabel.visible) {
-            this.nameLabel.left = this.frameTypeLabel.getRight() + LABEL_INTERVAL;
+            this.nameLabel.left = this.frameTypeLabel.getRight() + LABEL_INTERVAL * 2;
         } else {
             this.nameLabel.left = this.left + COMPARTMENT_LEFT_PADDING;
         }
@@ -5944,21 +5957,21 @@ define(function (require, exports, module) {
         UMLCustomFrameView.prototype.update.call(this, canvas);
         if (this.model) {
             // frame kind
-            if (this.model instanceof type.UMLClassDiagram) {
+            if (this.model instanceof type.UMLClass || this.model instanceof type.UMLClassDiagram) {
                 this.frameTypeLabel.text = "class";
-            } else if (this.model instanceof type.UMLComponentDiagram) {
+            } else if (this.model instanceof type.UMLComponent || this.model instanceof type.UMLComponentDiagram) {
                 this.frameTypeLabel.text = "component";
             } else if (this.model instanceof type.UMLDeploymentDiagram) {
                 this.frameTypeLabel.text = "deployment";
-            } else if ((this.model instanceof type.UMLSequenceDiagram) || (this.model instanceof type.UMLCommunicationDiagram)) {
+            } else if (this.model instanceof type.UMLInteraction || this.model instanceof type.UMLSequenceDiagram || this.model instanceof type.UMLCommunicationDiagram) {
                 this.frameTypeLabel.text = "interaction";
-            } else if (this.model instanceof type.UMLStatechartDiagram) {
+            } else if (this.model instanceof type.UMLStateMachine || this.model instanceof type.UMLStatechartDiagram) {
                 this.frameTypeLabel.text = "state machine";
-            } else if (this.model instanceof type.UMLActivityDiagram) {
+            } else if (this.model instanceof type.UMLActivity || this.model instanceof type.UMLActivityDiagram) {
                 this.frameTypeLabel.text = "activity";
-            } else if (this.model instanceof type.UMLUseCaseDiagram) {
+            } else if (this.model instanceof type.UMLUseCase || this.model instanceof type.UMLUseCaseDiagram) {
                 this.frameTypeLabel.text = "use case";
-            } else if (this.model instanceof type.UMLPackageDiagram) {
+            } else if (this.model instanceof type.UMLPackage || this.model instanceof type.UMLPackageDiagram) {
                 this.frameTypeLabel.text = "package";
             }
             // name

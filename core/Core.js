@@ -2047,28 +2047,12 @@ define(function (require, exports, module) {
                 canvas.line(p9.x, p9.y, p10.x, p10.y);
                 break;
             case ES_CIRCLE:
-                /*
-                canvas.fillColor = "#FF0000";
-                canvas.fillRect(p0.x-2, p0.y-2, p0.x+2, p0.y+2);
-                canvas.fillRect(p1.x-2, p1.y-2, p1.x+2, p1.y+2);
-                canvas.fillRect(p2.x-2, p2.y-2, p2.x+2, p2.y+2);
-                canvas.fillRect(p3.x-2, p3.y-2, p3.x+2, p3.y+2);
-                canvas.fillRect(p4.x-2, p4.y-2, p4.x+2, p4.y+2);
-                canvas.fillRect(p5.x-2, p5.y-2, p5.x+2, p5.y+2);
-                canvas.fillRect(p6.x-2, p6.y-2, p6.x+2, p6.y+2);
-                canvas.fillRect(p7.x-2, p7.y-2, p7.x+2, p7.y+2);
-                canvas.fillColor = "#00FF00";
-                canvas.fillRect(p8.x-2, p8.y-2, p8.x+2, p8.y+2);
-                canvas.fillRect(p9.x-2, p9.y-2, p9.x+2, p9.y+2);
-                canvas.fillRect(p10.x-2, p10.y-2, p10.x+2, p10.y+2);
-                canvas.fillRect(p11.x-2, p11.y-2, p11.x+2, p11.y+2);
-                */
-                canvas.fillArc(p8.x, p8.y, c3, 0, Math.PI*2, false);
-                canvas.arc(p8.x, p8.y, c3, 0, Math.PI*2, false);
+                canvas.fillEllipse(p8.x - c3, p8.y - c3, p8.x + c3, p8.y + c3);
+                canvas.ellipse(p8.x - c3, p8.y - c3, p8.x + c3, p8.y + c3);
                 break;
             case ES_CIRCLE_PLUS:
-                canvas.fillArc(p8.x, p8.y, c3, 0, Math.PI*2, false);
-                canvas.arc(p8.x, p8.y, c3, 0, Math.PI*2, false);
+                canvas.fillEllipse(p8.x - c3, p8.y - c3, p8.x + c3, p8.y + c3);
+                canvas.ellipse(p8.x - c3, p8.y - c3, p8.x + c3, p8.y + c3);
                 canvas.line(p11.x, p11.y, p0.x, p0.y);
                 canvas.line(p9.x, p9.y, p10.x, p10.y);
                 break;

@@ -47,34 +47,53 @@ requirejs("core/Core-rules");
 requirejs("uml/UML-meta");
 requirejs("uml/UML-rules");
 
-
+/**
+ * Load .mdj file
+ * @param{string} fullPath
+ * @return{Element} Root element in .mdj file
+ */
 function loadFromFile(fullPath) {
     var data = fs.readFileSync(fullPath, {encoding: "utf8"});
     return Repository.readObject(data);
 }
 
 
-function exportToPDF(diagram, fullPath) {
-    var doc = new PDFDocument();
-    
-    doc.pipe(fs.createWriteStream(fullPath));
+var PDF_MARGIN = 20;
+var PDF_DEFAULT_ZOOM = 1; // Default Zoom Level
 
-    // Skip jQuery event triggers
-    _global.$ = function () {
-        return { 
-            triggerHandler: function () {
-            }
-        };
-    };
-    
-    
+/**
+ * Export diagrams to a PDF file
+ * @param{Array.<Diagram>} diagrams
+ * @param{string} fullPath
+ * @param{Object} options
+ */
+function exportToPDF(diagrams, fullPath, options) {
+    var doc = new PDFDocument(options);
+    doc.pipe(fs.createWriteStream(fullPath));
     var canvas = new PDFGraphics.Canvas(doc);
-    
-    diagram.drawDiagram(canvas, false);
-    
+    var i, len;
+    for (i = 0, len = diagrams.length; i < len; i++) {
+        var diagram = diagrams[i];
+        if (i > 0) {
+            doc.addPage(options);
+        }
+        var box = diagram.getBoundingBox(canvas),
+            w   = doc.page.width - PDF_MARGIN * 2,
+            h   = doc.page.height - PDF_MARGIN * 2;
+        var zoom = Math.min(w / box.x2, h / box.y2);
+        canvas.zoomFactor.numer = Math.min(zoom, PDF_DEFAULT_ZOOM);
+        canvas.origin.x = PDF_MARGIN;
+        canvas.origin.y = PDF_MARGIN;
+        diagram.drawDiagram(canvas, false);
+    }
     doc.end();
-    
 }
+
+
+// Skip all of jQuery event triggers
+_global.$ = function () {
+    return { triggerHandler: function () {} };
+};
 
 
 // Public APIs

@@ -19,6 +19,10 @@ define(function (require, exports, module) {
     "use strict";
 
     var Graphics = require("core/Graphics");
+
+    var HELVETICA_FONTSET = ["Helvetica", "Helvetica-Bold", "Helvetica-Oblique", "Helvetica-BoldOblique"],
+        COURIER_FONTSET   = ["Courier", "Courier-Bold", "Courier-Oblique", "Courier-BoldOblique"],
+        TIMES_FONTSET     = ["Times-Roman", "Times-Bold", "Times-Italic", "Times-BoldItalic"];    
     
     /**
      * Canvas
@@ -38,22 +42,38 @@ define(function (require, exports, module) {
         this.gridFactor = new Graphics.GridFactor(1, 1);
         this.coordTransformApplied = true;
     }
-
     
     Canvas.prototype._setFont = function (font) {
-        this.context.fontSize(font.size);
+        this.context.fontSize(font.size * 0.96);
+        var _fontset = HELVETICA_FONTSET; // Default
+        switch (font.face.toLowerCase()) {
+        case "helvetica":
+        case "sans-serif":
+        case "arial":
+            _fontset = HELVETICA_FONTSET;
+            break;
+        case "times":
+        case "times new roman":
+        case "sans":
+            _fontset = TIMES_FONTSET;
+            break;
+        case "courier":
+        case "courier new":
+            _fontset = COURIER_FONTSET;
+            break;
+        }
         switch (font.style) {
         case Graphics.FS_NORMAL:
-            this.context.font("Helvetica");
+            this.context.font(_fontset[0]);
             break;
         case Graphics.FS_BOLD:
-            this.context.font("Helvetica-Bold");
+            this.context.font(_fontset[1]);
             break;
         case Graphics.FS_ITALIC:
-            this.context.font("Helvetica-Oblique");
+            this.context.font(_fontset[2]);
             break;
         case Graphics.FS_BOLD_ITALIC:
-            this.context.font("Helvetica-BoldOblique");
+            this.context.font(_fontset[3]);
             break;
         }
     };
@@ -485,6 +505,7 @@ define(function (require, exports, module) {
             baseY = rect.y1,
             options = {
                 lineBreak: false,
+                ellipsis: true,
                 width: rect.getWidth(),
                 height: rect.getHeight(),
                 underline: underline

@@ -58,7 +58,7 @@ function loadFromFile(fullPath) {
 }
 
 
-var PDF_MARGIN = 20;
+var PDF_MARGIN = 30;
 var PDF_DEFAULT_ZOOM = 1; // Default Zoom Level
 
 /**
@@ -73,18 +73,25 @@ function exportToPDF(diagrams, fullPath, options) {
     var canvas = new PDFGraphics.Canvas(doc);
     var i, len;
     for (i = 0, len = diagrams.length; i < len; i++) {
-        var diagram = diagrams[i];
         if (i > 0) {
             doc.addPage(options);
         }
-        var box = diagram.getBoundingBox(canvas),
-            w   = doc.page.width - PDF_MARGIN * 2,
-            h   = doc.page.height - PDF_MARGIN * 2;
-        var zoom = Math.min(w / box.x2, h / box.y2);
+        var diagram = diagrams[i],
+            box     = diagram.getBoundingBox(canvas),
+            w       = doc.page.width - PDF_MARGIN * 2,
+            h       = doc.page.height - PDF_MARGIN * 2,
+            zoom    = Math.min(w / box.x2, h / box.y2);
+
         canvas.zoomFactor.numer = Math.min(zoom, PDF_DEFAULT_ZOOM);
         canvas.origin.x = PDF_MARGIN;
         canvas.origin.y = PDF_MARGIN;
         diagram.drawDiagram(canvas, false);
+        
+        if (options.showName) {
+            doc.fontSize(10);
+            doc.font("Helvetica");
+            doc.text(diagram.getPathname(), PDF_MARGIN, PDF_MARGIN-10);
+        }
     }
     doc.end();
 }

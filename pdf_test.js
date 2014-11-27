@@ -8,4 +8,9 @@ mdjson.loadFromFile("test/StarUML2.mdj");
 
 var diagrams = mdjson.Repository.getInstancesOf("Diagram");
 
-mdjson.exportToPDF(diagrams, "pdf-file.pdf", { layout: "landscape" });
+var options = {
+    size: "A4",
+    layout: "landscape",
+    showName: true
+};
+mdjson.exportToPDF(diagrams, "pdf-file.pdf", options);

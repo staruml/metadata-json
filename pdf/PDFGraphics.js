@@ -159,7 +159,7 @@ define(function (require, exports, module) {
         this.context.lineWidth(this.lineWidth);
         this.context.opacity(this.alpha);
         if (dashPattern && dashPattern.length > 0) {
-            this.context.dash(dashPattern[0], dashPattern.length > 1 ? dashPattern[1] : dashPattern[0]);
+            this.context.dash(dashPattern[0], dashPattern.length > 1 ? { space: dashPattern[1] } : { space: dashPattern[0] });
         }
         this.context.moveTo(x1, y1);
         this.context.lineTo(x2, y2);
@@ -186,7 +186,7 @@ define(function (require, exports, module) {
         this.context.lineWidth(this.lineWidth);
         this.context.opacity(this.alpha);
         if (dashPattern && dashPattern.length > 0) {
-            this.context.dash(dashPattern[0], dashPattern.length > 1 ? dashPattern[1] : dashPattern[0]);
+            this.context.dash(dashPattern[0], dashPattern.length > 1 ? { space: dashPattern[1] } : { space: dashPattern[0] });
         }
         this.context.rect(x, y, w, h);
         this.context.stroke();
@@ -279,7 +279,7 @@ define(function (require, exports, module) {
         this.context.lineWidth(this.lineWidth);
         this.context.opacity(this.alpha);
         if (dashPattern && dashPattern.length > 0) {
-            this.context.dash(dashPattern[0], dashPattern.length > 1 ? dashPattern[1] : dashPattern[0]);
+            this.context.dash(dashPattern[0], dashPattern.length > 1 ? { space: dashPattern[1] } : { space: dashPattern[0] });
         }
         this.context.ellipse(cx, cy, rx, ry);
         this.context.stroke();
@@ -319,7 +319,7 @@ define(function (require, exports, module) {
         this.context.lineWidth(this.lineWidth);
         this.context.opacity(this.alpha);
         if (dashPattern && dashPattern.length > 0) {
-            this.context.dash(dashPattern[0], dashPattern.length > 1 ? dashPattern[1] : dashPattern[0]);
+            this.context.dash(dashPattern[0], dashPattern.length > 1 ? { space: dashPattern[1] } : { space: dashPattern[0] });
         }
         for (i = 0, len = points.length; i < len; i++) {
             p = points[i];
@@ -559,14 +559,7 @@ define(function (require, exports, module) {
                 break;
             case Graphics.AL_CENTER:                    
                 options.align = "center";                    
-            }
-            
-            // To avoid that a part of text is not rendered
-            var w = this.context._font.widthOfString(text, this.font.size);
-            if (w > options.width) {
-                options.width = w;
-            }
-            
+            }            
             if (wordWrap) {
                 var lines = this.wordWrap(text, rect.getWidth()),
                     _height = (lines.length * this.font.size);
@@ -579,10 +572,20 @@ define(function (require, exports, module) {
                     break;
                 }
                 for (var i = 0, len = lines.length; i < len; i++) {
+                    // To avoid that a part of text is not rendered
+                    var w = this.context._font.widthOfString(lines[i], this.font.size);
+                    if (w > options.width) {
+                        options.width = w;
+                    }
                     this.context.text(lines[i], baseX, baseY, options);
                     baseY = baseY + this.font.size;
                 }
             } else {
+                // To avoid that a part of text is not rendered
+                var w = this.context._font.widthOfString(text, this.font.size);
+                if (w > options.width) {
+                    options.width = w;
+                }
                 this.context.text(text, baseX, baseY, options);
             }
         }

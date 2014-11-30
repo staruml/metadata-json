@@ -2755,7 +2755,7 @@ define(function (require, exports, module) {
                 }
                 view.draw(canvas);            
             } catch (err) {
-                // console.log(view);
+                console.log(view);
                 console.error(err);
             }
         }

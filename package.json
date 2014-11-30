@@ -1,16 +1,16 @@
 {
-    "name": "mdjson",
+    "name": "metadata-json",
     "description": "Framework for metadata encoded by Metadata-JSON.",
-    "homepage": "http://staruml.io/mdjson",
+    "homepage": "https://github.com/niklauslee/metadata-json",
     "author": {
         "name": "Minkyu Lee",
         "email": "niklaus.lee@gmail.com"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/niklauslee/mdjson.git"
+        "url": "git://github.com/niklauslee/metadata-json.git"
     },
-    "main": "mdjson.js",
+    "main": "metadata-json.js",
     "version": "0.8.0",
     "dependencies": {
         "requirejs": "2.1.15",

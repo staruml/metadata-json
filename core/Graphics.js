@@ -1630,19 +1630,6 @@ define(function (require, exports, module) {
         this.restoreTransform();
     };
 
-
-    /**
-     * Draw by using direct access to 2d context
-     * @param {function(context)} drawFun
-     */
-    Canvas.prototype.draw = function (drawFun) {
-        if (drawFun) {
-            this.transform();
-            drawFun(this.context);
-            this.restoreTransform();
-        }
-    };
-
     // Type Definitions
     _global.type.Font   = Font;
     _global.type.Points = Points;

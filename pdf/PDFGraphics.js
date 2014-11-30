@@ -560,6 +560,13 @@ define(function (require, exports, module) {
             case Graphics.AL_CENTER:                    
                 options.align = "center";                    
             }
+            
+            // To avoid that a part of text is not rendered
+            var w = this.context._font.widthOfString(text, this.font.size);
+            if (w > options.width) {
+                options.width = w;
+            }
+            
             if (wordWrap) {
                 var lines = this.wordWrap(text, rect.getWidth()),
                     _height = (lines.length * this.font.size);

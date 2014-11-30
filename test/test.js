@@ -1,7 +1,7 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, browser: true */
 /*global require, global, _*/
 
-var mdjson = require("./mdjson");
+var mdj = require("./metadata-json");
 
-mdjson.loadFromFile("test.mdj");
-console.log(mdjson.Validator.validate());
+mdj.loadFromFile("test.mdj");
+console.log(mdj.Validator.validate());

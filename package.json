@@ -15,6 +15,7 @@
     "dependencies": {
         "requirejs": "2.1.15",
         "underscore": "1.7.0",
-        "pdfkit": "0.7.0"
+        "pdfkit": "0.7.0",
+        "ejs": "1.0.0"
     }
 }

@@ -3,7 +3,8 @@
 
 var fs          = require("fs"),
     requirejs   = require("requirejs"),
-    PDFDocument = require("pdfkit");
+    PDFDocument = require("pdfkit"),
+    ejs         = require("ejs");
 
 // load underscore (_) as a global variable
 global._ = require("underscore");
@@ -101,7 +102,6 @@ function exportToPDF(diagrams, fullPath, options) {
 _global.$ = function () {
     return { triggerHandler: function () {} };
 };
-
 
 // Public APIs
 

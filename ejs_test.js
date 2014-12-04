@@ -5,8 +5,8 @@ var fs  = require("fs-extra");
 var mdj = require("./metadata-json");
 var gen = require("./lib/generator");
 
-var project = mdj.loadFromFile("test/diagram_pdf_test.mdj");
-// var project = mdj.loadFromFile("test/StarUML2.mdj");
+// var project = mdj.loadFromFile("test/diagram_pdf_test.mdj");
+var project = mdj.loadFromFile("test/StarUML2.mdj");
 
 
 

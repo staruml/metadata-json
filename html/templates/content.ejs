@@ -5,12 +5,47 @@
         <% include head %>
     </head>
     <body>
-        <div class="container-fluid">
-            <h1><%= element.name %></h1>
+        <div>
             
-            <h3><%= element.getPathname() %></h3>
+            <h1><%=: element | toName %></h1>
             
-            <div><%= element.documentation %></div>
-        </div>
+            <section style="margin-top: .5em;">
+                <span class="alert alert-info"><%= element.getClassName() %></span>
+                <span class="label label-info"><%= element.getPathname() %></span>
+            </section>
+            
+            <section>
+                <h3>Documentation</h3>
+                <div><%-: element.documentation | markdown %></div>
+            </section>
+
+            <% if (element instanceof type.UMLClassifier) { %>
+            <section>
+                <h3>Attributes</h3>
+                <% element.attributes.forEach(function (attr) { %>
+                <div class="member public">
+                    <span class="pull-right scope"><%= attr.visibility %></span>
+                    <h4><%=: attr | toName %></h4>
+                    <div class="description"><%-: attr.documentation | markdown %></div>
+                </div>
+                <% }); %>
+            </section>            
+            <% } %>
+            
+            <section>
+                <h3>Diagrams</h3>
+                <span class="alert alert-info">TODO: List of diagrams should be here.</span>
+            </section>
+            
+            <section class="element-list">
+                <h3>Owned Elements</h3>
+                <ul class="nav nav-list">
+                    <% element.ownedElements.forEach(function (e) { %>
+                    <li><a href="<%=: e | toUrl %>"><%=: e | toName %></a></li>
+                    <% }); %>
+                </ul>
+            </section>
+
+        </div>        
     </body>    
 </html>

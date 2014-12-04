@@ -6,7 +6,7 @@
     </head>
     <body>
         
-        <div style="padding: 10px">
+        <div style="padding-top: 2em">
         
 		<ol id='navigation-tree'>
             <li class='expanded'>
@@ -18,7 +18,7 @@
                 <% if (project.getChildNodes().length > 0) { %>
                 <ol>
                     <% project.getChildNodes().forEach(function (e1) { %>
-                    <li>
+                    <li class='expanded'>
                         
                         <!-- First Level -->
                         <a href="<%=: e1 | toUrl %>" target="content">
@@ -31,42 +31,60 @@
                             <li>
                                 
                                 <!-- Second Level -->                                
-                                <a href="<%=: e2 | toUrl %>" target="content"><%=: e2 | toName %></a>
+                                <a href="<%=: e2 | toUrl %>" target="content">
+                                    <span class="node-icon <%=: e2 | toIcon %>"></span>
+                                    <%=: e2 | toName %>
+                                </a>
                                 <% if (e2.getChildNodes().length > 0) { %>
                                 <ol>
                                     <% e2.getChildNodes().forEach(function (e3) { %>
                                     <li>
 
                                         <!-- Third Level -->
-                                        <a href="<%=: e3 | toUrl %>" target="content"><%=: e3 | toName %></a>
+                                        <a href="<%=: e3 | toUrl %>" target="content">
+                                            <span class="node-icon <%=: e3 | toIcon %>"></span>
+                                            <%=: e3 | toName %>
+                                        </a>
                                         <% if (e3.getChildNodes().length > 0) { %>
                                         <ol>
                                             <% e3.getChildNodes().forEach(function (e4) { %>
                                             <li>
                                                 
                                                 <!-- Fourth Level -->
-                                                <a href="<%=: e4 | toUrl %>" target="content"><%=: e4 | toName %></a>
+                                                <a href="<%=: e4 | toUrl %>" target="content">
+                                                    <span class="node-icon <%=: e4 | toIcon %>"></span>
+                                                    <%=: e4 | toName %>
+                                                </a>
                                                 <% if (e4.getChildNodes().length > 0) { %>
                                                 <ol>
                                                     <% e4.getChildNodes().forEach(function (e5) { %>
                                                     <li>
                                                         
                                                         <!-- Fifth Level -->
-                                                        <a href="<%=: e5 | toUrl %>" target="content"><%=: e5 | toName %></a>
+                                                        <a href="<%=: e5 | toUrl %>" target="content">
+                                                            <span class="node-icon <%=: e5 | toIcon %>"></span>
+                                                            <%=: e5 | toName %>
+                                                        </a>
                                                         <% if (e5.getChildNodes().length > 0) { %>
                                                         <ol>
                                                             <% e5.getChildNodes().forEach(function (e6) { %>
                                                             <li>
                                                                 
                                                                 <!-- Sixth Level -->
-                                                                <a href="<%=: e6 | toUrl %>" target="content"><%=: e6 | toName %></a>
+                                                                <a href="<%=: e6 | toUrl %>" target="content">
+                                                                    <span class="node-icon <%=: e6 | toIcon %>"></span>
+                                                                    <%=: e6 | toName %>
+                                                                </a>
                                                                 <% if (e6.getChildNodes().length > 0) { %>
                                                                 <ol>
                                                                     <% e6.getChildNodes().forEach(function (e7) { %>
                                                                     <li>
 
                                                                         <!-- Seventh Level -->
-                                                                        <a href="<%=: e7 | toUrl %>" target="content"><%=: e7 | toName %></a>
+                                                                        <a href="<%=: e7 | toUrl %>" target="content">
+                                                                            <span class="node-icon <%=: e7 | toIcon %>"></span>
+                                                                            <%=: e7 | toName %>
+                                                                        </a>
 
                                                                     </li>
                                                                     <% }); %>

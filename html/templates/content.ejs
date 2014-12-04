@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><%= element.name %></title>
+        <% include head %>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <h1><%= element.name %></h1>
+            
+            <h3><%= element.getPathname() %></h3>
+            
+            <div><%= element.documentation %></div>
+        </div>
+    </body>    
+</html>

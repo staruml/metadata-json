@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    font-family: source-sans-pro, Helvetica, Arial, sans-serif !imporant;
+    font-size: 14px;
+    font-weight: 400;
+    color: #555;
+    background-color: #F8F8F8;
+    -webkit-font-smoothing: antialiased;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: source-sans-pro, Helvetica, Arial, sans-serif;
+}
+
+.node-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+

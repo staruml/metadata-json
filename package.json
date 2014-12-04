@@ -18,6 +18,7 @@
         "underscore": "1.7.0",
         "pdfkit": "0.7.0",
         "ejs": "1.0.0",
-        "markdown": "0.5.0"
+        "markdown": "0.5.0",
+        "escape-html": "1.0.1"
     }
 }

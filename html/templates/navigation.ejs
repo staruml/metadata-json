@@ -13,7 +13,7 @@
                 <!-- ROOT -->
                 <a href="<%=: project | toUrl %>" target="content">
                     <span class="node-icon <%=: project | toIcon %>"></span>
-                    <%=: project | toName %>
+                    <%=: project | toText %>
                 </a>
                 <% if (project.getChildNodes().length > 0) { %>
                 <ol>
@@ -23,7 +23,7 @@
                         <!-- First Level -->
                         <a href="<%=: e1 | toUrl %>" target="content">
                             <span class="node-icon <%=: e1 | toIcon %>"></span>
-                            <%=: e1 | toName %>
+                            <%=: e1 | toText %>
                         </a>
                         <% if (e1.getChildNodes().length > 0) { %>
                         <ol>
@@ -33,7 +33,7 @@
                                 <!-- Second Level -->                                
                                 <a href="<%=: e2 | toUrl %>" target="content">
                                     <span class="node-icon <%=: e2 | toIcon %>"></span>
-                                    <%=: e2 | toName %>
+                                    <%=: e2 | toText %>
                                 </a>
                                 <% if (e2.getChildNodes().length > 0) { %>
                                 <ol>
@@ -43,7 +43,7 @@
                                         <!-- Third Level -->
                                         <a href="<%=: e3 | toUrl %>" target="content">
                                             <span class="node-icon <%=: e3 | toIcon %>"></span>
-                                            <%=: e3 | toName %>
+                                            <%=: e3 | toText %>
                                         </a>
                                         <% if (e3.getChildNodes().length > 0) { %>
                                         <ol>
@@ -53,7 +53,7 @@
                                                 <!-- Fourth Level -->
                                                 <a href="<%=: e4 | toUrl %>" target="content">
                                                     <span class="node-icon <%=: e4 | toIcon %>"></span>
-                                                    <%=: e4 | toName %>
+                                                    <%=: e4 | toText %>
                                                 </a>
                                                 <% if (e4.getChildNodes().length > 0) { %>
                                                 <ol>
@@ -63,7 +63,7 @@
                                                         <!-- Fifth Level -->
                                                         <a href="<%=: e5 | toUrl %>" target="content">
                                                             <span class="node-icon <%=: e5 | toIcon %>"></span>
-                                                            <%=: e5 | toName %>
+                                                            <%=: e5 | toText %>
                                                         </a>
                                                         <% if (e5.getChildNodes().length > 0) { %>
                                                         <ol>
@@ -73,7 +73,7 @@
                                                                 <!-- Sixth Level -->
                                                                 <a href="<%=: e6 | toUrl %>" target="content">
                                                                     <span class="node-icon <%=: e6 | toIcon %>"></span>
-                                                                    <%=: e6 | toName %>
+                                                                    <%=: e6 | toText %>
                                                                 </a>
                                                                 <% if (e6.getChildNodes().length > 0) { %>
                                                                 <ol>
@@ -83,7 +83,7 @@
                                                                         <!-- Seventh Level -->
                                                                         <a href="<%=: e7 | toUrl %>" target="content">
                                                                             <span class="node-icon <%=: e7 | toIcon %>"></span>
-                                                                            <%=: e7 | toName %>
+                                                                            <%=: e7 | toText %>
                                                                         </a>
 
                                                                     </li>

@@ -136,6 +136,10 @@ textarea {
   font-family: source-sans-pro, Helvetica, Arial, sans-serif;
 }
 
+table p {
+  margin-bottom: 0px;
+}
+
 .btn {
   padding: 4px 12px;
   margin-bottom: 0;
@@ -539,8 +543,9 @@ badge {
     padding: 19px 19px 0;
 }
 
-
-
+.table {
+    background-color: #fff;
+}
 
 /* non-bootstrap css
 ---------------------------------------------------------*/

@@ -6,37 +6,129 @@
     </head>
     <body>
         <div>
-            
+                        
             <h1><%=: element | toName %></h1>
             
             <section style="margin-top: .5em;">
                 <span class="alert alert-info"><%= element.getClassName() %></span>
-                <span class="label label-info"><%= element.getPathname() %></span>
+                <% if (element.stereotype) { %>
+                    <span class="alert alert-info"><%-: element.stereotype | toValue %></span>
+                <% } %>
+            </section>
+
+            <section style="margin-top: 10px">
+                <% var terms = []; %>
+                <% element.traverseUp(function (e) { terms.unshift(e); }); %>
+                <% for (var i = 0, len = terms.length; i < len; i++) { %>
+                    <% if (i > 0) { %><span>::</span><% } %>
+                <span class="label label-info"><a href="<%=: terms[i] | toUrl %>"><%=: terms[i] | toName %></a></span>
+                <% } %>
             </section>
             
             <section>
-                <h3>Documentation</h3>
-                <div><%-: element.documentation | markdown %></div>
+                <h3>Description</h3>
+                <div>
+                    <% if (element.documentation.trim().length === 0) { %>
+                        <span class="label label-info">none</span>
+                    <% } else { %>
+                        <%-: element.documentation | markdown %></div>
+                    <% } %>
             </section>
 
-            <% if (element instanceof type.UMLClassifier) { %>
+            <% var properties = element.getMetaAttributes(); %>
+            <section>
+                <h3>Properties</h3>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Name</th>
+                        <th>Value</th>
+                    </tr>
+                    <% properties.forEach(function (prop) { %>
+                    <% if (prop.visible && prop.kind !== "objs" && prop.kind !== "refs") { %>
+                    <tr>
+                        <td><%= prop.name %></td>
+                        <td><%-: element[prop.name] | toValue %></td>
+                    </tr>
+                    <% } %>
+                    <% }); %>                    
+                </table>
+            </section>
+            
+            <% if (element instanceof type.UMLClassifier && element.attributes && element.attributes.length > 0) { %>
             <section>
                 <h3>Attributes</h3>
-                <% element.attributes.forEach(function (attr) { %>
-                <div class="member public">
-                    <span class="pull-right scope"><%= attr.visibility %></span>
-                    <h4><%=: attr | toName %></h4>
-                    <div class="description"><%-: attr.documentation | markdown %></div>
-                </div>
-                <% }); %>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Visibility</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <% element.attributes.forEach(function (attr) { %>
+                    <tr>
+                        <td><%= attr.visibility %></td>
+                        <td><a href="<%=: attr | toUrl %>"><%=: attr | toName %></a></td>
+                        <td><%-: attr.type | toType %></td>
+                        <td><%-: attr.documentation | markdown %></td>
+                    </tr>
+                    <% }); %>
+                </table>
             </section>            
             <% } %>
+
+            <% if (element instanceof type.UMLClassifier && element.operations && element.operations.length > 0) { %>
+            <section>
+                <h3>Operations</h3>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Visibility</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                    <% element.operations.forEach(function (op) { %>
+                    <tr>
+                        <td><%= op.visibility %></td>
+                        <td><a href="<%=: op | toUrl %>"><%=: op.getString({showOperationSignature: true, showType: true}) %></a></td>
+                        <td><%-: op.documentation | markdown %></td>
+                    </tr>
+                    <% }); %>
+                </table>
+            </section>            
+            <% } %>
+            
+            <% if (element instanceof type.UMLBehavioralFeature && element.parameters && element.parameters.length > 0) { %>
+            <section>
+                <h3>Parameters</h3>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Direction</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <% element.parameters.forEach(function (param) { %>
+                    <tr>
+                        <td><%= param.direction %></td>
+                        <td><a href="<%=: param | toUrl %>"><%=: param | toName %></a></td>
+                        <td><%-: param.type | toValue %></td>
+                        <td><%-: param.documentation | markdown %></td>
+                    </tr>
+                    <% }); %>
+                </table>
+            </section>            
+            <% } %>
+            
+            <section>
+                <h3>Relationships</h3>
+                <span class="alert alert-info">TODO: List of diagrams should be here.</span>
+            </section>
             
             <section>
                 <h3>Diagrams</h3>
                 <span class="alert alert-info">TODO: List of diagrams should be here.</span>
             </section>
             
+            <% if (element.ownedElements && element.ownedElements.length > 0) { %>
             <section class="element-list">
                 <h3>Owned Elements</h3>
                 <ul class="nav nav-list">
@@ -45,6 +137,7 @@
                     <% }); %>
                 </ul>
             </section>
+            <% } %>
 
         </div>        
     </body>    

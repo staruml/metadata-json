@@ -28,7 +28,7 @@
             <% if (element instanceof type.Diagram) { %>
             <section>
                 <h3>Diagram</h3>
-                <img src="../../../html/diagrams/Main.svg">
+                <img src="<%=: element | toDiagram %>">
             </section>
             <% } %>
             
@@ -206,7 +206,33 @@
                 </table>
             </section>            
             <% } %>
-            
+
+            <%
+            var _diagrams = [];
+            if (element.ownedElements && element.ownedElements.length > 0) {
+                element.ownedElements.forEach(function (e) {
+                    if (e instanceof type.Diagram) { _diagrams.push(e); }
+                });
+            }
+            %>
+            <% if (_diagrams.length > 0) { %>
+            <section class="element-list">
+                <h3>Diagrams</h3>
+                <div>
+                    <% _diagrams.forEach(function (d) { %>
+                    <div style="display: inline-block; width: 250px; vertical-align: top;">
+                        <div class="member">
+                            <a href="<%=: d | toUrl %>">
+                            <img src="<%=: d | toDiagram %>">
+                            <div style="text-align: center; margin-top: 1em;"><%-: d | toName %></div>
+                            </a>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </section>
+            <% } %>            
+                        
             <% var properties = element.getMetaAttributes(); %>
             <section>
                 <h3>Properties</h3>

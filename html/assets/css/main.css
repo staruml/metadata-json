@@ -584,8 +584,8 @@ section > h2,
 section > h3{
     font-size: 30px;
     line-height: 30px;
-    margin-bottom: 15px;
-    margin-top: 40px;
+    margin-bottom: 10px;
+    margin-top: 25px;
     text-indent: 2px;
 }
 .properties > h3 {
@@ -806,7 +806,7 @@ dl .label {
 
 /* --------------- Appended ---------------- */
 
-.node-icon_ {
+.node-icon {
     width: 16px;
     height: 16px;
     display: inline-block;

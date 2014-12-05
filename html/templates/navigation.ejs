@@ -6,121 +6,82 @@
     </head>
     <body>
         
-        <div style="padding-top: 2em">
+        <div style="padding-top: 2em; overflow-x: auto; width: 100%">
         
 		<ol id='navigation-tree'>
+            <% var elem = project; %>
             <li class='expanded'>
-                <!-- ROOT -->
-                <a href="<%=: project | toUrl %>" target="content">
-                    <span class="node-icon <%=: project | toIcon %>"></span>
-                    <%=: project | toText %>
-                </a>
+                <% include node %>
                 <% if (project.getChildNodes().length > 0) { %>
                 <ol>
                     <% project.getChildNodes().forEach(function (e1) { %>
+                    <% var elem = e1; %>
                     <li class='expanded'>
-                        
-                        <!-- First Level -->
-                        <a href="<%=: e1 | toUrl %>" target="content">
-                            <span class="node-icon <%=: e1 | toIcon %>"></span>
-                            <%=: e1 | toText %>
-                        </a>
+                        <% include node %>
                         <% if (e1.getChildNodes().length > 0) { %>
                         <ol>
                             <% e1.getChildNodes().forEach(function (e2) { %>
+                            <% var elem = e2; %>
                             <li>
-                                
-                                <!-- Second Level -->                                
-                                <a href="<%=: e2 | toUrl %>" target="content">
-                                    <span class="node-icon <%=: e2 | toIcon %>"></span>
-                                    <%=: e2 | toText %>
-                                </a>
+                                <% include node %>                                
                                 <% if (e2.getChildNodes().length > 0) { %>
                                 <ol>
                                     <% e2.getChildNodes().forEach(function (e3) { %>
+                                    <% var elem = e3; %>
                                     <li>
-
-                                        <!-- Third Level -->
-                                        <a href="<%=: e3 | toUrl %>" target="content">
-                                            <span class="node-icon <%=: e3 | toIcon %>"></span>
-                                            <%=: e3 | toText %>
-                                        </a>
+                                        <% include node %>
                                         <% if (e3.getChildNodes().length > 0) { %>
                                         <ol>
                                             <% e3.getChildNodes().forEach(function (e4) { %>
+                                            <% var elem = e4; %>
                                             <li>
-                                                
-                                                <!-- Fourth Level -->
-                                                <a href="<%=: e4 | toUrl %>" target="content">
-                                                    <span class="node-icon <%=: e4 | toIcon %>"></span>
-                                                    <%=: e4 | toText %>
-                                                </a>
+                                                <% include node %>              
                                                 <% if (e4.getChildNodes().length > 0) { %>
                                                 <ol>
                                                     <% e4.getChildNodes().forEach(function (e5) { %>
+                                                    <% var elem = e5; %>
                                                     <li>
-                                                        
-                                                        <!-- Fifth Level -->
-                                                        <a href="<%=: e5 | toUrl %>" target="content">
-                                                            <span class="node-icon <%=: e5 | toIcon %>"></span>
-                                                            <%=: e5 | toText %>
-                                                        </a>
+                                                        <% include node %>
                                                         <% if (e5.getChildNodes().length > 0) { %>
                                                         <ol>
                                                             <% e5.getChildNodes().forEach(function (e6) { %>
+                                                            <% var elem = e6; %>
                                                             <li>
-                                                                
-                                                                <!-- Sixth Level -->
-                                                                <a href="<%=: e6 | toUrl %>" target="content">
-                                                                    <span class="node-icon <%=: e6 | toIcon %>"></span>
-                                                                    <%=: e6 | toText %>
-                                                                </a>
+                                                                <% include node %>
                                                                 <% if (e6.getChildNodes().length > 0) { %>
                                                                 <ol>
                                                                     <% e6.getChildNodes().forEach(function (e7) { %>
+                                                                    <% var elem = e7; %>
                                                                     <li>
-
-                                                                        <!-- Seventh Level -->
-                                                                        <a href="<%=: e7 | toUrl %>" target="content">
-                                                                            <span class="node-icon <%=: e7 | toIcon %>"></span>
-                                                                            <%=: e7 | toText %>
-                                                                        </a>
-
+                                                                        <% include node %>
                                                                     </li>
                                                                     <% }); %>
                                                                 </ol>
                                                                 <% } %>
-                                                                
                                                             </li>
                                                             <% }); %>
                                                         </ol>
                                                         <% } %>
-                                                        
                                                     </li>
                                                     <% }); %>
                                                 </ol>
                                                 <% } %>
-                                                
                                             </li>
                                             <% }); %>
                                         </ol>
                                         <% } %>
-                                        
                                     </li>
                                     <% }); %>
                                 </ol>
                                 <% } %>
-                                
                             </li>
                             <% }); %>
                         </ol>
                         <% } %>
-                        
                     </li>
                     <% }); %>
                 </ol>
                 <% } %>
-                
             </li>
 		</ol>
 

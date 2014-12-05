@@ -1142,7 +1142,7 @@ define(function (require, exports, module) {
     UndirectedRelationship.prototype.constructor = UndirectedRelationship;
 
     UndirectedRelationship.prototype.getNodeText = function () {
-        return "(" + this.end1.reference.name + "-" + this.end2.reference.name + ")";
+        return "(" + this.end1.reference.name + "—" + this.end2.reference.name + ")";
     };
 
 

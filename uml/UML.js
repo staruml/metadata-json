@@ -225,7 +225,7 @@ define(function (require, exports, module) {
                         break;
                     case Core.TK_REFERENCE:
                         if (tag.reference instanceof Core.Model) {
-                            tagArray.push(tag.name + '=(' + tag.value.name + ')');
+                            tagArray.push(tag.name + '=(' + tag.reference.name + ')');
                         } else {
                             tagArray.push(tag.name + '=null');
                         }
@@ -935,6 +935,14 @@ define(function (require, exports, module) {
     UMLInterface.prototype = Object.create(UMLClassifier.prototype);
     UMLInterface.prototype.constructor = UMLInterface;
 
+    UMLInterface.prototype.getRealizedElements = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLInterfaceRealization) && (r.target === self);
+            });
+        return _.map(rels, function (g) { return g.source; });
+    };
+    
     /**
      * UMLSignal
      * @constructor

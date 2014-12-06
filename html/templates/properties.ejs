@@ -1,0 +1,26 @@
+<table class="table table-striped table-bordered">
+    <tr>
+        <th width="50%">Name</th>
+        <th width="50%">Value</th>
+    </tr>
+    <% properties.forEach(function (prop) { %>
+    <% if (prop.visible) { %>
+    <%   if (prop.kind === "objs" || prop.kind === "refs") { %>
+    <tr>
+        <td><%= prop.name %></td>
+        <td>
+            <% elem[prop.name].forEach(function (e, idx) { %>
+            <% if (idx > 0) { %><span>, </span><% } %>
+            <%-: e | toValue %>
+            <% }); %>
+        </td>
+    </tr>
+    <%   } else { %>
+    <tr>
+        <td><%= prop.name %></td>
+        <td><%-: elem[prop.name] | toValue %></td>
+    </tr>
+    <%   } %>
+    <% } %>
+    <% }); %>
+</table>                

@@ -7,7 +7,11 @@
     <body>
         <div>
                         
+            <!-- Name Title -->
+
             <h1><%=: element | toName %></h1>
+            
+            <!-- Type and Stereotype -->
             
             <section style="margin-top: .5em;">
                 <span class="alert alert-info">
@@ -21,6 +25,8 @@
                 <% } %>
             </section>
 
+            <!-- Path -->
+
             <section style="margin-top: 10px">
                 <% var terms = []; %>
                 <% element.traverseUp(function (e) { terms.unshift(e); }); %>
@@ -30,12 +36,16 @@
                 <% } %>
             </section>
             
+            <!-- Diagram -->
+            
             <% if (element instanceof type.Diagram) { %>
             <section>
                 <h3>Diagram</h3>
                 <img src="<%=: element | toDiagram %>">
             </section>
             <% } %>
+
+            <!-- Description -->
             
             <% if (element instanceof type.ExtensibleModel) { %>
             <section>
@@ -49,6 +59,8 @@
                 </div>
             </section>
             <% } %>
+
+            <!-- Specification -->
             
             <% if ((element instanceof type.UMLConstraint || element instanceof type.UMLOperation) && (element.specification.length > 0)) { %>
             <section>
@@ -56,6 +68,8 @@
                 <pre><%= element.specification %></pre>
             </section>
             <% } %>
+
+            <!-- Directed Relationship -->
             
             <% if (element instanceof type.DirectedRelationship && element.source && element.target) { %>
             <section class="element-list">
@@ -78,6 +92,8 @@
             </section>
             <% } %>
 
+            <!-- Undirected Relationship -->
+
             <% if (element instanceof type.UndirectedRelationship && element.end1 && element.end2) { %>
             <section class="element-list">
                 <table width="100%">
@@ -97,174 +113,68 @@
             </section>
             <% } %>
             
-            <% if (element instanceof type.UMLClassifier) { %>
-            <%   var _generals = element.getGeneralElements(); %>
-            <%   if (_generals.length > 0) { %>
-            <section class="element-list">
-                <h3>Generalized Elements</h3>
-                <ul class="nav nav-list">
-                    <% _generals.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
+            <!-- Classifier -->
 
             <% if (element instanceof type.UMLClassifier) { %>
-            <%   var _specials = element.getSpecialElements(); %>
-            <%   if (_specials.length > 0) { %>
-            <section class="element-list">
-                <h3>Specialized Elements</h3>
-                <ul class="nav nav-list">
-                    <% _specials.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
+                <% var title = "Generalized Elements", list = element.getGeneralElements() || []; %>
+                <% include list %>
+
+                <% var title = "Specialized Elements", list = element.getSpecialElements() || []; %>
+                <% include list %>
+
+                <% var title = "Interfaces", list = element.getInterfaces() || []; %>
+                <% include list %>
+
+                <% var title = "Components", list = element.getComponents() || []; %>
+                <% include list %>
+
+                <% var title = "Deployment Targets", list = element.getDeploymentTargets() || []; %>
+                <% include list %>
             <% } %>
 
-            <% if (element instanceof type.UMLClassifier) { %>
-            <%   var _reals = element.getInterfaces(); %>
-            <%   if (_reals.length > 0) { %>
-            <section class="element-list">
-                <h3>Interfaces</h3>
-                <ul class="nav nav-list">
-                    <% _reals.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
+            <!-- Interface -->
 
             <% if (element instanceof type.UMLInterface) { %>
-            <%   var _impls = element.getImplementingClassifiers(); %>
-            <%   if (_impls.length > 0) { %>
-            <section class="element-list">
-                <h3>Implementing Classifiers</h3>
-                <ul class="nav nav-list">
-                    <% _impls.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
+                <% var title = "Implementing Classifiers", list = element.getImplementingClassifiers() || []; %>
+                <% include list %>
             <% } %>
 
-            <% if (element instanceof type.UMLClassifier) { %>
-            <%   var _comps = element.getComponents(); %>
-            <%   if (_comps.length > 0) { %>
-            <section class="element-list">
-                <h3>Components</h3>
-                <ul class="nav nav-list">
-                    <% _comps.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
-            
+            <!-- Component -->
+
             <% if (element instanceof type.UMLComponent) { %>
-            <%   var _compreals = element.getRealizingClassifiers(); %>
-            <%   if (_compreals.length > 0) { %>
-            <section class="element-list">
-                <h3>Realizing Classifiers</h3>
-                <ul class="nav nav-list">
-                    <% _compreals.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
+                <% var title = "Realizing Classifiers", list = element.getRealizingClassifiers() || []; %>
+                <% include list %>
             <% } %>
 
-            <% if (element instanceof type.UMLClassifier) { %>
-            <%   var _targets = element.getDeploymentTargets(); %>
-            <%   if (_targets.length > 0) { %>
-            <section class="element-list">
-                <h3>Deployment Targets</h3>
-                <ul class="nav nav-list">
-                    <% _targets.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
-            
+            <!-- Node -->
+
             <% if (element instanceof type.UMLNode) { %>
-            <%   var _deployed = element.getDeployedElements(); %>
-            <%   if (_deployed.length > 0) { %>
-            <section class="element-list">
-                <h3>Deployed Elements</h3>
-                <ul class="nav nav-list">
-                    <% _deployed.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
+                <% var title = "Deployed Elements", list = element.getDeployedElements() || []; %>
+                <% include list %>
             <% } %>
+
+            <!-- Actor -->
 
             <% if (element instanceof type.UMLActor) { %>
-            <%   var _usecases = element.getUseCases(); %>
-            <%   if (_usecases.length > 0) { %>
-            <section class="element-list">
-                <h3>Use Cases</h3>
-                <ul class="nav nav-list">
-                    <% _usecases.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
-            
-            <% if (element instanceof type.UMLUseCase) { %>
-            <%   var _actors = element.getActors(); %>
-            <%   if (_actors.length > 0) { %>
-            <section class="element-list">
-                <h3>Actors</h3>
-                <ul class="nav nav-list">
-                    <% _actors.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
-            
-            <% if (element instanceof type.UMLUseCase) { %>
-            <%   var _includeds = element.getIncludedUseCases(); %>
-            <%   if (_includeds.length > 0) { %>
-            <section class="element-list">
-                <h3>Included Use Cases</h3>
-                <ul class="nav nav-list">
-                    <% _includeds.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
+                <% var title = "Use Cases", list = element.getUseCases() || []; %>
+                <% include list %>
             <% } %>
 
+            <!-- Use Case -->
+
             <% if (element instanceof type.UMLUseCase) { %>
-            <%   var _extendings = element.getExtendingUseCases(); %>
-            <%   if (_extendings.length > 0) { %>
-            <section class="element-list">
-                <h3>Extending Use Cases</h3>
-                <ul class="nav nav-list">
-                    <% _extendings.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
+                <% var title = "Actors", list = element.getActors() || []; %>
+                <% include list %>
+
+                <% var title = "Included Use Cases", list = element.getIncludedUseCases() || []; %>
+                <% include list %>
+
+                <% var title = "Extending Use Cases", list = element.getExtendingUseCases() || []; %>
+                <% include list %>
             <% } %>
-            
+
+            <!-- Template Parameters -->
+
             <% if (element instanceof type.UMLModelElement && element.templateParameters && element.templateParameters.length > 0) { %>
             <section>
                 <h3>Template Parameters</h3>
@@ -287,6 +197,8 @@
             </section>            
             <% } %>
 
+            <!-- Literals -->
+
             <% if (element instanceof type.UMLEnumeration && element.literals && element.literals.length > 0) { %>
             <section>
                 <h3>Literals</h3>
@@ -306,7 +218,9 @@
                 </table>
             </section>            
             <% } %>            
-            
+
+            <!-- Attributes -->
+
             <% if (element instanceof type.UMLClassifier && element.attributes && element.attributes.length > 0) { %>
             <section>
                 <h3>Attributes</h3>
@@ -329,6 +243,8 @@
             </section>            
             <% } %>
 
+            <!-- Operations -->
+
             <% if (element instanceof type.UMLClassifier && element.operations && element.operations.length > 0) { %>
             <section>
                 <h3>Operations</h3>
@@ -349,6 +265,8 @@
             </section>
             <% } %>
 
+            <!-- Extension Points -->
+
             <% if (element instanceof type.UMLUseCase && element.extensionPoints && element.extensionPoints.length > 0) { %>
             <section>
                 <h3>Extension Points</h3>
@@ -368,7 +286,9 @@
                 </table>
             </section>            
             <% } %>            
-                        
+
+            <!-- Parameters -->
+
             <% if (element instanceof type.UMLBehavioralFeature && element.parameters && element.parameters.length > 0) { %>
             <section>
                 <h3>Parameters</h3>
@@ -390,6 +310,8 @@
                 </table>
             </section>            
             <% } %>
+
+            <!-- Diagrams -->
 
             <%
             var _diagrams = [];
@@ -416,12 +338,134 @@
                 </div>
             </section>
             <% } %>            
-                        
+            
+            <!-- Behavior -->
+
+            <% if (element instanceof type.UMLBehavior) { %>
+                <% var title = "Preconditions", list = element.preconditions || []; %>
+                <% include list %>
+
+                <% var title = "Postconditions", list = element.postconditions || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- Action -->
+
+            <% if (element instanceof type.UMLAction) { %>
+                <% var title = "Inputs", list = element.inputs || []; %>
+                <% include list %>
+
+                <% var title = "Outputs", list = element.outputs || []; %>
+                <% include list %>
+
+                <% var title = "Triggers", list = element.triggers || []; %>
+                <% include list %>
+
+                <% var title = "Local Preconditions", list = element.localPreconditions || []; %>
+                <% include list %>
+
+                <% var title = "Local Postconditions", list = element.localPostconditions || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- Interaction -->
+
+            <% if (element instanceof type.UMLInteraction) { %>
+                <% var title = "Fragments", list = element.fragments || []; %>
+                <% include list %>
+
+                <% var title = "Participants", list = element.participants || []; %>
+                <% include list %>
+
+                <% var title = "Messages", list = element.messages || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- CombinedFragment -->
+
+            <% if (element instanceof type.UMLCombinedFragment) { %>
+                <% var title = "Interaction Operands", list = element.operands || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- Activity -->
+
+            <% if (element instanceof type.UMLActivity) { %>
+                <% var title = "Groups", list = element.groups || []; %>
+                <% include list %>
+
+                <% var title = "Nodes", list = element.nodes || []; %>
+                <% include list %>
+
+                <% var title = "Edges", list = element.edges || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- State Machine -->
+
+            <% if (element instanceof type.UMLStateMachine) { %>
+                <% var title = "Regions", list = element.regions || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- State Machine -->
+
+            <% if (element instanceof type.UMLRegion) { %>
+                <% var title = "Vertices", list = element.vertices || []; %>
+                <% include list %>
+
+                <% var title = "Transitions", list = element.transitions || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- State -->
+
+            <% if (element instanceof type.UMLState) { %>
+                <% var title = "Entry Activities", list = element.entryActivities || []; %>
+                <% include list %>
+
+                <% var title = "Do Activities", list = element.doActivities || []; %>
+                <% include list %>
+
+                <% var title = "Exit Activities", list = element.exitActivities || []; %>
+                <% include list %>
+
+                <% var title = "Connections", list = element.connections || []; %>
+                <% include list %>
+
+                <% var title = "Regions", list = element.regions || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- Vertex -->
+
+            <% if (element instanceof type.UMLVertex) { %>
+                <% var title = "Incoming Transitions", list = element.getIncomingTransitions() || []; %>
+                <% include list %>
+
+                <% var title = "Outgoing Transitions", list = element.getOutgoingTransitions() || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- Transition -->
+
+            <% if (element instanceof type.UMLTransition) { %>
+                <% var title = "Triggers", list = element.triggers || []; %>
+                <% include list %>
+
+                <% var title = "Effects", list = element.effects || []; %>
+                <% include list %>
+            <% } %>
+
+            <!-- Properties -->
+
             <section>
                 <h3>Properties</h3>
                 <% var elem = element, properties = elem.getMetaAttributes(); %>
                 <% include properties %>
             </section>
+
+            <!-- Tags -->
 
             <% if (element instanceof type.Model && element.tags && element.tags.length > 0) { %>
             <section>
@@ -453,147 +497,28 @@
             </section>            
             <% } %>
 
-            <% if (element instanceof type.UMLModelElement) { %>
-            <%   var _constraints = element.getConstraints(); %>
-            <%   if (_constraints.length > 0) { %>
-            <section class="element-list">
-                <h3>Constraints</h3>
-                <ul class="nav nav-list">
-                    <% _constraints.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
-
-            <% if (element instanceof type.UMLBehavior && element.preconditions && element.preconditions.length > 0) { %>
-            <section class="element-list">
-                <h3>Preconditions</h3>
-                <ul class="nav nav-list">
-                    <% element.preconditions.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <% } %>
-
-            <% if (element instanceof type.UMLBehavior && element.postconditions && element.postconditions.length > 0) { %>
-            <section class="element-list">
-                <h3>Postconditions</h3>
-                <ul class="nav nav-list">
-                    <% element.postconditions.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <% } %>
-
-            <% if (element instanceof type.UMLAction && element.localPreconditions && element.localPreconditions.length > 0) { %>
-            <section class="element-list">
-                <h3>Local Preconditions</h3>
-                <ul class="nav nav-list">
-                    <% element.localPreconditions.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <% } %>
-
-            <% if (element instanceof type.UMLAction && element.localPostconditions && element.localPostconditions.length > 0) { %>
-            <section class="element-list">
-                <h3>Local Postconditions</h3>
-                <ul class="nav nav-list">
-                    <% element.localPostconditions.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <% } %>
-
-            <% if (element instanceof type.UMLInteraction) { %>
-            <%   if (element.fragments && element.fragments.length > 0) { %>
-            <section class="element-list">
-                <h3>Fragments</h3>
-                <ul class="nav nav-list">
-                    <% element.fragments.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <%   if (element.participants && element.participants.length > 0) { %>
-            <section class="element-list">
-                <h3>Participants</h3>
-                <ul class="nav nav-list">
-                    <% element.participants.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <%   if (element.messages && element.messages.length > 0) { %>
-            <section class="element-list">
-                <h3>Messages</h3>
-                <ul class="nav nav-list">
-                    <% element.messages.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
+            <!-- Constraints, Dependencies, Dependants -->
 
             <% if (element instanceof type.UMLModelElement) { %>
-            <%   var _dependencies = element.getDependencies(); %>
-            <%   if (_dependencies.length > 0) { %>
-            <section class="element-list">
-                <h3>Dependencies</h3>
-                <ul class="nav nav-list">
-                    <% _dependencies.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
+                <% var title = "Constraints", list = element.getConstraints() || []; %>
+                <% include list %>
+
+                <% var title = "Dependencies", list = element.getDependencies() || []; %>
+                <% include list %>
+
+                <% var title = "Dependants", list = element.getDependants() || []; %>
+                <% include list %>
             <% } %>
-            
-            <% if (element instanceof type.UMLModelElement) { %>
-            <%   var _dependants = element.getDependants(); %>
-            <%   if (_dependants.length > 0) { %>
-            <section class="element-list">
-                <h3>Dependants</h3>
-                <ul class="nav nav-list">
-                    <% _dependants.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <%   } %>
-            <% } %>
-            
-            <% var _rels = mdj.Repository.getRelationshipsOf(element);  %>
-            <% if (_rels.length > 0) { %>
-            <section class="element-list">
-                <h3>Relationships</h3>
-                <ul class="nav nav-list">
-                    <% _rels.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <% } %>
-            
-            <% if (element.ownedElements && element.ownedElements.length > 0) { %>
-            <section class="element-list">
-                <h3>Owned Elements</h3>
-                <ul class="nav nav-list">
-                    <% element.ownedElements.forEach(function (e) { %>
-                    <li><%-: e | toValue %></li>
-                    <% }); %>
-                </ul>
-            </section>
-            <% } %>
+
+            <!-- Relationships -->
+
+            <% var title = "Relationships", list = mdj.Repository.getRelationshipsOf(element) || []; %>
+            <% include list %>
+
+            <!-- Owned Elements -->
+
+            <% var title = "Owned Elements", list = element.ownedElements || []; %>
+            <% include list %>
 
         </div>        
     </body>    

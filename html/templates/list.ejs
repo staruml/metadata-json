@@ -1,0 +1,10 @@
+<% if (list && list.length > 0) { %>
+<section class="element-list">
+    <h3><%= title %></h3>
+    <ul class="nav nav-list">
+        <% list.forEach(function (e) { %>
+        <li><%-: e | toValue %></li>
+        <% }); %>
+    </ul>
+</section>
+<% } %>

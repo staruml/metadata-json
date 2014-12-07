@@ -147,7 +147,7 @@ define(function (require, exports, module) {
             message: "Duplicated realizations.",
             appliesTo: [ "UMLClassifier" ],
             constraint: function (elem) {
-                var reals = elem.getRealizingInterfaces();
+                var reals = elem.getInterfaces();
                 return (reals.length === _.uniq(reals).length);
             }
         },
@@ -260,7 +260,7 @@ define(function (require, exports, module) {
             message: "A use case cannot include use cases that directly or indirectly include it.",
             appliesTo: [ "UMLUseCase" ],
             constraint: function (elem) {
-                var includings = elem.getAllIncludingUseCases();
+                var includings = elem.getAllIncludedUseCases();
                 return (!_.contains(includings, elem));
             }
         },

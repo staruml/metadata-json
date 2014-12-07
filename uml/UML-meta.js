@@ -56,7 +56,7 @@ define(function (require, exports, module) {
         },
         "UMLInteractionOperatorKind": {
             "kind": "enum",
-            "literals": [ "alt", "opt", "par", "loop", "critical", "neg", "assert", "strict", "seq", "ignore", "consider" ]
+            "literals": [ "alt", "opt", "par", "loop", "critical", "neg", "assert", "strict", "seq", "ignore", "consider", "break" ]
         },
         "UMLActionKind": {
             "kind": "enum",

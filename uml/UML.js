@@ -120,7 +120,8 @@ define(function (require, exports, module) {
         IOK_STRICT   = 'strict',
         IOK_SEQ      = 'seq',
         IOK_IGNORE   = 'ignore',
-        IOK_CONSIDER = 'consider';
+        IOK_CONSIDER = 'consider',
+        IOK_BREAK    = 'break';
 
     /**
      * UMLActionKind
@@ -282,7 +283,26 @@ define(function (require, exports, module) {
         return text;
     };
 
+    UMLModelElement.prototype.getDependencies = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLDependency) && (r.source === self);
+            });
+        return _.map(rels, function (g) { return g.target; });
+    };
 
+    UMLModelElement.prototype.getDependants = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLDependency) && (r.target === self);
+            });
+        return _.map(rels, function (g) { return g.source; });
+    };
+
+    UMLModelElement.prototype.getConstraints = function () {
+        return _.filter(this.ownedElements, function (e) { return (e instanceof type.UMLConstraint); });
+    };
+        
     /**
      * UMLConstraint
      * @constructor
@@ -728,7 +748,7 @@ define(function (require, exports, module) {
         return inherited;
     };
 
-    UMLClassifier.prototype.getRealizingInterfaces = function () {
+    UMLClassifier.prototype.getInterfaces = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
                 return (r instanceof type.UMLInterfaceRealization) && (r.source === self);
@@ -736,6 +756,22 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.target; });
     };
 
+    UMLClassifier.prototype.getComponents = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLComponentRealization) && (r.source === self);
+            });
+        return _.map(rels, function (g) { return g.target; });
+    };
+
+    UMLClassifier.prototype.getDeploymentTargets = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLDeployment) && (r.source === self);
+            });
+        return _.map(rels, function (g) { return g.target; });
+    };
+    
     UMLClassifier.prototype.getAssociationEnds = function (counterpart) {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) { return (r instanceof type.UMLAssociation); }),
@@ -935,7 +971,7 @@ define(function (require, exports, module) {
     UMLInterface.prototype = Object.create(UMLClassifier.prototype);
     UMLInterface.prototype.constructor = UMLInterface;
 
-    UMLInterface.prototype.getRealizedElements = function () {
+    UMLInterface.prototype.getImplementingClassifiers = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
                 return (r instanceof type.UMLInterfaceRealization) && (r.target === self);
@@ -1391,6 +1427,14 @@ define(function (require, exports, module) {
     UMLComponent.prototype = Object.create(UMLClassifier.prototype);
     UMLComponent.prototype.constructor = UMLComponent;
 
+    UMLComponent.prototype.getRealizingClassifiers = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLComponentRealization) && (r.target === self);
+            });
+        return _.map(rels, function (g) { return g.source; });
+    };
+    
 
     /**
      * UMLSubsystem
@@ -1420,6 +1464,13 @@ define(function (require, exports, module) {
     UMLNode.prototype = Object.create(UMLClassifier.prototype);
     UMLNode.prototype.constructor = UMLNode;
 
+    UMLNode.prototype.getDeployedElements = function () {
+        var self = this,
+            rels = Repository.getRelationshipsOf(self, function (r) {
+                return (r instanceof type.UMLDeployment) && (r.target === self);
+            });
+        return _.map(rels, function (g) { return g.source; });
+    };
 
     /**
      * UMLDeployment
@@ -1489,7 +1540,12 @@ define(function (require, exports, module) {
     UMLUseCase.prototype = Object.create(UMLClassifier.prototype);
     UMLUseCase.prototype.constructor = UMLUseCase;
 
-    UMLUseCase.prototype.getIncludingUseCases = function () {
+    UMLUseCase.prototype.getActors = function () {
+        var associated = _.map(this.getAssociationEnds(true), function (e) { return e.reference; });
+        return _.filter(associated, function (asso) { return (asso instanceof type.UMLActor); });
+    };    
+    
+    UMLUseCase.prototype.getIncludedUseCases = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
                 return (r instanceof type.UMLInclude) && (r.source === self);
@@ -1505,13 +1561,13 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.source; });
     };
 
-    UMLUseCase.prototype.getAllIncludingUseCases = function () {
-        var includings = this.getIncludingUseCases(),
+    UMLUseCase.prototype.getAllIncludedUseCases = function () {
+        var includings = this.getIncludedUseCases(),
             size = 0;
         do {
             size = includings.length;
             _.each(includings, function (e) {
-                includings = _.union(includings, e.getIncludingUseCases());
+                includings = _.union(includings, e.getIncludedUseCases());
             });
         } while (size < includings.length);
         return includings;
@@ -1528,7 +1584,12 @@ define(function (require, exports, module) {
     UMLActor.prototype = Object.create(UMLClassifier.prototype);
     UMLActor.prototype.constructor = UMLActor;
 
+    UMLActor.prototype.getUseCases = function () {
+        var associated = _.map(this.getAssociationEnds(true), function (e) { return e.reference; });
+        return _.filter(associated, function (asso) { return (asso instanceof type.UMLUseCase); });
+    };    
 
+    
     /**
      * UMLInclude
      * @constructor

@@ -1,7 +1,10 @@
 <div style="display: inline-block; white-space: nowrap">
     <span class="node-icon <%=: elem | toIcon %>"></span>
-    <% if (elem instanceof type.Project) { %><strong><% } %>
-    <a href="<%=: elem | toUrl %>" target="content" style="white-space: nowrap;"><%=: elem | toText %></a>
-    <% if (elem instanceof type.Project) { %></strong><% } %>
-    <!-- <span class="label label-info"><%=: elem.getClassName() %></span> -->
+    <% if (elem instanceof type.Project) { %>
+        <strong>
+        <a href="home.html" target="content" style="white-space: nowrap;"><%=: elem | toText %></a>
+        </strong>
+    <% } else { %>
+        <a href="<%=: elem | toUrl %>" target="content" style="white-space: nowrap;"><%=: elem | toText %></a>
+    <% } %>
 </div>

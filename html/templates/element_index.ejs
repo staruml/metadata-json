@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Index</title>
+        <% include head %>
+    </head>
+    <body>
+        <div>
+            <h1>Index</h1>
+
+            <%
+                var typeMap = {};
+                project.traverse(function (e) {
+                    if (e instanceof type.Model) {
+                        var ty = e.getClassName();
+                        if (typeMap[ty]) {
+                            typeMap[ty].push(e);
+                        } else {
+                            typeMap[ty] = [e];
+                        }
+                    }
+                });
+                var types = _.keys(typeMap).sort();
+            %>
+            <% types.forEach(function (t) { %>
+            <section>
+                <% var _elements = typeMap[t]; %>
+                <% _elements = _.sortBy(_elements, function (e) { return e.name; }); %>
+                <h3><%= t %> (<%= _elements.length %>)</h3>
+                <div>
+                <% _elements.forEach(function (e) { %>
+                    <div><%-: e | toValue %></div>
+                <% }); %>
+                </div>
+            </section>
+            <% }); %>
+        </div>        
+    </body>    
+</html>

@@ -6,90 +6,93 @@
     </head>
     <body>
         
-        <div style="padding-top: 2em; overflow-x: auto; width: 100%">
-        
-		<ol id='navigation-tree'>
-            <% var elem = project; %>
-            <li class='expanded'>
-                <% include node %>
-                <% if (project.getChildNodes().length > 0) { %>
-                <ol>
-                    <% project.getChildNodes().forEach(function (e1) { %>
-                    <% var elem = e1; %>
-                    <li>
-                        <% include node %>
-                        <% if (e1.getChildNodes().length > 0) { %>
-                        <ol>
-                            <% e1.getChildNodes().forEach(function (e2) { %>
-                            <% var elem = e2; %>
-                            <li>
-                                <% include node %>                                
-                                <% if (e2.getChildNodes().length > 0) { %>
-                                <ol>
-                                    <% e2.getChildNodes().forEach(function (e3) { %>
-                                    <% var elem = e3; %>
-                                    <li>
-                                        <% include node %>
-                                        <% if (e3.getChildNodes().length > 0) { %>
-                                        <ol>
-                                            <% e3.getChildNodes().forEach(function (e4) { %>
-                                            <% var elem = e4; %>
-                                            <li>
-                                                <% include node %>              
-                                                <% if (e4.getChildNodes().length > 0) { %>
-                                                <ol>
-                                                    <% e4.getChildNodes().forEach(function (e5) { %>
-                                                    <% var elem = e5; %>
-                                                    <li>
-                                                        <% include node %>
-                                                        <% if (e5.getChildNodes().length > 0) { %>
-                                                        <ol>
-                                                            <% e5.getChildNodes().forEach(function (e6) { %>
-                                                            <% var elem = e6; %>
-                                                            <li>
-                                                                <% include node %>
-                                                                <% if (e6.getChildNodes().length > 0) { %>
-                                                                <ol>
-                                                                    <% e6.getChildNodes().forEach(function (e7) { %>
-                                                                    <% var elem = e7; %>
-                                                                    <li>
-                                                                        <% include node %>
-                                                                    </li>
-                                                                    <% }); %>
-                                                                </ol>
-                                                                <% } %>
-                                                            </li>
-                                                            <% }); %>
-                                                        </ol>
-                                                        <% } %>
-                                                    </li>
-                                                    <% }); %>
-                                                </ol>
-                                                <% } %>
-                                            </li>
-                                            <% }); %>
-                                        </ol>
-                                        <% } %>
-                                    </li>
-                                    <% }); %>
-                                </ol>
-                                <% } %>
-                            </li>
-                            <% }); %>
-                        </ol>
-                        <% } %>
-                    </li>
-                    <% }); %>
-                </ol>
-                <% } %>
-            </li>
-		</ol>
-
+        <div style="padding-top: 1em; overflow-x: auto; width: 100%">
+            <div style="margin-bottom: 1em;">
+                <a href="home.html" target="content">Home</a>
+                <span style="color: #ccc; margin-left: 5px; margin-right: 5px;">|</span>
+                <a href="diagrams.html" target="content">All Diagrams</a>
+                <span style="color: #ccc; margin-left: 5px; margin-right: 5px;">|</span>
+                <a href="element_index.html" target="content">Index</a>
+            </div>
+            <ol id='navigation-tree'>
+                <% var elem = project; %>
+                <li class='expanded'>
+                    <% include node %>
+                    <% if (project.getChildNodes().length > 0) { %>
+                    <ol>
+                        <% project.getChildNodes().forEach(function (e1) { %>
+                        <% var elem = e1; %>
+                        <li>
+                            <% include node %>
+                            <% if (e1.getChildNodes().length > 0) { %>
+                            <ol>
+                                <% e1.getChildNodes().forEach(function (e2) { %>
+                                <% var elem = e2; %>
+                                <li>
+                                    <% include node %>                                
+                                    <% if (e2.getChildNodes().length > 0) { %>
+                                    <ol>
+                                        <% e2.getChildNodes().forEach(function (e3) { %>
+                                        <% var elem = e3; %>
+                                        <li>
+                                            <% include node %>
+                                            <% if (e3.getChildNodes().length > 0) { %>
+                                            <ol>
+                                                <% e3.getChildNodes().forEach(function (e4) { %>
+                                                <% var elem = e4; %>
+                                                <li>
+                                                    <% include node %>              
+                                                    <% if (e4.getChildNodes().length > 0) { %>
+                                                    <ol>
+                                                        <% e4.getChildNodes().forEach(function (e5) { %>
+                                                        <% var elem = e5; %>
+                                                        <li>
+                                                            <% include node %>
+                                                            <% if (e5.getChildNodes().length > 0) { %>
+                                                            <ol>
+                                                                <% e5.getChildNodes().forEach(function (e6) { %>
+                                                                <% var elem = e6; %>
+                                                                <li>
+                                                                    <% include node %>
+                                                                    <% if (e6.getChildNodes().length > 0) { %>
+                                                                    <ol>
+                                                                        <% e6.getChildNodes().forEach(function (e7) { %>
+                                                                        <% var elem = e7; %>
+                                                                        <li>
+                                                                            <% include node %>
+                                                                        </li>
+                                                                        <% }); %>
+                                                                    </ol>
+                                                                    <% } %>
+                                                                </li>
+                                                                <% }); %>
+                                                            </ol>
+                                                            <% } %>
+                                                        </li>
+                                                        <% }); %>
+                                                    </ol>
+                                                    <% } %>
+                                                </li>
+                                                <% }); %>
+                                            </ol>
+                                            <% } %>
+                                        </li>
+                                        <% }); %>
+                                    </ol>
+                                    <% } %>
+                                </li>
+                                <% }); %>
+                            </ol>
+                            <% } %>
+                        </li>
+                        <% }); %>
+                    </ol>
+                    <% } %>
+                </li>
+            </ol>
         </div>            
-            
 		<script>
 			$('#navigation-tree').bonsai();
-		</script>        
-        
+		</script>                
     </body>    
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>All Diagrams</title>
+        <% include head %>
+    </head>
+    <body>
+        <div>
+            <h1>All Diagrams</h1>
+            
+            <!-- Diagrams -->
+
+            <% var _diagrams = mdj.Repository.getInstancesOf("Diagram"); %>
+            <% if (_diagrams.length > 0) { %>
+            <section class="element-list">
+                <div>
+                    <% _diagrams.forEach(function (d) { %>
+                    <div style="display: inline-block; width: 250px; vertical-align: top;">
+                        <div class="member">
+                            <a href="<%=: d | toUrl %>">
+                            <img src="<%=: d | toDiagram %>">
+                            <div style="text-align: center; margin-top: 1em;"><%-: d | toName %></div>
+                            </a>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </section>
+            <% } %>            
+
+        </div>        
+    </body>    
+</html>

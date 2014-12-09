@@ -3,18 +3,20 @@
 
 var fs  = require("fs-extra");
 var mdj = require("./metadata-json");
-var gen = require("./lib/generator");
 
 // var project = mdj.loadFromFile("test/diagram_pdf_test.mdj");
 var project = mdj.loadFromFile("test/StarUML2.mdj");
 
 
-
+/*
 function convertToWindowsFilename(filename) {
     return filename.replace(/[\/\*<>:\\\"|?]/g, "_");
 }
 
 
+
+function exportToHTML() {
+}
 
 var targetDir = "test/html-out";
 fs.ensureDirSync(targetDir);
@@ -42,3 +44,7 @@ project.traverse(function (element) {
         gen.render("html/templates/content.ejs", targetDir + "/contents/" + gen.toFilename(element)  + ".html", options);
     }
 });
+*/
+
+mdj.exportToHTML(project, "test/html-out");
+

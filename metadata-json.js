@@ -1,10 +1,11 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, browser: true */
 /*global require, global, _, __dirname, exports*/
 
-var fs          = require("fs"),
+var fs          = require("fs-extra");
     requirejs   = require("requirejs"),
     PDFDocument = require("pdfkit"),
-    ejs         = require("ejs");
+    ejs         = require("ejs"),
+    generator   = require("./lib/generator");
 
 // load underscore (_) as a global variable
 global._ = require("underscore");
@@ -97,6 +98,39 @@ function exportToPDF(diagrams, fullPath, options) {
     doc.end();
 }
 
+/**
+ * Export to HTML
+ * @param{Project} project Project to be exported
+ * @param{string} targetDir Path where generated HTML files to be located
+ */
+function exportToHTML(project, targetDir) {
+    fs.ensureDirSync(targetDir);
+    fs.ensureDirSync(targetDir + "/contents");
+    fs.copySync("html/assets", targetDir + "/assets");
+
+    var options = {
+        mdj: exports,
+        project: project
+    };
+
+    generator.render("html/templates/index.ejs", targetDir + "/index.html", options);
+    generator.render("html/templates/navigation.ejs", targetDir + "/contents/navigation.html", options);
+    generator.render("html/templates/diagrams.ejs", targetDir + "/contents/diagrams.html", options);
+    generator.render("html/templates/element_index.ejs", targetDir + "/contents/element_index.html", options);
+
+    // for Project
+    options.element = project;
+    generator.render("html/templates/content.ejs", targetDir + "/contents/home.html", options);
+
+    // for Elements
+    project.traverse(function (element) {
+        if (!(element instanceof type.Project) && element instanceof type.Model) {
+            options.element = element;
+            generator.render("html/templates/content.ejs", targetDir + "/contents/" + generator.toFilename(element)  + ".html", options);
+        }
+    });    
+}
+
 
 // Skip all of jQuery event triggers
 _global.$ = function () {
@@ -119,3 +153,4 @@ exports.PDFGraphics      = PDFGraphics;
 
 exports.loadFromFile     = loadFromFile;
 exports.exportToPDF      = exportToPDF;
+exports.exportToHTML     = exportToHTML;

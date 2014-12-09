@@ -1,3 +1,7 @@
+**THIS MODULE IS UNDER DEVELOPMENT, DO NOT USE FOR ACTUAL PROJECT**
+
+---
+
 Metadata-JSON
 =============
 

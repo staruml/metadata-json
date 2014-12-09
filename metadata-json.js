@@ -106,6 +106,7 @@ function exportToPDF(diagrams, fullPath, options) {
 function exportToHTML(project, targetDir) {
     fs.ensureDirSync(targetDir);
     fs.ensureDirSync(targetDir + "/contents");
+    fs.ensureDirSync(targetDir + "/diagrams");
     fs.copySync(__dirname + "/html/assets", targetDir + "/assets");
 
     var options = {

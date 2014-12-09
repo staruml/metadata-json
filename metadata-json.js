@@ -106,29 +106,33 @@ function exportToPDF(diagrams, fullPath, options) {
 function exportToHTML(project, targetDir) {
     fs.ensureDirSync(targetDir);
     fs.ensureDirSync(targetDir + "/contents");
-    fs.copySync("html/assets", targetDir + "/assets");
+    fs.copySync(__dirname + "/html/assets", targetDir + "/assets");
 
     var options = {
         mdj: exports,
         project: project
     };
 
-    generator.render("html/templates/index.ejs", targetDir + "/index.html", options);
-    generator.render("html/templates/navigation.ejs", targetDir + "/contents/navigation.html", options);
-    generator.render("html/templates/diagrams.ejs", targetDir + "/contents/diagrams.html", options);
-    generator.render("html/templates/element_index.ejs", targetDir + "/contents/element_index.html", options);
+    try {
+        generator.render(__dirname + "/html/templates/index.ejs", targetDir + "/index.html", options);
+        generator.render(__dirname + "/html/templates/navigation.ejs", targetDir + "/contents/navigation.html", options);
+        generator.render(__dirname + "/html/templates/diagrams.ejs", targetDir + "/contents/diagrams.html", options);
+        generator.render(__dirname + "/html/templates/element_index.ejs", targetDir + "/contents/element_index.html", options);
 
-    // for Project
-    options.element = project;
-    generator.render("html/templates/content.ejs", targetDir + "/contents/home.html", options);
+        // for Project
+        options.element = project;
+        generator.render(__dirname + "/html/templates/content.ejs", targetDir + "/contents/home.html", options);
 
-    // for Elements
-    project.traverse(function (element) {
-        if (!(element instanceof type.Project) && element instanceof type.Model) {
-            options.element = element;
-            generator.render("html/templates/content.ejs", targetDir + "/contents/" + generator.toFilename(element)  + ".html", options);
-        }
-    });    
+        // for Elements
+        project.traverse(function (element) {
+            if (!(element instanceof type.Project) && element instanceof type.Model) {
+                options.element = element;
+                generator.render(__dirname + "/html/templates/content.ejs", targetDir + "/contents/" + generator.toFilename(element)  + ".html", options);
+            }
+        });
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 

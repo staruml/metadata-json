@@ -12,8 +12,8 @@
  *
  */
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
-/*global define, $, _*/
+/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true, loopfunc: true */
+/*global define, $, _, type*/
 
 /**
  * Repository maintains a set of elements.
@@ -753,6 +753,36 @@ define(function (require, exports, module) {
                         obj.icon._parent = obj;
                     }
                     
+                    // Fix: remove disconnected UndirectedRelationships
+                    if (obj instanceof type.UndirectedRelationship) {
+                        if (!(obj.end1 instanceof type.RelationshipEnd &&
+                              obj.end1.reference instanceof type.Model &&
+                              obj.end2 instanceof type.RelationshipEnd &&
+                              obj.end2.reference instanceof type.Model)) {
+                            if (obj._parent && obj._parent.ownedElements) {
+                                obj._parent.ownedElements.remove(obj);
+                                obj._parent = null;
+                                obj.end1.reference = null;
+                                obj.end2.reference = null;
+                                delete reader.idMap[obj._id];
+                            }
+                        }
+                    }
+
+                    // Fix: remove disconnected DirectedRelationships
+                    if (obj instanceof type.DirectedRelationship) {
+                        if (!(obj.source instanceof type.Model &&
+                              obj.target instanceof type.Model)) {
+                            if (obj._parent && obj._parent.ownedElements) {
+                                obj._parent.ownedElements.remove(obj);
+                                obj._parent = null;
+                                obj.source = null;
+                                obj.target = null;
+                                delete reader.idMap[obj._id];
+                            }
+                        }
+                    }
+                    
                 }
             }
         }
@@ -859,7 +889,147 @@ define(function (require, exports, module) {
     function isElement(elem) {
         return (elem && elem._id && get(elem._id));
     }
-
+    
+    /**
+     * Return an array of elements selected by selector expression.
+     * This is a quite heavy operation, so you need to concern about performance.
+     *
+     * Selector expression
+     *     - Children selector
+     *       ex) Package1:: -- all children of Package1
+     *
+     *     - Type selector: "@<type>"
+     *       ex) Package1::@UMLClass
+     *
+     *     - Field selector: ".<field>"
+     *       ex) Class1.attributes, Package1.owendElements
+     *
+     *     - Value selector: "[field=value]"
+     *       ex) Class1.operations[isAbstract=false]     
+     *
+     *     - Name selector: "<name>" (equivalent to "[name=<name>]")
+     *       ex) Class1, Class1::Attribute1
+     *     
+     * Selector examples:
+     *     @UMLClass
+     *     Package1::Class1.attributes[type=String]
+     *     Package1::Model1::@UMLInterface.operations[isAbstract=false]
+     * 
+     * @param {string} selector
+     * @return {Array.<Element>}
+     */
+    function select(selector) {
+        selector = selector || "";
+        
+        // Parse selector into an array of terms
+        var interm = selector
+            .replace(/::/g, "\n::\n")
+            .replace(/@/g, "\n@")
+            .replace(/\./g, "\n.")
+            .replace(/\[/g, "\n[");
+        
+        var i, len, 
+            sliced = interm.split("\n"),
+            terms = [];
+        
+        for (i = 0, len = sliced.length; i < len; i++) {
+            var item = sliced[i].trim(), arg;
+            // children selector
+            if (item === "::") { 
+                terms.push({ op: "::" });
+            // type selector
+            } else if (item.charAt(0) === "@") {
+                arg = item.substring(1, item.length).trim();
+                if (arg.length === 0) {
+                    throw "[Selector] Type selector requires type name after '@'";
+                }
+                terms.push({ op: "@", type: arg });
+            // field selector
+            } else if (item.charAt(0) === ".") {
+                arg = item.substring(1, item.length).trim();
+                if (arg.length === 0) {
+                    throw "[Selector] Field selector requires field name after '.'";
+                }
+                terms.push({ op: ".", field: arg});
+            // value selector
+            } else if (item.charAt(0) === "[") {
+                arg = item.substring(1, item.length - 1);
+                var fv = arg.split("="), f = fv[0] || "", v = fv[1] || "";
+                if (!(item.charAt(item.length - 1) === "]" && fv.length === 2 && f.trim().length > 0 && v.trim().length > 0)) {
+                    throw "[Selector] Value selector should be format of '[field=value]'";
+                }
+                terms.push({ op: "[]", field: f.trim(), value: v.trim()});
+            // name selector
+            } else if (item.length > 0) {
+                terms.push({ op: "name", name: item });
+            }
+        }
+        
+        // Process terms sequentially
+        var current = _.values(_idMap),
+            term,
+            elems;
+        for (i = 0, len = terms.length; i < len; i++) {
+            term = terms[i];
+            elems = [];
+            switch (term.op) {
+            case "::":
+                current.forEach(function (e) {
+                    elems = _.union(elems, e.getChildren());
+                });
+                current = elems;
+                break;
+            case "@":
+                current.forEach(function (e) {
+                    if (type[term.type] && e instanceof type[term.type]) {
+                        elems.push(e);
+                    }
+                });
+                current = elems;
+                break;
+            case ".":
+                current.forEach(function (e) {
+                    if (typeof e[term.field] !== "undefined") {
+                        var val = e[term.field];
+                        if (isElement(val)) {
+                            elems.push(val);
+                        }
+                        if (Array.isArray(val)) {
+                            val.forEach(function (e2) {
+                                if (isElement(e2)) {
+                                    elems.push(e2);
+                                }
+                            });
+                        }
+                    }
+                });
+                current = elems;
+                break;
+            case "[]":
+                current.forEach(function (e) {
+                    if (typeof e[term.field] !== "undefined") {
+                        var val = e[term.field];
+                        if (term.value == val) {
+                            elems.push(e);
+                        }
+                    }
+                });
+                current = elems;
+                break;
+            case "name":
+                current.forEach(function (e) {
+                    if (e.name === term.name) {
+                        elems.push(e);
+                    }
+                });
+                current = elems;
+                break;
+            }
+        }
+        
+        return current;
+    }
+    
     /**
      * Return element by id.
      * @param {string} id Identifier of element.
@@ -1094,6 +1264,7 @@ define(function (require, exports, module) {
     exports.isModified          = isModified;
     exports.setModified         = setModified;
     exports.isElement           = isElement;
+    exports.select              = select;
     exports.get                 = get;
     exports.getInstancesOf      = getInstancesOf;
     exports.find                = find;

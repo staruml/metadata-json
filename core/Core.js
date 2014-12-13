@@ -2800,8 +2800,10 @@ define(function (require, exports, module) {
      * @param {boolean} shallow Find only in first level
      */
     Diagram.prototype.getViewAt = function (canvas, x, y, shallow) {
-        for (var i = this.ownedViews.length - 1; i >= 0; i--) {
-            var v = this.ownedViews[i];
+        // Sort views by zIndex
+        var sortedViews = _.sortBy(this.ownedViews, function (v) { return v.zIndex; });
+        for (var i = sortedViews.length - 1; i >= 0; i--) {
+            var v = sortedViews[i];
             if (shallow === true) {
                 if (v.visible && (v.selectable === SK_YES) && v.containsPoint(canvas, x, y)) {
                     return v;

@@ -8,19 +8,19 @@
         
         <div style="padding-top: 1em; overflow-x: auto; width: 100%">
             <div style="margin-bottom: 1em;">
-                <a href="home.html" target="content">Home</a>
+                <a href="<%=: root | toUrl %>" target="content">Home</a>
                 <span style="color: #ccc; margin-left: 5px; margin-right: 5px;">|</span>
                 <a href="diagrams.html" target="content">All Diagrams</a>
                 <span style="color: #ccc; margin-left: 5px; margin-right: 5px;">|</span>
                 <a href="element_index.html" target="content">Index</a>
             </div>
             <ol id='navigation-tree'>
-                <% var elem = project; %>
+                <% var elem = root; %>
                 <li class='expanded'>
                     <% include node %>
-                    <% if (project.getChildNodes().length > 0) { %>
+                    <% if (root.getChildNodes().length > 0) { %>
                     <ol>
-                        <% project.getChildNodes().forEach(function (e1) { %>
+                        <% root.getChildNodes().forEach(function (e1) { %>
                         <% var elem = e1; %>
                         <li>
                             <% include node %>

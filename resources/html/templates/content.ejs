@@ -481,11 +481,11 @@
                         <td><%= tag.name %></td>
                         <td><span class="label label-info"><%= tag.kind %></span></td>
                         <td>
-                            <% if (tag.kind === mdj.Core.TK_BOOLEAN) { %>
+                            <% if (tag.kind === mdjson.Core.TK_BOOLEAN) { %>
                             <%-: tag.checked | toValue %>
-                            <% } else if (tag.kind === mdj.Core.TK_REFERENCE) { %>
+                            <% } else if (tag.kind === mdjson.Core.TK_REFERENCE) { %>
                             <%-: tag.reference | toValue %>
-                            <% } else if (tag.kind === mdj.Core.TK_NUMBER) { %>
+                            <% } else if (tag.kind === mdjson.Core.TK_NUMBER) { %>
                             <%-: tag.number | toValue %>
                             <% } else { %>
                             <%-: tag.value | toValue %>
@@ -512,7 +512,7 @@
 
             <!-- Relationships -->
 
-            <% var title = "Relationships", list = mdj.Repository.getRelationshipsOf(element) || []; %>
+            <% var title = "Relationships", list = mdjson.Repository.getRelationshipsOf(element) || []; %>
             <% include list %>
 
             <!-- Owned Elements -->

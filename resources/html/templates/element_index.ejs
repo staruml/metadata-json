@@ -10,7 +10,7 @@
 
             <%
                 var typeMap = {};
-                project.traverse(function (e) {
+                root.traverse(function (e) {
                     if (e instanceof type.Model) {
                         var ty = e.getClassName();
                         if (typeMap[ty]) {

@@ -1,8 +1,6 @@
-var mdjson = require("./metadata-json");
-
-var fs = require('fs');
-
-var Canvas = require('canvas');
+var mdjson = require('../metadata-json'),
+    fs     = require('fs'),
+    Canvas = require('canvas');
 
 /**
  * Get image data of diagram
@@ -34,4 +32,7 @@ mdjson.loadFromFile("test/StarUML2.mdj");
 var diagrams = mdjson.Repository.getInstancesOf("Diagram");
 
 fs.writeFile('out.png', getImageData(diagrams[2]));
-
+fs.writeFile('out.gif', getImageData(diagrams[2], 'gif'));
+fs.writeFile('out.pdf', getImageData(diagrams[2], 'pdf'));
+fs.writeFile('out.svg', getImageData(diagrams[2], 'svg'));
+fs.writeFile('out.jpg', getImageData(diagrams[2], 'jpg'));

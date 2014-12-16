@@ -1,7 +1,3 @@
-**THIS MODULE IS UNDER DEVELOPMENT, DO NOT USE FOR ACTUAL PROJECT**
-
----
-
 Metadata-JSON
 =============
 
@@ -17,8 +13,8 @@ Installation
 $ npm install metadata-json
 ```
 
-Load From File
---------------
+Load a model file
+-----------------
 
 To load a model file (`.mdj`), call `loadFromFile` function with a file path. It returns the root element (typically an instanceof Project). You can also get the root element by `getRoot` function.
 
@@ -30,8 +26,13 @@ console.log(root);
 console.log(mdjson.getRoot()); // equivalent
 ```
 
-Generate Code using EJS Template
+Generate code using EJS template
 --------------------------------
+
+### Generate a single file
+
+If you want to generate code with a EJS template, you can do by calling `render` function.
+
 
 ```javascript
 var mdjson = require("metadata-json");
@@ -51,7 +52,7 @@ Here is the content of `template.ejs` file.
   <body>
     <h1><%= element.name %></h1>
     <h3>Description</h3>
-    <div><%= element.documentation %></div>
+    <div><%-: element.documentation | markdown %></div>
     <h3>Children</h3>
     <ul>
     <% element.getChildren().forEach(function (e) { %>
@@ -62,8 +63,14 @@ Here is the content of `template.ejs` file.
 </html>
 ```
 
-Generate Multiple Codes
------------------------
+In template, you can use the following variables. If you want to pass additional variables, add them to options, the fourth parameter of `render`.
+
+* `element` : the element passed as the third parameter of `render` function.
+* `mdjson` : reference to `metadata-json` module.
+* `filename` : file name of the template file.
+* `root` : the root element. It equals to `mdjson.getRoot()`.
+
+### Generate multiple files
 
 If you want to render a set of elements with a same template, you can do by calling `renderBulk` function. You can pass array of elements or selector expression (string) to the third parameter of `renderBulk`. To save each rendered data with different file name, you can also use EJS template syntax in the output file name.
 
@@ -73,6 +80,35 @@ var mdjson = require("metadata-json");
 mdjson.loadFromFile("test.mdj");
 mdjson.renderBulk("template.ejs", "<%= element.name %>.html", "@UMLPackage");
 ```
+
+### Use filters
+
+You can define filters to be used in templates.
+
+```javascript
+var myFilters = {
+    attributeExpression: function (e) {
+        return e.name + " : " + e.type + " = " + e.defaultValue;
+    }
+};
+mdjson.render("template.ejs", "out.html", attr, { filters: myFilters }); // out.html file generated.
+```
+
+In template, you can use the filters you defined.
+
+```
+...
+<%=: element | attributeExpression %>
+...
+```
+
+### Predefined filters
+
+EJS provides several [predefined filters](https://github.com/tj/ejs#filter-list) and additionally following filters are defined in `metadata-json` so you can use them in your EJS templates.
+
+* `filename` : convert string to possible filename in Windows.
+* `markdown` : render markdown syntax to HTML.
+
 
 Export Diagrams to PDF
 ----------------------
@@ -100,3 +136,4 @@ var options = {
 
 mdjson.exportToPDF(diagrams, "out.pdf", options);
 ```
+

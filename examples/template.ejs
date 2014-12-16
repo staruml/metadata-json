@@ -5,7 +5,7 @@
   <body>
     <h1><%= element.name %></h1>
     <h3>Description</h3>
-    <div><%= element.documentation %></div>
+    <div><%-: element.documentation | markdown %></div>
     <h3>Children</h3>
     <ul>
     <% element.getChildren().forEach(function (e) { %>

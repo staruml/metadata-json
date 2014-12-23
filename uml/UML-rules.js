@@ -43,7 +43,8 @@ define(function (require, exports, module) {
                 var parent   = elem._parent,
                     field    = elem.getParentField(),
                     siblings = parent[field],
-                    i, len;
+                    i,
+                    len;
                 for (i = 0, len = siblings.length; i < len; i++) {
                     var sibling = siblings[i];
                     if (elem !== sibling && elem.name.length > 0 && elem.name === sibling.name) {

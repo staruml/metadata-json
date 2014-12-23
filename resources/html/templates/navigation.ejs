@@ -5,7 +5,7 @@
         <% include head %>
     </head>
     <body>
-        
+
         <div style="padding-top: 1em; overflow-x: auto; width: 100%">
             <div style="margin-bottom: 1em;">
                 <a href="<%=: root | toUrl %>" target="content">Home</a>
@@ -20,43 +20,43 @@
                     <% include node %>
                     <% if (root.getChildNodes().length > 0) { %>
                     <ol>
-                        <% root.getChildNodes().forEach(function (e1) { %>
+                        <% root.getChildNodes(true).forEach(function (e1) { %>
                         <% var elem = e1; %>
                         <li>
                             <% include node %>
                             <% if (e1.getChildNodes().length > 0) { %>
                             <ol>
-                                <% e1.getChildNodes().forEach(function (e2) { %>
+                                <% e1.getChildNodes(true).forEach(function (e2) { %>
                                 <% var elem = e2; %>
                                 <li>
-                                    <% include node %>                                
+                                    <% include node %>
                                     <% if (e2.getChildNodes().length > 0) { %>
                                     <ol>
-                                        <% e2.getChildNodes().forEach(function (e3) { %>
+                                        <% e2.getChildNodes(true).forEach(function (e3) { %>
                                         <% var elem = e3; %>
                                         <li>
                                             <% include node %>
                                             <% if (e3.getChildNodes().length > 0) { %>
                                             <ol>
-                                                <% e3.getChildNodes().forEach(function (e4) { %>
+                                                <% e3.getChildNodes(true).forEach(function (e4) { %>
                                                 <% var elem = e4; %>
                                                 <li>
-                                                    <% include node %>              
+                                                    <% include node %>
                                                     <% if (e4.getChildNodes().length > 0) { %>
                                                     <ol>
-                                                        <% e4.getChildNodes().forEach(function (e5) { %>
+                                                        <% e4.getChildNodes(true).forEach(function (e5) { %>
                                                         <% var elem = e5; %>
                                                         <li>
                                                             <% include node %>
                                                             <% if (e5.getChildNodes().length > 0) { %>
                                                             <ol>
-                                                                <% e5.getChildNodes().forEach(function (e6) { %>
+                                                                <% e5.getChildNodes(true).forEach(function (e6) { %>
                                                                 <% var elem = e6; %>
                                                                 <li>
                                                                     <% include node %>
                                                                     <% if (e6.getChildNodes().length > 0) { %>
                                                                     <ol>
-                                                                        <% e6.getChildNodes().forEach(function (e7) { %>
+                                                                        <% e6.getChildNodes(true).forEach(function (e7) { %>
                                                                         <% var elem = e7; %>
                                                                         <li>
                                                                             <% include node %>
@@ -90,9 +90,9 @@
                     <% } %>
                 </li>
             </ol>
-        </div>            
-		<script>
-			$('#navigation-tree').bonsai();
-		</script>                
-    </body>    
+        </div>
+        <script>
+            $('#navigation-tree').bonsai();
+        </script>
+    </body>
 </html>

@@ -226,7 +226,7 @@ define(function (require, exports, module) {
                         break;
                     case Core.TK_REFERENCE:
                         if (tag.reference instanceof Core.Model) {
-                            tagArray.push(tag.name + '=(' + tag.reference.name + ')');
+                            tagArray.push(tag.name + '=' + tag.reference.name);
                         } else {
                             tagArray.push(tag.name + '=null');
                         }
@@ -302,7 +302,7 @@ define(function (require, exports, module) {
     UMLModelElement.prototype.getConstraints = function () {
         return _.filter(this.ownedElements, function (e) { return (e instanceof type.UMLConstraint); });
     };
-        
+
     /**
      * UMLConstraint
      * @constructor
@@ -771,7 +771,7 @@ define(function (require, exports, module) {
             });
         return _.map(rels, function (g) { return g.target; });
     };
-    
+
     UMLClassifier.prototype.getAssociationEnds = function (counterpart) {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) { return (r instanceof type.UMLAssociation); }),
@@ -978,7 +978,7 @@ define(function (require, exports, module) {
             });
         return _.map(rels, function (g) { return g.source; });
     };
-    
+
     /**
      * UMLSignal
      * @constructor
@@ -1434,7 +1434,7 @@ define(function (require, exports, module) {
             });
         return _.map(rels, function (g) { return g.source; });
     };
-    
+
 
     /**
      * UMLSubsystem
@@ -1543,8 +1543,8 @@ define(function (require, exports, module) {
     UMLUseCase.prototype.getActors = function () {
         var associated = _.map(this.getAssociationEnds(true), function (e) { return e.reference; });
         return _.filter(associated, function (asso) { return (asso instanceof type.UMLActor); });
-    };    
-    
+    };
+
     UMLUseCase.prototype.getIncludedUseCases = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1587,9 +1587,9 @@ define(function (require, exports, module) {
     UMLActor.prototype.getUseCases = function () {
         var associated = _.map(this.getAssociationEnds(true), function (e) { return e.reference; });
         return _.filter(associated, function (asso) { return (asso instanceof type.UMLUseCase); });
-    };    
+    };
 
-    
+
     /**
      * UMLInclude
      * @constructor

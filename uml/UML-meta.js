@@ -20,7 +20,7 @@ define(function (require, exports, module) {
 
     var MetaModelManager  = require("core/MetaModelManager");
     require("core/Core-meta");
-    
+
     var metaModel = {
         "UMLVisibilityKind": {
             "kind": "enum",
@@ -85,7 +85,8 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "specification",       "kind": "prim", "type": "String", "visible": true, "multiline": true },
                 { "name": "constrainedElements", "kind": "refs", "type": "UMLModelElement", "visible": true }
-            ]
+            ],
+            "view": "UMLConstraintView"
         },
         "UMLTemplateParameter": {
             "kind": "class",
@@ -141,6 +142,7 @@ define(function (require, exports, module) {
                 { "name": "aggregation",  "kind": "enum", "type": "UMLAggregationKind", "visible": true, "default": "none" },
                 { "name": "isID",         "kind": "prim", "type": "Boolean", "visible": true, "default": false }
             ],
+            "view": "UMLPartView",
             "ordering": 1105
         },
         "UMLOperation": {
@@ -232,6 +234,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "importedElements", "kind": "refs", "type": "UMLModelElement", "visible": true }
             ],
+            "view": "UMLPackageView",
             "ordering": 1001
         },
         "UMLModel": {
@@ -240,6 +243,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "viewpoint", "kind": "prim", "type": "String", "visible": true }
             ],
+            "view": "UMLModelView",
             "ordering": 1000
         },
         "UMLClass": {
@@ -248,26 +252,31 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "isActive",   "kind": "prim", "type": "Boolean", "visible": true, "default": false }
             ],
+            "view": "UMLClassView",
             "ordering": 1201
         },
         "UMLInterface": {
             "kind": "class",
             "super": "UMLClassifier",
+            "view": "UMLInterfaceView",
             "ordering": 1202
         },
         "UMLSignal": {
             "kind": "class",
             "super": "UMLClassifier",
+            "view": "UMLSignalView",
             "ordering": 1203
         },
         "UMLDataType": {
             "kind": "class",
             "super": "UMLClassifier",
+            "view": "UMLDataTypeView",
             "ordering": 1204
         },
         "UMLPrimitiveType": {
             "kind": "class",
             "super": "UMLDataType",
+            "view": "UMLPrimitiveTypeView",
             "ordering": 1205
         },
         "UMLEnumerationLiteral": {
@@ -281,6 +290,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "literals", "kind": "objs", "type": "UMLEnumerationLiteral" }
             ],
+            "view": "UMLEnumerationView",
             "ordering": 1206
         },
         "UMLDependency": {
@@ -289,6 +299,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "mapping", "kind": "prim", "type": "String", "visible": true }
             ],
+            "view": "UMLDependencyView",
             "ordering": 1806
         },
         "UMLAbstraction": {
@@ -307,16 +318,19 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "discriminator", "kind": "prim", "type": "String", "visible": true }
             ],
+            "view": "UMLGeneralizationView",
             "ordering": 1807
         },
         "UMLInterfaceRealization": {
             "kind": "class",
             "super": "UMLRealization",
+            "view": "UMLInterfaceRealizationView",
             "ordering": 1809
         },
         "UMLComponentRealization": {
             "kind": "class",
             "super": "UMLRealization",
+            "view": "UMLComponentRealizationView",
             "ordering": 1810
         },
         "UMLAssociationEnd": {
@@ -333,6 +347,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "isDerived", "kind": "prim", "type": "Boolean", "visible": true, "default": false }
             ],
+            "view": "UMLAssociationView",
             "ordering": 1802
         },
         "UMLAssociationClassLink": {
@@ -342,6 +357,7 @@ define(function (require, exports, module) {
                 { "name": "classSide",       "kind": "ref", "type": "UMLClass", "visible": true },
                 { "name": "associationSide", "kind": "ref", "type": "UMLAssociation", "visible": true }
             ],
+            "view": "UMLAssociationClassLinkView",
             "ordering": 1803
         },
         "UMLSlot": {
@@ -365,21 +381,25 @@ define(function (require, exports, module) {
         "UMLObject": {
             "kind": "class",
             "super": "UMLInstance",
+            "view": "UMLObjectView",
             "ordering": 1302
         },
         "UMLArtifactInstance": {
             "kind": "class",
             "super": "UMLInstance",
+            "view": "UMLArtifactInstanceView",
             "ordering": 1303
         },
         "UMLComponentInstance": {
             "kind": "class",
             "super": "UMLInstance",
+            "view": "UMLComponentInstanceView",
             "ordering": 1304
         },
         "UMLNodeInstance": {
             "kind": "class",
             "super": "UMLInstance",
+            "view": "UMLNodeInstanceView",
             "ordering": 1305
         },
         "UMLLinkEnd": {
@@ -393,6 +413,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "association",  "kind": "ref",  "type": "UMLAssociation", "visible": true }
             ],
+            "view": "UMLLinkView",
             "ordering": 1815
         },
         "UMLPort": {
@@ -403,6 +424,7 @@ define(function (require, exports, module) {
                 { "name": "isService",    "kind": "prim", "type": "Boolean", "visible": true, "default": false },
                 { "name": "isConjugated", "kind": "prim", "type": "Boolean", "visible": true, "default": false }
             ],
+            "view": "UMLPortView",
             "ordering": 1104
         },
         "UMLConnectorEnd": {
@@ -416,11 +438,13 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "type", "kind": "ref",  "type": "UMLAssociation", "visible": true }
             ],
+            "view": "UMLConnectorView",
             "ordering": 1813
         },
         "UMLCollaboration": {
             "kind": "class",
             "super": "UMLClassifier",
+            "view": "UMLCollaborationView",
             "ordering": 1401
         },
         "UMLCollaborationUse": {
@@ -429,6 +453,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "type", "kind": "ref", "type": "UMLCollaboration", "visible": true }
             ],
+            "view": "UMLCollaborationUseView",
             "ordering": 1405
         },
         "UMLRoleBinding": {
@@ -437,6 +462,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "roleName", "kind": "prim", "type": "String", "visible": true }
             ],
+            "view": "UMLRoleBindingView",
             "ordering": 1818
         },
         "UMLArtifact": {
@@ -445,6 +471,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "fileName", "kind": "prim", "type": "String", "visible": true }
             ],
+            "view": "UMLArtifactView",
             "ordering": 1207
         },
         "UMLComponent": {
@@ -453,26 +480,31 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "isIndirectlyInstantiated", "kind": "prim", "type": "Boolean", "visible": true, "default": true }
             ],
+            "view": "UMLComponentView",
             "ordering": 1208
         },
         "UMLSubsystem": {
             "kind": "class",
             "super": "UMLComponent",
+            "view": "UMLSubsystemView",
             "ordering": 1002
         },
         "UMLNode": {
             "kind": "class",
             "super": "UMLClassifier",
+            "view": "UMLNodeView",
             "ordering": 1209
         },
         "UMLDeployment": {
             "kind": "class",
             "super": "UMLDependency",
+            "view": "UMLDeploymentView",
             "ordering": 1804
         },
         "UMLCommunicationPath": {
             "kind": "class",
             "super": "UMLAssociation",
+            "view": "UMLCommunicationPathView",
             "ordering": 1805
         },
         "UMLExtensionPoint": {
@@ -489,16 +521,19 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "extensionPoints", "kind": "objs", "type": "UMLExtensionPoint", "visible": true }
             ],
+            "view": "UMLUseCaseView",
             "ordering": 1210
         },
         "UMLActor": {
             "kind": "class",
             "super": "UMLClassifier",
+            "view": "UMLActorView",
             "ordering": 1211
         },
         "UMLInclude": {
             "kind": "class",
             "super": "UMLDirectedRelationship",
+            "view": "UMLIncludeView",
             "ordering": 1816
         },
         "UMLExtend": {
@@ -508,6 +543,7 @@ define(function (require, exports, module) {
                 { "name": "condition", "kind": "prim", "type": "String", "visible": true },
                 { "name": "extensionLocations", "kind": "refs", "type": "UMLExtensionPoint", "visible": true }
             ],
+            "view": "UMLExtendView",
             "ordering": 1817
         },
         "UMLUseCaseSubject": {
@@ -516,6 +552,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "represent", "kind": "ref", "type": "UMLClassifier", "visible": true }
             ],
+            "view": "UMLUseCaseSubjectView",
             "ordering": 1003
         },
         "UMLStateMachine": {
@@ -545,6 +582,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "kind", "kind": "enum", "type": "UMLPseudostateKind", "visible": true }
             ],
+            "view": "UMLPseudostateView",
             "ordering": 1408
         },
         "UMLConnectionPointReference": {
@@ -553,7 +591,9 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "entry", "kind": "refs", "type": "UMLPseudostate", "visible": true },
                 { "name": "exit",  "kind": "refs", "type": "UMLPseudostate", "visible": true }
-            ]
+            ],
+            "view": "UMLConnectionPointReferenceView",
+            "ordering": 1408
         },
         "UMLState": {
             "kind": "class",
@@ -566,11 +606,13 @@ define(function (require, exports, module) {
                 { "name": "submachine",      "kind": "ref",  "type": "UMLStateMachine", "visible": true },
                 { "name": "connections",     "kind": "objs", "type": "UMLConnectionPointReference" }
             ],
+            "view": "UMLStateView",
             "ordering": 1409
         },
         "UMLFinalState": {
             "kind": "class",
             "super": "UMLState",
+            "view": "UMLFinalStateView",
             "ordering": 1410
         },
         "UMLTransition": {
@@ -582,6 +624,7 @@ define(function (require, exports, module) {
                 { "name": "triggers",   "kind": "objs", "type": "UMLEvent" },
                 { "name": "effects",    "kind": "objs", "type": "UMLBehavior" }
             ],
+            "view": "UMLTransitionView",
             "ordering": 1819
         },
         "UMLActivity": {
@@ -602,11 +645,13 @@ define(function (require, exports, module) {
         },
         "UMLInputPin": {
             "kind": "class",
-            "super": "UMLPin"
+            "super": "UMLPin",
+            "view": "UMLInputPinView"
         },
         "UMLOutputPin": {
             "kind": "class",
-            "super": "UMLPin"
+            "super": "UMLPin",
+            "view": "UMLOutputPinView"
         },
         "UMLActivityNode": {
             "kind": "class",
@@ -629,6 +674,7 @@ define(function (require, exports, module) {
                 { "name": "localPreconditions",  "kind": "objs", "type": "UMLConstraint" },
                 { "name": "localPostconditions", "kind": "objs", "type": "UMLConstraint" }
             ],
+            "view": "UMLActionView",
             "ordering": 1411
         },
         "UMLObjectNode": {
@@ -639,6 +685,7 @@ define(function (require, exports, module) {
                 { "name": "isControlType", "kind": "prim", "type": "Boolean", "visible": true, "default": false },
                 { "name": "ordering",      "kind": "enum", "type": "UMLObjectNodeOrderingKind", "visible": true }
             ],
+            "view": "UMLObjectNodeView",
             "ordering": 1412
         },
         "UMLControlNode": {
@@ -649,41 +696,49 @@ define(function (require, exports, module) {
         "UMLInitialNode": {
             "kind": "class",
             "super": "UMLControlNode",
+            "view": "UMLControlNodeView",
             "ordering": 1414
         },
         "UMLFinalNode": {
             "kind": "class",
             "super": "UMLControlNode",
+            "view": "UMLControlNodeView",
             "ordering": 1415
         },
         "UMLActivityFinalNode": {
             "kind": "class",
             "super": "UMLFinalNode",
+            "view": "UMLControlNodeView",
             "ordering": 1416
         },
         "UMLFlowFinalNode": {
             "kind": "class",
             "super": "UMLFinalNode",
+            "view": "UMLControlNodeView",
             "ordering": 1417
         },
         "UMLForkNode": {
             "kind": "class",
             "super": "UMLControlNode",
+            "view": "UMLControlNodeView",
             "ordering": 1418
         },
         "UMLJoinNode": {
             "kind": "class",
             "super": "UMLControlNode",
+            "view": "UMLControlNodeView",
             "ordering": 1419
         },
         "UMLMergeNode": {
             "kind": "class",
             "super": "UMLControlNode",
+            "view": "UMLControlNodeView",
             "ordering": 1420
         },
         "UMLDecisionNode": {
             "kind": "class",
             "super": "UMLControlNode",
+            "view": "UMLControlNodeView",
             "ordering": 1421
         },
         "UMLActivityGroup": {
@@ -697,6 +752,7 @@ define(function (require, exports, module) {
         "UMLActivityPartition": {
             "kind": "class",
             "super": "UMLActivityGroup",
+            "view": "UMLSwimlaneView",
             "ordering": 1423
         },
         "UMLActivityEdge": {
@@ -710,11 +766,13 @@ define(function (require, exports, module) {
         "UMLControlFlow": {
             "kind": "class",
             "super": "UMLActivityEdge",
+            "view": "UMLControlFlowView",
             "ordering": 1820
         },
         "UMLObjectFlow": {
             "kind": "class",
             "super": "UMLActivityEdge",
+            "view": "UMLObjectFlowView",
             "ordering": 1821
         },
         "UMLInteractionFragment": {
@@ -738,6 +796,7 @@ define(function (require, exports, module) {
                 { "name": "covered",   "kind": "ref",  "type": "UMLLifeline", "visible": true },
                 { "name": "invariant", "kind": "prim", "type": "String", "visible": true }
             ],
+            "view": "UMLStateInvariantView",
             "ordering": 1424
         },
         "UMLContinuation": {
@@ -746,6 +805,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "setting", "kind": "prim", "type": "Boolean", "visible": true, "default": false }
             ],
+            "view": "UMLContinuationView",
             "ordering": 1425
         },
         "UMLInteractionOperand": {
@@ -763,6 +823,7 @@ define(function (require, exports, module) {
                 { "name": "interactionOperator",  "kind": "enum", "type": "UMLInteractionOperatorKind", "visible": true },
                 { "name": "operands",             "kind": "objs", "type": "UMLInteractionOperand" }
             ],
+            "view": "UMLCombinedFragmentView",
             "ordering": 1426
         },
         "UMLInteractionUse": {
@@ -774,6 +835,7 @@ define(function (require, exports, module) {
                 { "name": "returnValue",          "kind": "prim", "type": "String", "visible": true },
                 { "name": "returnValueRecipient", "kind": "ref",  "type": "UMLStructuralFeature", "visible": true }
             ],
+            "view": "UMLInteractionUseView",
             "ordering": 1406
         },
         "UMLMessageEndpoint": {
@@ -793,11 +855,13 @@ define(function (require, exports, module) {
         "UMLGate": {
             "kind": "class",
             "super": "UMLMessageEndpoint",
+            "view": "UMLGateView",
             "ordering": 1429
         },
         "UMLEndpoint": {
             "kind": "class",
             "super": "UMLMessageEndpoint",
+            "view": "UMLEndpointView",
             "ordering": 1430
         },
         "UMLMessage": {
@@ -815,6 +879,7 @@ define(function (require, exports, module) {
         "UMLProfile": {
             "kind": "class",
             "super": "UMLPackage",
+            "view": "UMLProfileView",
             "ordering": 1901
         },
         "UMLImage": {
@@ -833,16 +898,19 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "icon",    "kind": "obj",  "type": "UMLImage", "visible": true, "expand": true }
             ],
+            "view": "UMLStereotypeView",
             "ordering": 1903
         },
         "UMLMetaClass": {
             "kind": "class",
             "super": "UMLModelElement",
+            "view": "UMLMetaClassView",
             "ordering": 1904
         },
         "UMLExtension": {
             "kind": "class",
             "super": "UMLDirectedRelationship",
+            "view": "UMLExtensionView",
             "ordering": 1905
         },
         "UMLDiagram": {
@@ -861,7 +929,7 @@ define(function (require, exports, module) {
                 { "name": "nameLabel",       "kind": "ref", "type": "LabelView" },
                 { "name": "namespaceLabel",  "kind": "ref", "type": "LabelView" },
                 { "name": "propertyLabel",   "kind": "ref", "type": "LabelView" },
-                { "name": "wordWrap",        "kind": "prim","type": "Boolean", "default": false, "transient": true }
+                { "name": "wordWrap",        "kind": "prim", "type": "Boolean", "default": false, "transient": true }
             ]
         },
         "UMLAttributeView": {
@@ -1411,7 +1479,8 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "text", "kind": "prim", "type": "String" }
+                { "name": "text", "kind": "prim", "type": "String" },
+                { "name": "wordWrap", "kind": "prim", "type": "Boolean", "default": true }
             ]
         },
         "UMLTextView": {

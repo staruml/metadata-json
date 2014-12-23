@@ -175,9 +175,24 @@ define(function (require, exports, module) {
         }
     }
 
+
+    /**
+     * Return a corresponding view type of a given model type.
+     * @param {string} typeName
+     * @return {string}
+     */
+    function getViewTypeOf(typeName) {
+        var metaClass = _global.meta[typeName];
+        if (metaClass) {
+            return metaClass.view || null;
+        }
+        return null;
+    }
+
     exports.register          = register;
     exports.getMetaAttributes = getMetaAttributes;
     exports.isKindOf          = isKindOf;
+    exports.getViewTypeOf     = getViewTypeOf;
 
 });
 

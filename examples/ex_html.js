@@ -3,8 +3,8 @@
 
 var mdjson = require('../metadata-json');
 
-mdjson.loadFromFile("../test/diagram_pdf_test.mdj");
-// mdjson.loadFromFile("../test/StarUML2.mdj");
+// mdjson.loadFromFile("../test/diagram_pdf_test.mdj");
+mdjson.loadFromFile("../test/StarUML2.mdj");
 
 mdjson.exportToHTML("html-out");
 

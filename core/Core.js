@@ -60,7 +60,7 @@
  */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true, loopfunc: true */
-/*global define, _, graphlib, dagre */
+/*global define, _, type, graphlib, dagre */
 
 define(function (require, exports, module) {
     "use strict";
@@ -78,7 +78,8 @@ define(function (require, exports, module) {
         Coord             = require("core/Graphics").Coord,
         Canvas            = require("core/Graphics").Canvas,
         Toolkit           = require("core/Toolkit"),
-        MetaModelManager  = require("core/MetaModelManager");
+        MetaModelManager  = require("core/MetaModelManager"),
+        PreferenceManager = require("core/PreferenceManager");
 
     /**
      * Attribute Kind
@@ -322,9 +323,10 @@ define(function (require, exports, module) {
      * 하위 노드 요소들을 반환.
      * (Model의 하위 타입이고 Tag가 아닌 모든 하위 요소를 리턴)
      *
+     * @param {boolean} sort
      * @return {Array.<Element>}
      */
-    Element.prototype.getChildNodes = function () {
+    Element.prototype.getChildNodes = function (sort) {
         var children = [];
         var self = this;
 
@@ -351,6 +353,13 @@ define(function (require, exports, module) {
                 break;
             }
         });
+
+        if (sort) {
+            children = _.sortBy(children, function (child, idx) {
+                return child.getOrdering(idx);
+            });
+        }
+
         return children;
     };
 
@@ -877,6 +886,16 @@ define(function (require, exports, module) {
     Model.prototype.constructor = Model;
 
     /**
+     * Get a corresponding view type
+     * @return {constructor}
+     */
+    Model.prototype.getViewType = function () {
+        var typeName = MetaModelManager.getViewTypeOf(this.getClassName()),
+            ViewType = typeName ? type[typeName] : null;
+        return ViewType;
+    };
+
+    /**
      * Get path to from a given base
      * @param {Model} base
      * @return {Array.<string>}
@@ -1179,23 +1198,27 @@ define(function (require, exports, module) {
         this.selectable = SK_YES;
 
         /** @member {string} */
-        this.lineColor = "#000000";
+        this.lineColor = PreferenceManager.get("view.lineColor", "#000000");
 
         /** @member {string} */
-        this.fillColor = "#ffffff";
+        this.fillColor = PreferenceManager.get("view.fillColor", "#ffffff");
 
         /** @member {string} */
-        this.fontColor = "#000000";
+        this.fontColor = PreferenceManager.get("view.fontColor", "#000000");
 
         /** @member {Font} */
-        this.font = new Font("Arial", 13, Graphics.FS_NORMAL);
+        this.font = new Font(
+            PreferenceManager.get("view.font", "Arial"),
+            PreferenceManager.get("view.fontSize", 13),
+            Graphics.FS_NORMAL
+        );
 
         /** @member {boolean} */
         this.parentStyle = false;
 
         /** @member {boolean} */
-        this.showShadow = true;
-                
+        this.showShadow = PreferenceManager.get("view.showShadow", true);
+
         /** @member {boolean} */
         this.containerChangeable = false;
 
@@ -1786,7 +1809,7 @@ define(function (require, exports, module) {
         this.tail = null;
 
         /** @member {number} */
-        this.lineStyle = LS_OBLIQUE;
+        this.lineStyle = PreferenceManager.get("view.lineStyle", LS_OBLIQUE);
 
         this.lineMode = LM_SOLID;
         this.points = new Points();
@@ -2500,7 +2523,7 @@ define(function (require, exports, module) {
 
         /** @member {string} */
         this.underline = false;
-        
+
         this.enabled = true;
         this.movable = MM_FREE;
         this.sizable = SZ_NONE;
@@ -2552,7 +2575,7 @@ define(function (require, exports, module) {
 
         /** @member {string} */
         this.underline = false;
-        
+
         this.enabled = true;
         this.movable = MM_FREE;
         this.sizable = SZ_NONE;
@@ -2753,7 +2776,7 @@ define(function (require, exports, module) {
                 if (view.showShadow) {
                     view.drawShadow(canvas);
                 }
-                view.draw(canvas);            
+                view.draw(canvas);
             } catch (err) {
                 console.log(view);
                 console.error(err);

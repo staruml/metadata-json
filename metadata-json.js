@@ -13,22 +13,23 @@ global._ = require('underscore');
 
 requirejs.config({
     paths: {
-        "core/Core-meta"        : __dirname + "/core/Core-meta",
-        "core/Core-rules"       : __dirname + "/core/Core-rules",
-        "core/Core"             : __dirname + "/core/Core",
-        "core/Global"           : __dirname + "/core/Global",
-        "core/Graphics"         : __dirname + "/core/Graphics",
-        "core/IdGenerator"      : __dirname + "/core/IdGenerator",
-        "core/MetaModelManager" : __dirname + "/core/MetaModelManager",
-        "core/OperationBuilder" : __dirname + "/core/OperationBuilder",
-        "core/Repository"       : __dirname + "/core/Repository",
-        "core/Toolkit"          : __dirname + "/core/Toolkit",
-        "core/Validator"        : __dirname + "/core/Validator",
-        "uml/UML-meta"          : __dirname + "/uml/UML-meta",
-        "uml/UML-rules"         : __dirname + "/uml/UML-rules",
-        "uml/UML"               : __dirname + "/uml/UML",
-        "uml/UMLDiagram"        : __dirname + "/uml/UMLDiagram",
-        "lib/PDFGraphics"       : __dirname + "/lib/PDFGraphics"
+        "core/Core-meta"         : __dirname + "/core/Core-meta",
+        "core/Core-rules"        : __dirname + "/core/Core-rules",
+        "core/Core"              : __dirname + "/core/Core",
+        "core/Global"            : __dirname + "/core/Global",
+        "core/Graphics"          : __dirname + "/core/Graphics",
+        "core/IdGenerator"       : __dirname + "/core/IdGenerator",
+        "core/MetaModelManager"  : __dirname + "/core/MetaModelManager",
+        "core/OperationBuilder"  : __dirname + "/core/OperationBuilder",
+        "core/Repository"        : __dirname + "/core/Repository",
+        "core/Toolkit"           : __dirname + "/core/Toolkit",
+        "core/Validator"         : __dirname + "/core/Validator",
+        "core/PreferenceManager" : __dirname + "/core/PreferenceManager",
+        "uml/UML-meta"           : __dirname + "/uml/UML-meta",
+        "uml/UML-rules"          : __dirname + "/uml/UML-rules",
+        "uml/UML"                : __dirname + "/uml/UML",
+        "uml/UMLDiagram"         : __dirname + "/uml/UMLDiagram",
+        "lib/PDFGraphics"        : __dirname + "/lib/PDFGraphics"
     }
 });
 

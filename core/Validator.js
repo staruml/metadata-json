@@ -32,6 +32,7 @@ define(function (require, exports, module) {
 
     /**
      * Add validation rules
+     *
      * @param {Array.<Object>} rules
      */
     function addRules(rules) {
@@ -41,7 +42,8 @@ define(function (require, exports, module) {
     }
 
     /**
-     * Validate
+     * Validate and return validation errors
+     *
      * @return {Array.<Object>}
      */
     function validate() {

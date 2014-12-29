@@ -118,7 +118,7 @@ define(function (require, exports, module) {
             message: "Final and leaf element must not have child.",
             appliesTo: [ "UMLClassifier" ],
             constraint: function (elem) {
-                if (elem.isFinalSpecification === true || elem.isLeaf === true) {
+                if (elem.isFinalSpecialization === true || elem.isLeaf === true) {
                     var subs = elem.getSpecialElements();
                     return (subs.length === 0);
                 }

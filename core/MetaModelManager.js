@@ -189,10 +189,32 @@ define(function (require, exports, module) {
         return null;
     }
 
-    exports.register          = register;
-    exports.getMetaAttributes = getMetaAttributes;
-    exports.isKindOf          = isKindOf;
-    exports.getViewTypeOf     = getViewTypeOf;
+    /**
+     * Return all available view types of a diagram type.
+     * @param {string} diagramTypeName
+     * @return {Array.<string}>}
+     */
+    function getAvailableViewTypes(diagramTypeName) {
+        var metaClass = _global.meta[diagramTypeName],
+            views     = [];
+        if (metaClass.super) {
+            views = getAvailableViewTypes(metaClass.super);
+        }
+        if (metaClass.views) {
+            var i, len, item;
+            for (i = 0, len = metaClass.views.length; i < len; i++) {
+                item = metaClass.views[i];
+                views.push(item);
+            }
+        }
+        return views;
+    }
+
+    exports.register              = register;
+    exports.getMetaAttributes     = getMetaAttributes;
+    exports.isKindOf              = isKindOf;
+    exports.getViewTypeOf         = getViewTypeOf;
+    exports.getAvailableViewTypes = getAvailableViewTypes;
 
 });
 

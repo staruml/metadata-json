@@ -62,6 +62,12 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true, loopfunc: true */
 /*global define, _, type, graphlib, dagre */
 
+/**
+ * Core classes is defined in this module. We don't recommend to instantiate
+ *   instance of classes defined in this module in your extension.
+ *
+ * (This module is not well documented)
+ */
 define(function (require, exports, module) {
     "use strict";
 
@@ -216,7 +222,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 표시를 위한 타입(클래스)의 이름을 반환.
+     * Return class name for display (e.g. "Class" rather than "UMLClass").
      * @return {string}
      */
     Element.prototype.getDisplayClassName = function () {
@@ -224,7 +230,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 클래스를 반환.
+     * Return Class. (equivalent to `type[element.getClassName()])`
+     *
      * @return {constructor}
      */
     Element.prototype.getClass = function () {
@@ -232,7 +239,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 클래스의 이름을 반환.
+     * Return Class name.
      *
      * @return {string}
      */
@@ -241,7 +248,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 메타 클래스를 반환.
+     * Return Meta Class.
      *
      * @return {Object}
      */
@@ -250,7 +257,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 메타 속성들을 반환.
+     * Return Meta Attributes.
      *
      * @return {Array.<{name:string, kind:string, type:string}>}
      */
@@ -259,9 +266,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 상위요소에서 자신을 포함하는 field명 리턴
+     * Return name of parent's field containing this object.
      *
-     * @return {string} - field 명 (e.g. 'ownedElements')
+     * @return {string} Field name (e.g. 'ownedElements')
      */
     Element.prototype.getParentField = function () {
         if (this._parent) {
@@ -279,7 +286,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 아이콘 Class 명을 리턴 (Explorer 등의 UI에서 아이콘으로 표현됨)
+     * Return CSS class name of icon for this object. (Shown in Explorer)
      *
      * @return {string} - iconClass명 (e.g. 'icon-UMLClass')
      */
@@ -288,9 +295,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     * Text 표시 문자열을 리턴. (Explorer 등의 UI에서 텍스트로 표시)
+     * Return textual string for this object. (Shown in Explorer)
      *
-     * @return {string} - text 문자열 (e.g. 'icon-UMLClass')
+     * @return {string} Text (e.g. '<<stereotype>>Class1')
      */
     Element.prototype.getNodeText = function () {
         if (this.name && this.name.length > 0) {
@@ -301,9 +308,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 요소의 정렬 순위 (Explorer 등의 UI에서 정렬을 위한 기준. 값이 낮을 수록 먼저온다)
+     * Return ordering priority number. (Lower value comes first in Explorer)
      *
-     * @param {number} index?
+     * @param {number} index
      * @return {Number}
      */
     Element.prototype.getOrdering = function (index) {
@@ -320,8 +327,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 하위 노드 요소들을 반환.
-     * (Model의 하위 타입이고 Tag가 아닌 모든 하위 요소를 리턴)
+     * Return all child nodes to be shown in Explorer.
      *
      * @param {boolean} sort
      * @return {Array.<Element>}
@@ -365,7 +371,7 @@ define(function (require, exports, module) {
 
 
     /**
-     * 하위 요소들을 반환. (ATTR_KIND_OBJ or ATTR_KIND_OBJS 관계로 포함되는 모든 하위 요소를 리턴)
+     * Return all children.
      *
      * @return {Array.<Element>}
      */
@@ -393,8 +399,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 요소의 계층 구조를 트래버스 함.
-     * (Breadth-First Traversal)
+     * Traverse all nodes in the tree structure. (Breadth-First Traversal)
      *
      * @param {function(elem:Element)} fun
      */
@@ -420,8 +425,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 요소의 계층 구조를 트래버스 함.
-     * (Depth-First Traversal)
+     * Traverse all nodes in the tree structure. (Depth-First Traversal)
      *
      * @param {function(elem:Element)} fun
      */
@@ -447,10 +451,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 특정 하위 요소들을 traverse 함.
-     * (Breadth-First Traversal)
+     * Traverse a specific field chains. (Breadth-First Traversal)
      *
-     * @param {string} field - traverse할 필드 (e.g. 'containedViews')
+     * @param {string} field Field name to traverse (e.g. 'ownedElements')
      * @param {function} fun
      */
     Element.prototype.traverseField = function (field, fun) {
@@ -463,10 +466,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 특정 하위 요소들을 traverse 함.
-     * (Depth-First Traversal)
+     * Traverse a specific field chains. (Depth-First Traversal)
      *
-     * @param {string} field - traverse할 필드 (e.g. 'containedViews')
+     * @param {string} field Field name to traverse (e.g. 'ownedElements')
      * @param {function} fun
      */
     Element.prototype.traverseFieldDepthFirst = function (field, fun) {
@@ -479,7 +481,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * Traverse up along with the _parent chain.
+     * Traverse up along with the `_parent` chain.
      * @param {function} fun
      */
     Element.prototype.traverseUp = function (fun) {
@@ -490,7 +492,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 요소 데이터를 Reader로부터 읽어들임.
+     * Read it's state data from Reader.
      *
      * @param {Reader} reader
      */
@@ -554,7 +556,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 요소 데이터를 Writer를 통해 기록함.
+     * Write it's state data to writer.
      *
      * @param {Writer} writer
      */
@@ -623,7 +625,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 상태 정보를 memento 객체에 저장
+     * Store it's state data to memento
      *
      * @param {object} memento
      */
@@ -648,7 +650,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 상태 정보를 memento 객체로부터 복구
+     * Load it's state data from memento
      *
      * @param {object} memento
      */
@@ -673,10 +675,10 @@ define(function (require, exports, module) {
     };
 
     /**
-     * memento에 저장된 상태 정보와 현재의 상태 정보를 차이를 리턴
+     * Return differences between it's state data and data stored in memento.
      *
      * @param {object} memento
-     * @return {Array.<{elem:Element, f:string, n:?, o:?}>} - f:필드명, n:새로운값, o:이전값
+     * @return {Array.<{elem:Element, f:string, n:?, o:?}>} `{f: Field name, n: New value, o: Old value}`
      */
     Element.prototype.diff = function (memento) {
         var diffs = [];
@@ -728,12 +730,12 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 이름으로 요소를 찾음. ownedElements에서 찾고, 없으면 _parent 체인을 따라 lookup.
+     * Find an element by name. Find through `ownedElements` chain, and then lookup through `_parent` chain.
      *
      * @param {string} name
-     * @param {constructor} typeFilter?
-     * @param {Element} namespace - Lookup only inside of namespace
-     * @return {Element} - 가장 먼저 찾게 되는 요소.
+     * @param {constructor} typeFilter
+     * @param {Element} namespace Lookup only inside of namespace
+     * @return {Element} Return the first matched element.
      */
     Element.prototype.lookup = function (name, typeFilter, namespace) {
         var children = this.getChildren();
@@ -792,6 +794,7 @@ define(function (require, exports, module) {
 
     /**
      * Return true only if a given elem is one of the container.
+     *
      * @param {Element} elem
      * @return {boolean}
      */
@@ -807,6 +810,7 @@ define(function (require, exports, module) {
 
     /**
      * Return true only if it can contain the kind of elements
+     *
      * @param {string} kind
      * @return {Boolean}
      */
@@ -858,6 +862,7 @@ define(function (require, exports, module) {
     /**
      * Return true only if it can accomodate elements in clipboard
      *     based on a given kind and copyContext.
+     *
      * @param {string} kind
      * @param {{field:string}} copyContext
      * @return {Boolean}
@@ -867,9 +872,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     * Model 요소의 타입 정의
+     * Model
+     *
      * @constructor
-     * @augments module:core/Core.Element
      */
     function Model() {
         Element.apply(this, arguments);
@@ -887,6 +892,7 @@ define(function (require, exports, module) {
 
     /**
      * Get a corresponding view type
+     *
      * @return {constructor}
      */
     Model.prototype.getViewType = function () {
@@ -897,6 +903,7 @@ define(function (require, exports, module) {
 
     /**
      * Get path to from a given base
+     *
      * @param {Model} base
      * @return {Array.<string>}
      */
@@ -928,6 +935,7 @@ define(function (require, exports, module) {
 
     /**
      * Return true only if it can contain a given element.
+     *
      * @override
      * @param {Element} elem
      * @return {Boolean}
@@ -947,7 +955,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 포함 가능한 다이어그램 타입 이름이 넘어오면 true를 리턴한다.
+     * Determines whether a given diagram type name can be contained or not.
      *
      * @param {string} kind
      * @return {Boolean}
@@ -957,7 +965,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 포함 가능한 다이어그램 요소를 넣으면 true를 리턴한다.
+     * Determines whether a given diagram can be contained or not.
      *
      * @param {Diagram} diagram
      * @return {Boolean}
@@ -967,7 +975,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 현재 모델 요소가 다른 모델요소로 Relocate(이동)가 가능한지를 리턴.
+     * Determines whether this object can be relocated to a given element.
      *
      * @param {Model} model
      * @return {Boolean}
@@ -978,9 +986,9 @@ define(function (require, exports, module) {
 
 
     /**
-     * Tag 요소의 타입 정의
+     * Tag
+     *
      * @constructor
-     * @augments module:core/Core.Element
      */
     function Tag() {
         Model.apply(this, arguments);
@@ -1007,9 +1015,9 @@ define(function (require, exports, module) {
 
 
     /**
-     * ExtensibleModel 요소의 타입 정의
+     * ExtensibleModel
+     *
      * @constructor
-     * @augments module:core/Core.ExtensibleModel
      */
     function ExtensibleModel() {
         Model.apply(this, arguments);
@@ -1027,6 +1035,7 @@ define(function (require, exports, module) {
 
     /**
      * Return whether element has a specific tag
+     *
      * @param {string} tagName
      * @return {Boolean}
      */
@@ -1042,6 +1051,7 @@ define(function (require, exports, module) {
 
     /**
      * Return a specific tag by name
+     *
      * @param {string} tagName
      * @return {Tag|undefined}
      */
@@ -1057,6 +1067,7 @@ define(function (require, exports, module) {
 
     /**
      * Return value of a specific tag
+     *
      * @param {string} tagName
      * @return {Boolean|undefined}
      */
@@ -1073,8 +1084,8 @@ define(function (require, exports, module) {
 
     /**
      * Relationship
+     *
      * @constructor
-     * @augments module:core/Core.ExtensibleModel
      */
     function Relationship() {
         ExtensibleModel.apply(this, arguments);
@@ -1088,8 +1099,8 @@ define(function (require, exports, module) {
 
     /**
      * DirectedRelationship
+     *
      * @constructor
-     * @augments module:core/Core.Relationship
      */
     function DirectedRelationship() {
         Relationship.apply(this, arguments);
@@ -1116,8 +1127,8 @@ define(function (require, exports, module) {
 
     /**
      * RelationshipEnd
+     *
      * @constructor
-     * @augments module:core/Core.Model
      */
     function RelationshipEnd() {
         ExtensibleModel.apply(this, arguments);
@@ -1130,21 +1141,14 @@ define(function (require, exports, module) {
     RelationshipEnd.prototype = Object.create(ExtensibleModel.prototype);
     RelationshipEnd.prototype.constructor = RelationshipEnd;
 
-    /**
-     * RelationshipEnd cannot be deleted alone.
-     * @override
-     * @return {Boolean}
-     */
-    /*
     RelationshipEnd.prototype.canDelete = function () {
         return false;
-    }
-    */
+    };
 
     /**
      * UndirectedRelationship
+     *
      * @constructor
-     * @augments module:core/Core.Relationship
      */
     function UndirectedRelationship() {
         Relationship.apply(this, arguments);
@@ -1167,8 +1171,8 @@ define(function (require, exports, module) {
 
     /**
      * View
+     *
      * @constructor
-     * @augments module:core/Core.Element
      */
     function View() {
         Element.apply(this, arguments);
@@ -1233,7 +1237,7 @@ define(function (require, exports, module) {
     View.prototype.constructor = View;
 
     /**
-     * 뷰의 하위요소들을 traverse 함. (Breadth-First로)
+     * Traverse all sub views recursively (Breadth-First Traversal)
      *
      * @param {function} fun
      */
@@ -1247,7 +1251,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 뷰의 하위요소들을 traverse 함. (Depth-First로)
+     * Traverse all sub views recursively (Depth-First Traversal)
      *
      * @param {function} fun
      */
@@ -1291,7 +1295,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 스타일 정보를 캔버스에 할당.
+     * Assign styles to canvas.
+     *
      * @param {Canvas} canvas
      */
     View.prototype.assignStyleToCanvas = function (canvas) {
@@ -1305,14 +1310,16 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 뷰 객체를 초기화 함.
+     * Initialize view object.
+     *
      * @abstract
      * @param {Canvas} canvas
      */
     View.prototype.initialize = function (canvas, x1, y1, x2, y2) {};
 
     /**
-     * 객체를 dx, dy 만큼 이동. (하위 객체 포함)
+     * Move view object including all sub views by (dx, dy)
+     *
      * @param {Canvas} canvas
      * @param {number} dx
      * @param {number} dy
@@ -1326,7 +1333,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 자신을 dx, dy 만큼 이동.
+     * Move this view object by (dx, dy).
+     *
      * @param {Canvas} canvas
      * @param {number} dx
      * @param {number} dy
@@ -1334,7 +1342,8 @@ define(function (require, exports, module) {
     View.prototype.moveObject = function (canvas, dx, dy) {};
 
     /**
-     * 뷰 상태를 초기화 함. (스타일 및 속)
+     * Setup view object (styles and attributes)
+     *
      * @param {Canvas} canvas
      */
     View.prototype.setup = function (canvas) {
@@ -1357,7 +1366,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 뷰 객체를 업데이트 함. (모델 정보로 부터)
+     * Update view object from a corresponding model object.
+     *
      * @param {Canvas} canvas
      */
     View.prototype.update = function (canvas) {
@@ -1368,7 +1378,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 뷰 객체의 크기를 계산
+     * Compute it's size
+     *
      * @param {Canvas} canvas
      */
     View.prototype.size = function (canvas) {
@@ -1381,13 +1392,15 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 자신의 크기를 계산
+     * Compute it's size
+     *
      * @param {Canvas} canvas
      */
     View.prototype.sizeObject = function (canvas) {};
 
     /**
-     * 객체의 위치를 배치
+     * Arrange this view object.
+     *
      * @param {Canvas} canvas
      */
     View.prototype.arrange = function (canvas) {
@@ -1401,13 +1414,15 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 자신의 위치를 배치
+     * Arrange this view object.
+     *
      * @param {Canvas} canvas
      */
     View.prototype.arrangeObject = function (canvas) {};
 
     /**
-     * 객체의 그림자를 그림.
+     * Draw shadow.
+     *
      * @param {Canvas} canvas
      */
     View.prototype.drawShadow = function (canvas) {
@@ -1420,7 +1435,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 객체를 그림.
+     * Draw view object.
+     *
      * @param {Canvas} canvas
      */
     View.prototype.draw = function (canvas) {
@@ -1435,20 +1451,23 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 자신을 그림.
+     * Draw view object.
+     *
      * @param {Canvas} canvas
      */
     View.prototype.drawObject = function (canvas) {};
 
     /**
-     * 선택 영역을 캔버스에 그림.
+     * Draw selection of this view object.
+     *
      * @abstract
      * @param {Canvas} canvas
      */
     View.prototype.drawSelection = function (canvas) {};
 
     /**
-     * (x, y) 좌표에서의 하위 뷰 객체를 리턴.
+     * Return a sub view located at (x, y).
+     *
      * @param {Canvas} canvas
      * @param {number} x
      * @param {number} y
@@ -1470,7 +1489,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 자신이 소속된 다이어그램 객체를 리턴.
+     * Return a diagram containg this view object.
+     *
+     * @return {View}
      */
     View.prototype.getDiagram = function () {
         if (this._parent instanceof Diagram) {
@@ -1482,18 +1503,22 @@ define(function (require, exports, module) {
     };
 
     /**
-     * BoundingBox를 리턴.
+     * Return a bounding box.
+     *
      * @param {Canvas} canvas
+     * @param {Rect}
      */
     View.prototype.getBoundingBox = function (canvas) {
         return new Rect(-1, -1, 0, 0);
     };
 
     /**
-     * (x, y)를 뷰 객체가 포함하는지를 판단
+     * Determines whether this view contains a point (x, y)
+     *
      * @param {Canvas} canvas
      * @param {number} x
      * @param {number} y
+     * @return {boolean}
      */
     View.prototype.containsPoint = function (canvas, x, y) {
         var r = this.getBoundingBox(canvas);
@@ -1509,9 +1534,11 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 주어진 rect가 뷰 객체와 겹쳐지는지를 판단
+     * Determines whether this view overlaps a given rect
+     *
      * @param {Canvas} canvas
      * @param {Rect} rect
+     * @return {boolean}
      */
     View.prototype.overlapRect = function (canvas, rect) {
         var bound = this.getBoundingBox(canvas);
@@ -1522,7 +1549,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 하위 뷰를 추가
+     * Add a sub view.
+     *
      * @param {View} view
      */
     View.prototype.addSubView = function (view) {
@@ -1531,7 +1559,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 하위 뷰를 제거
+     * Remove a sub view
+     *
      * @param {View} view
      */
     View.prototype.removeSubView = function (view) {
@@ -1540,7 +1569,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 포함관계의 뷰를 추가
+     * Add a contained view.
+     *
      * @param {View} view
      */
     View.prototype.addContainedView = function (view) {
@@ -1549,7 +1579,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 포함관계의 뷰를 제거
+     * Remove a contained view.
      * @param {View} view
      */
     View.prototype.removeContainedView = function (view) {
@@ -2107,7 +2137,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 점들을 다시 계산한다.
+     *
      */
     EdgeView.prototype.recalcPoints = function (canvas) {
         if (this.lineStyle === LS_OBLIQUE) {
@@ -2274,6 +2304,7 @@ define(function (require, exports, module) {
 
     /**
      * Return true only if this edge can be connected the view
+     *
      * @param {View} view
      * @param {boolean} isTail Try to connect to tail-side or not
      * @return {boolean}
@@ -2645,8 +2676,8 @@ define(function (require, exports, module) {
 
     /**
      * Diagram
+     *
      * @constructor
-     * @augments module:core/Core.Model
      */
     function Diagram() {
         ExtensibleModel.apply(this, arguments);
@@ -2816,11 +2847,13 @@ define(function (require, exports, module) {
     };
 
     /**
-     * Find View at specific position (x, y)
+     * Find a view at specific position (x, y)
+     *
      * @param {Canvas} canvas
      * @param {number} x
      * @param {number} y
      * @param {boolean} shallow Find only in first level
+     * @return {View}
      */
     Diagram.prototype.getViewAt = function (canvas, x, y, shallow) {
         // Sort views by zIndex
@@ -2848,9 +2881,11 @@ define(function (require, exports, module) {
 
     /**
      * Find View at specific position (x, y) in depth-first manner
+     *
      * @param {Canvas} canvas
      * @param {number} x
      * @param {number} y
+     * @return {View}
      */
     Diagram.prototype.getBottomViewAt = function (canvas, x, y) {
         return this.findDepthFirst(function (v) {
@@ -2859,9 +2894,11 @@ define(function (require, exports, module) {
     };
 
     /**
-     * Get View of a specific model
+     * Get a view of a specific model
+     *
      * @param {Model} model
      * @param {?constructor} viewType
+     * @return {View}
      */
     Diagram.prototype.getViewOf = function (model, viewType) {
         return this.find(function (v) {
@@ -2941,6 +2978,7 @@ define(function (require, exports, module) {
 
     /**
      * Return true only if all selected views could be copied.
+     *
      * @return {Boolean}
      */
     Diagram.prototype.canCopyViews = function () {
@@ -2954,6 +2992,7 @@ define(function (require, exports, module) {
 
     /**
      * Return true only if all selected views could be deleted.
+     *
      * @return {Boolean}
      */
     Diagram.prototype.canDeleteViews = function () {
@@ -2966,18 +3005,22 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 현재 다이어그램에 클립보드의 뷰 요소들이 Paste가 가능한지를 리턴.
+     * Determine whether views in clipboard can be pasted in this diagram.
      *
-     * @param {string} kind
-     * @param {string} copyContext
+     * @param {Array.<View>} views
      * @return {Boolean}
      */
-    Diagram.prototype.canPasteViews = function (kind, copyContext) {
-        return true;
+    Diagram.prototype.canPasteViews = function (views) {
+        var viewTypes = MetaModelManager.getAvailableViewTypes(this.getClassName());
+        return _.all(views, function (v) {
+            return _.any(viewTypes, function (vt) {
+                return v instanceof type[vt];
+            });
+        });
     };
 
     /**
-     * 현재 다이어그램으로 모델 요소를 드래그-앤-드롭을 수용할 수 있는지를 리턴.
+     * Determine whether to accept to create a view of a given model drag-and-dropped from Explorer.
      *
      * @param {Model} model
      * @return {Boolean}
@@ -2987,7 +3030,8 @@ define(function (require, exports, module) {
     };
 
     /**
-     * Layout Diagram
+     * Layout diagram automatically
+     *
      * @param {string} direction Rank Direction ( "TB" | "BT" | "LR" | "RL" )
      * @param {{node:number, edge:number, rank:number}} separations
      */
@@ -3059,8 +3103,8 @@ define(function (require, exports, module) {
 
     /**
      * Project
+     *
      * @constructor
-     * @augments module:core/Core.ExtensibleModel
      */
     function Project() {
         ExtensibleModel.apply(this, arguments);
@@ -3530,27 +3574,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * 주어진 메타 클래스의 메타 속성들을 반환.
-     *
-     * @param {object} metaClass
-     * @return {Array.<{name:string, kind:string, type:string}>}
-     */
-    function getMetaAttributes(metaClass) {
-        var attrs = [];
-        if (metaClass.super) {
-            attrs = getMetaAttributes(_global.meta[metaClass.super]);
-        }
-        if (metaClass.attributes) {
-            for (var i = 0, len = metaClass.attributes.length; i < len; i++) {
-                var item = metaClass.attributes[i];
-                attrs.push(item);
-            }
-        }
-        return attrs;
-    }
-
-    /**
-     * 주어진 타입의 슈퍼 타입을 리턴.
+     * Return a super type of a given type.
      *
      * @param {constructor} subType
      * @return {constructor} - superType of subType
@@ -3564,7 +3588,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 주어진 요소들의 가장 일반적인 타입 리턴.
+     * Return a generalized type of given elements.
      *
      * @param {Array.<Element>} elems
      * @return {constructor}
@@ -3582,11 +3606,11 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소들의 배열속에서 name으로 요소를 찾는다.
+     * Find element by name in a given array.
      *
      * @param {Array.<Element>} array
      * @param {string} name
-     * @return {Element} - 이름이 같은 요소
+     * @return {Element}
      */
     function findByName(array, name) {
         if (array && array.length > 0) {
@@ -3601,12 +3625,11 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소들의 배열속에서 새로운 이름을 찾는다.
-     * (e.g. Class1, Class2, ... 배열속에 같은 이름이 없을때 까지)
+     * Find an available name in a given array. (e.g. Class1, Class2, ... )
      *
      * @param {Array.<Element>} array
-     * @param {string} prefix - 이름의 prefix 문자열
-     * @return {string} - 새로운 이름을 리턴
+     * @param {string} prefix Prefix for name
+     * @return {string} Return a new name
      */
     function getNewName(array, prefix) {
         var num = 0, name = null;
@@ -3730,7 +3753,6 @@ define(function (require, exports, module) {
     exports.Writer                  = Writer;
 
     // Public Functions
-    exports.getMetaAttributes       = getMetaAttributes;
     exports.getSuperType            = getSuperType;
     exports.getCommonType           = getCommonType;
     exports.findByName              = findByName;

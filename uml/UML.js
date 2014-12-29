@@ -653,7 +653,7 @@ define(function (require, exports, module) {
         this.operations = [];
         this.behaviors = [];
         this.isAbstract = false;
-        this.isFinalSpecification = false;
+        this.isFinalSpecialization = false;
         this.isLeaf = false;
     }
     // inherits from UMLModelElement

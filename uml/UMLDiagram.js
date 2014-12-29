@@ -51,6 +51,7 @@ define(function (require, exports, module) {
 
     /**
      * View Constants
+     * @private
      * @const {number}
      */
     var SHADOW_OFFSET = 7,
@@ -266,6 +267,8 @@ define(function (require, exports, module) {
     }
 
     /**
+     * Draw image
+     * @private
      * @param {Canvas} canvas
      * @param {Rect} rect
      * @param {type.UMLImage} image
@@ -302,7 +305,6 @@ define(function (require, exports, module) {
         var name = this.getClassName();
         return name.substring(3, name.length);
     };
-
 
     /**
      * UMLCompartmentView
@@ -2860,6 +2862,7 @@ define(function (require, exports, module) {
 
     /**
      * UMLArtifactViewMixin
+     * @private
      */
     var UMLArtifactViewMixin = {
 
@@ -2949,6 +2952,7 @@ define(function (require, exports, module) {
 
     /**
      * UMLComponentViewMixin
+     * @private
      * @mixin
      */
     var UMLComponentViewMixin = {
@@ -3117,6 +3121,7 @@ define(function (require, exports, module) {
 
     /**
      * UMLNodeViewMixin
+     * @private
      */
     var UMLNodeViewMixin = {
 

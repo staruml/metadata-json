@@ -28,7 +28,6 @@
  *     - fieldReorder:   (elem, field, val, newPos)
  *     - fieldRelocate:  (elem, field, oldParent, newParent)
  */
-
 define(function (require, exports, module) {
     "use strict";
 
@@ -48,14 +47,16 @@ define(function (require, exports, module) {
         OP_FIELD_RELOCATE    = 'l';
 
     /**
-     * 현재 구성중인 Operation
+     * Current Operation
+     *
      * @private
      * @type {Object}
      */
     var _currentOperation = null;
 
     /**
-     * 특정 요소의 배열필드의 배열을 유지한다.
+     * Keep an array of array field of a particular element.
+     *
      * @private
      * @type {Object.<string,Array>}
      */
@@ -69,11 +70,11 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 기본적인 Operation 구성의 틀을 리턴.
+     * Make and return a base operation object.
      *
      * @private
-     * @param {string} name - Operation 이름
-     * @return {Object} 기본 Operation 틀
+     * @param {string} name Operation name
+     * @return {Object} Base operation object
      */
     function _getBase(name) {
         var operation = {
@@ -87,13 +88,13 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 특정 요소의 "임시로 복제된 배열 필드"를 넘겨준다.
-     * - fieldInsert, fieldRemove가 진행됨에 따라 변경된다.
-     * - 이것을 사용하는 이유는 fieldInsert를 여러번 수행하면 요소의 index 값이 정확하지 않기 때문.
+     * Return a copied array of array field of a particular element.
+     * It could be changed by `fieldInsert`, `fieldRemove`.
+     * The reason why using this is index value maybe incorrect when performing `fieldInsert` multiple times.
      *
      * @private
-     * @param {Element} elem - 요소
-     * @param {string} field - 배열 필드명
+     * @param {Element} elem An element
+     * @param {string} field Array field name
      * @return {number}
      */
     function _getArray(elem, field) {
@@ -105,9 +106,9 @@ define(function (require, exports, module) {
     }
 
     /**
-     * Operation 구성을 시작함.
+     * Begin to make an operation.
      *
-     * @param {string} opName - Operation 이름
+     * @param {string} opName Operation name
      */
     function begin(name, bypass) {
         _currentOperation = _getBase(name);
@@ -117,7 +118,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * Operation 구성을 종료함.
+     * Finish to make an operation.
      */
     function end() {
         _currentArray = {};
@@ -125,7 +126,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * Operation 구성을 취소함.
+     * Discard currently making operation.
      */
     function discard() {
         _currentOperation = null;
@@ -133,7 +134,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 현재까지 구성된 Operation를 리턴.
+     * Return currently made operation.
      *
      * @return {Object}
      */
@@ -142,7 +143,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소 생성 오퍼레이션을 커멘드에 추가.
+     * Insert an element.
      *
      * @param {Element} elem
      */
@@ -158,7 +159,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소 삭제 오퍼레이션을 커멘드에 추가.
+     * Remove an element.
      *
      * @param {Element} elem
      */
@@ -174,7 +175,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소의 필드값 변경 오퍼레이션을 커멘드에 추가.
+     * Assign value to field.
      *
      * @param {Element} elem
      * @param {string} field
@@ -205,7 +206,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소의 (배열)필드에 값 추가 오퍼레이션을 커멘드에 추가.
+     * Insert an element to array field.
      *
      * @param {Element} elem
      * @param {string} field
@@ -231,12 +232,12 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소의 (배열)필드에 값을 특정 위치에 추가하는 오퍼레이션을 커멘드에 추가.
+     * Insert a value to array field at a specific position (index).
      *
      * @param {Element} elem
      * @param {string} field
      * @param {?} val
-     * @param {number} pos - 추가할 위치 (정수 인덱스값)
+     * @param {number} pos
      */
     function fieldInsertAt(elem, field, val, pos) {
         try {
@@ -256,7 +257,7 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소의 (배열)필드에 특정 값 삭제 오퍼레이션을 커멘드에 추가.
+     * Remove a value from array field.
      *
      * @param {Element} elem
      * @param {string} field
@@ -282,11 +283,12 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소의 (배열)필드에 특정 위치의 값을 삭제하는 오퍼레이션을 커멘드에 추가.
+     * Remove a value from array field at a specific position.
      *
      * @param {Element} elem
      * @param {string} field
-     * @param {number} pos - 추가할 위치 (정수 인덱스값)
+     * @param {?} value
+     * @param {number} pos
      */
     function fieldRemoveAt(elem, field, val, pos) {
         try {
@@ -306,12 +308,12 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소의 (배열)필드에 특정 위치의 값을 다른 위치로 이동하는 오퍼레이션을 커멘드에 추가.
+     * Change order of a value in array field.
      *
      * @param {Element} elem
      * @param {string} field
      * @param {?} val
-     * @param {number} pos - 이동할 위치 (정수 인덱스값)
+     * @param {number} pos Position to be placed
      */
     function fieldReorder(elem, field, val, pos) {
         try {
@@ -331,12 +333,12 @@ define(function (require, exports, module) {
     }
 
     /**
-     * 요소를 다른 위치로 이동하는 오퍼레이션을 커멘드에 추가.
+     * Relocate an element to another parent.
      *
-     * @param {Element} elem - 이동할 요소
-     * @param {string} field - 포함하는 요소의 배열 필드
-     * @param {number} oldParent - 현재 위치 (이전에 포함하던 요소)
-     * @param {number} newParent - 이동할 위치 (이후에 포함하는 요소)
+     * @param {Element} elem Element to be relocated
+     * @param {string} field Field name of parent
+     * @param {number} oldParent Current parent
+     * @param {number} newParent New parent to be located in
      */
     function fieldRelocate(elem, field, oldParent, newParent) {
         try {

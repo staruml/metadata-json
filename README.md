@@ -72,7 +72,7 @@ In template, you can use the following variables. If you want to pass additional
 
 ### Generate multiple files
 
-If you want to render a set of elements with a same template, you can do by calling `renderBulk` function. You can pass array of elements or selector expression (string) to the third parameter of `renderBulk`. To save each rendered data with different file name, you can also use EJS template syntax in the output file name.
+If you want to render a set of elements with a same template, you can do by calling `renderBulk` function. You can pass array of elements or [selector expression (string)](https://github.com/staruml/metadata-json/wiki/SelectorExpression) to the third parameter of `renderBulk`. To save each rendered data with different file name, you can also use EJS template syntax in the output file name.
 
 ```javascript
 var mdjson = require("metadata-json");

@@ -343,7 +343,7 @@ define(function (require, exports, module) {
             appliesTo: [ "UMLPseudostate" ],
             constraint: function (elem) {
                 if (elem.kind === 'choice') {
-                    return (elem.getOutgoingTransitions().length >= 2) &&
+                    return (elem.getOutgoingTransitions().length >= 1) &&
                            (elem.getIncomingTransitions().length === 1);
                 }
                 return true;

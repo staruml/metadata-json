@@ -168,14 +168,28 @@ define(function (require, exports, module) {
 
     /**
      * UMLElementMixin
+     *
+     * @mixin
      */
     var UMLElementMixin = {
 
+        /**
+         * Get class name for display
+         *
+         * @memberof UMLElementMixin
+         * @return {string}
+         */
         getDisplayClassName: function () {
             var name = this.getClassName();
             return name.substring(3, name.length);
         },
 
+        /**
+         * Get visibility string
+         *
+         * @memberof UMLElementMixin
+         * @return {string}
+         */
         getVisibilityString: function () {
             switch (this.visibility) {
             case VK_PUBLIC:
@@ -189,6 +203,13 @@ define(function (require, exports, module) {
             }
         },
 
+        /**
+         * Get string representation of this element
+         *
+         * @memberof UMLElementMixin
+         * @param {boolean} includeVisibility
+         * @return {string}
+         */
         getString: function (includeVisibility) {
             var _string = this.name;
             if (includeVisibility) {
@@ -197,6 +218,13 @@ define(function (require, exports, module) {
             return _string;
         },
 
+
+        /**
+         * Get stereotype string
+         *
+         * @memberof UMLElementMixin
+         * @return {string}
+         */
         getStereotypeString: function () {
             if (_.isString(this.stereotype) && (this.stereotype.length > 0)) {
                 return "«" + this.stereotype + "»";
@@ -206,6 +234,12 @@ define(function (require, exports, module) {
             return "";
         },
 
+        /**
+         * Get namespace string
+         *
+         * @memberof UMLElementMixin
+         * @return {string}
+         */
         getNamespaceString: function () {
             if (this._parent) {
                 return "(from " + this._parent.name + ")";
@@ -214,6 +248,12 @@ define(function (require, exports, module) {
             }
         },
 
+        /**
+         * Return an array of tag strings
+         *
+         * @memberof UMLElementMixin
+         * @return {Array.<string>}
+         */
         getTagStringArray: function () {
             var tagArray = [];
             if (this.tags && this.tags.length > 0) {
@@ -244,6 +284,11 @@ define(function (require, exports, module) {
             return tagArray;
         },
 
+        /**
+         * Return property string
+         *
+         * @return {string}
+         */
         getPropertyString: function () {
             var props = this.getTagStringArray();
             if (props.length > 0) {
@@ -256,13 +301,23 @@ define(function (require, exports, module) {
 
     /**
      * UMLModelElement
+     *
      * @constructor
+     * @extends ExtensibleModel
+     * @mixes UMLElementMixin
      */
     function UMLModelElement() {
         type.ExtensibleModel.apply(this, arguments);
+
+        /** @member {UMLStereotype} */
         this.stereotype = null;
+
+        /** @member {string} */
         this.visibility = VK_PUBLIC;
+
+        /** @member {Array.<UMLTemplateParameter>} */
         this.templateParameters = [];
+
         // mixin UMLElementMixin
         _.extend(UMLModelElement.prototype, UMLElementMixin);
     }
@@ -283,6 +338,11 @@ define(function (require, exports, module) {
         return text;
     };
 
+    /**
+     * Get dependencies
+     *
+     * @return {Array.<Element>}
+     */
     UMLModelElement.prototype.getDependencies = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -291,6 +351,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.target; });
     };
 
+    /**
+     * Get dependants
+     *
+     * @return {Array.<Element>}
+     */
     UMLModelElement.prototype.getDependants = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -299,6 +364,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.source; });
     };
 
+    /**
+     * Get constraints of this element
+     *
+     * @return {Array.<UMLConstraint>}
+     */
     UMLModelElement.prototype.getConstraints = function () {
         return _.filter(this.ownedElements, function (e) { return (e instanceof type.UMLConstraint); });
     };
@@ -306,10 +376,15 @@ define(function (require, exports, module) {
     /**
      * UMLConstraint
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLConstraint() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {string} */
         this.specification = '';
+
+        /** @member {Array.<UMLModelElement>} */
         this.constrainedElements = [];
     }
     // inherits from UMLModelElement
@@ -342,10 +417,15 @@ define(function (require, exports, module) {
     /**
      * UMLTemplateParameter
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLTemplateParameter() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {string} */
         this.parameterType = '';
+
+        /** @member {string} */
         this.defaultValue = '';
     }
     // inherits from UMLModelElement
@@ -367,10 +447,15 @@ define(function (require, exports, module) {
     /**
      * UMLFeature
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLFeature() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {boolean} */
         this.isStatic = false;
+
+        /** @member {boolean} */
         this.isLeaf = false;
     }
     // inherits from UMLModelElement
@@ -381,20 +466,38 @@ define(function (require, exports, module) {
     /**
      * UMLStructuralFeature
      * @constructor
+     * @extends UMLFeature
      */
     function UMLStructuralFeature() {
         UMLFeature.apply(this, arguments);
+
+        /** @member {string} */
         this.type = '';
+
+        /** @member {string} */
         this.multiplicity = '';
+
+        /** @member {boolean} */
         this.isReadOnly = false;
+
+        /** @member {boolean} */
         this.isOrdered = false;
+
+        /** @member {boolean} */
         this.isUnique = false;
+
+        /** @member {string} */
         this.defaultValue = '';
     }
     // inherits from UMLFeature
     UMLStructuralFeature.prototype = Object.create(UMLFeature.prototype);
     UMLStructuralFeature.prototype.constructor = UMLStructuralFeature;
 
+    /**
+     * Get type string
+     *
+     * @return {string}
+     */
     UMLStructuralFeature.prototype.getTypeString = function () {
         if (this.type) {
             if (_.isString(this.type) && (this.type.length > 0)) {
@@ -438,15 +541,23 @@ define(function (require, exports, module) {
     /**
      * UMLParameter
      * @constructor
+     * @extends UMLStructuralFeature
      */
     function UMLParameter() {
         UMLStructuralFeature.apply(this, arguments);
+
+        /** @member {string} */
         this.direction = DK_IN;
     }
     // inherits from UMLStructuralFeature
     UMLParameter.prototype = Object.create(UMLStructuralFeature.prototype);
     UMLParameter.prototype.constructor = UMLParameter;
 
+    /**
+     * Get parameter direction string
+     *
+     * @return {string}
+     */
     UMLParameter.prototype.getDirectionString = function (options) {
         switch (this.direction) {
         case DK_IN:
@@ -478,17 +589,29 @@ define(function (require, exports, module) {
     /**
      * UMLBehavioralFeature
      * @constructor
+     * @extends UMLFeature
      */
     function UMLBehavioralFeature() {
         UMLFeature.apply(this, arguments);
+
+        /** @member {Array.<UMLParameter>} */
         this.parameters = [];
+
+        /** @member {Array.<UMLSignal>} */
         this.raisedExceptions = [];
+
+        /** @member {string} */
         this.concurrency = CCK_SEQUENTIAL;
     }
     // inherits from UMLFeature
     UMLBehavioralFeature.prototype = Object.create(UMLFeature.prototype);
     UMLBehavioralFeature.prototype.constructor = UMLBehavioralFeature;
 
+    /**
+     * Get return parameter(s)
+     *
+     * @return {UMLParameter}
+     */
     UMLBehavioralFeature.prototype.getReturnParameter = function () {
         var i, len;
         for (i = 0, len = this.parameters.length; i < len; i++) {
@@ -500,6 +623,11 @@ define(function (require, exports, module) {
         return null;
     };
 
+    /**
+     * Get non-return parameters
+     *
+     * @return {Array.<UMLParameter>}
+     */
     UMLBehavioralFeature.prototype.getNonReturnParameters = function () {
         var i, len, params = [];
         for (i = 0, len = this.parameters.length; i < len; i++) {
@@ -511,6 +639,11 @@ define(function (require, exports, module) {
         return params;
     };
 
+    /**
+     * Get parameters string
+     *
+     * @return {string}
+     */
     UMLBehavioralFeature.prototype.getParametersString = function (options) {
         var i, len, terms = [],
             params = this.getNonReturnParameters();
@@ -521,6 +654,11 @@ define(function (require, exports, module) {
         return "(" + terms.join(", ") + ")";
     };
 
+    /**
+     * Get return parameter string
+     *
+     * @return {string}
+     */
     UMLBehavioralFeature.prototype.getReturnString = function (options) {
         var returnParam = this.getReturnParameter();
         var text = "";
@@ -561,11 +699,18 @@ define(function (require, exports, module) {
     /**
      * UMLAttribute
      * @constructor
+     * @extends UMLStructuralFeature
      */
     function UMLAttribute() {
         UMLStructuralFeature.apply(this, arguments);
+
+        /** @member {string} */
         this.isDerived = false;
+
+        /** @member {string} */
         this.aggregation = AK_NONE;
+
+        /** @member {boolean} */
         this.isID = false;
     }
     // inherits from UMLStructuralFeature
@@ -613,14 +758,27 @@ define(function (require, exports, module) {
     /**
      * UMLOperation
      * @constructor
+     * @extends UMLBehavioralFeature
      */
     function UMLOperation() {
         UMLBehavioralFeature.apply(this, arguments);
+
+        /** @member {boolean} */
         this.isQuery = false;
+
+        /** @member {boolean} */
         this.isAbstract = false;
+
+        /** @member {string} */
         this.specification = '';
+
+        /** @member {Array.<UMLConstraint>} */
         this.preconditions = [];
+
+        /** @member {Array.<UMLConstraint>} */
         this.bodyConditions = [];
+
+        /** @member {Array.<UMLConstraint>} */
         this.postconditions = [];
     }
     // inherits from UMLBehavioralFeature
@@ -646,14 +804,27 @@ define(function (require, exports, module) {
     /**
      * UMLClassifier
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLClassifier() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {Array.<UMLAttribute>} */
         this.attributes = [];
+
+        /** @member {Array.<UMLOperation>} */
         this.operations = [];
+
+        /** @member {Array.<UMLBehavior>} */
         this.behaviors = [];
+
+        /** @member {boolean} */
         this.isAbstract = false;
+
+        /** @member {boolean} */
         this.isFinalSpecialization = false;
+
+        /** @member {boolean} */
         this.isLeaf = false;
     }
     // inherits from UMLModelElement
@@ -670,6 +841,11 @@ define(function (require, exports, module) {
         return "";
     };
 
+    /**
+     * Get general elements
+     *
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.getGeneralElements = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -678,6 +854,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.target; });
     };
 
+    /**
+     * Get special elements
+     *
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.getSpecialElements = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -686,6 +867,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.source; });
     };
 
+    /**
+     * Get ancestors
+     *
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.getAncestors = function () {
         var ancestors = this.getGeneralElements(),
             size = 0;
@@ -698,6 +884,11 @@ define(function (require, exports, module) {
         return ancestors;
     };
 
+    /**
+     * Get descendants
+     *
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.getDescendants = function () {
         var descendants = this.getSpecialElements(),
             size = 0;
@@ -710,22 +901,51 @@ define(function (require, exports, module) {
         return descendants;
     };
 
+    /**
+     * Check a given element is a general element of this element
+     *
+     * @param {Element} elem
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.isGeneralElement = function (elem) {
         return _.contains(this.getGeneralElements(), elem);
     };
 
+    /**
+     * Check a given element is a special element of this element
+     *
+     * @param {Element} elem
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.isSpecialElement = function (elem) {
         return _.contains(this.getSpecialElements(), elem);
     };
 
+    /**
+     * Check a given element is an ancestor of this element
+     *
+     * @param {Element} elem
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.isAncestor = function (elem) {
         return _.contains(this.getAncestors(), elem);
     };
 
+    /**
+     * Check a given element is a descendant of this element
+     *
+     * @param {Element} elem
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.isDescendant = function (elem) {
         return _.contains(this.getDescendants(), elem);
     };
 
+    /**
+     * Get all inherited attributes
+     *
+     * @return {Array.<UMLAttribute>}
+     */
     UMLClassifier.prototype.getInheritedAttributes = function () {
         var ancestors = this.getAncestors(),
             inherited = [];
@@ -737,6 +957,11 @@ define(function (require, exports, module) {
         return inherited;
     };
 
+    /**
+     * Get all inherited operations
+     *
+     * @return {Array.<UMLOperation>}
+     */
     UMLClassifier.prototype.getInheritedOperations = function () {
         var ancestors = this.getAncestors(),
             inherited = [];
@@ -748,6 +973,11 @@ define(function (require, exports, module) {
         return inherited;
     };
 
+    /**
+     * Get all interfaces of this element is realizing
+     *
+     * @return {Array.<UMLInterface>}
+     */
     UMLClassifier.prototype.getInterfaces = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -756,6 +986,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.target; });
     };
 
+    /**
+     * Get all components of this element is realizing
+     *
+     * @return {Array.<UMLComponent>}
+     */
     UMLClassifier.prototype.getComponents = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -764,6 +999,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.target; });
     };
 
+    /**
+     * Get all interfaces of this element is realizing
+     *
+     * @return {Array.<Element>}
+     */
     UMLClassifier.prototype.getDeploymentTargets = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -772,6 +1012,12 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.target; });
     };
 
+    /**
+     * Get all association ends linked to this element
+     *
+     * @param {boolean} counterpart Returns whether counterpart (opposite-side) association ends or not.
+     * @return {Array.<UMLAssociationEnd>}
+     */
     UMLClassifier.prototype.getAssociationEnds = function (counterpart) {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) { return (r instanceof type.UMLAssociation); }),
@@ -788,10 +1034,16 @@ define(function (require, exports, module) {
     /**
      * UMLDirectedRelationship
      * @constructor
+     * @extends DirectedRelationship
+     * @mixes UMLElementMixin
      */
     function UMLDirectedRelationship() {
         type.DirectedRelationship.apply(this, arguments);
+
+        /** @member {UMLStereotype} */
         this.stereotype = null;
+
+        /** @member {string} */
         this.visibility = VK_PUBLIC;
         // mixin UMLElementMixin
         _.extend(UMLDirectedRelationship.prototype, UMLElementMixin);
@@ -804,20 +1056,45 @@ define(function (require, exports, module) {
     /**
      * UMLRelationshipEnd
      * @constructor
+     * @extends RelationshipEnd
+     * @mixes UMLElementMixin
      */
     function UMLRelationshipEnd() {
         type.RelationshipEnd.apply(this, arguments);
+
+        /** @member {UMLStereotype} */
         this.stereotype = null;
+
+        /** @member {string} */
         this.visibility = VK_PUBLIC;
+
+        /** @member {boolean} */
         this.navigable = true;
+
+        /** @member {string} */
         this.aggregation = AK_NONE;
+
+        /** @member {string} */
         this.multiplicity = '';
+
+        /** @member {string} */
         this.defaultValue = '';
+
+        /** @member {boolean} */
         this.isReadOnly = false;
+
+        /** @member {boolean} */
         this.isOrdered = false;
+
+        /** @member {boolean} */
         this.isUnique = false;
+
+        /** @member {boolean} */
         this.isDerived = false;
+
+        /** @member {boolean} */
         this.isID = false;
+
         // mixin UMLElementMixin
         _.extend(UMLRelationshipEnd.prototype, UMLElementMixin);
     }
@@ -842,11 +1119,18 @@ define(function (require, exports, module) {
     /**
      * UMLUndirectedRelationship
      * @constructor
+     * @extends UndirectedRelationship
+     * @mixes UMLElementMixin
      */
     function UMLUndirectedRelationship() {
         type.UndirectedRelationship.apply(this, arguments);
+
+        /** @member {UMLStereotype} */
         this.stereotype = null;
+
+        /** @member {string} */
         this.visibility = VK_PUBLIC;
+
         // mixin UMLElementMixin
         _.extend(UMLUndirectedRelationship.prototype, UMLElementMixin);
     }
@@ -864,12 +1148,21 @@ define(function (require, exports, module) {
     /**
      * UMLBehavior
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLBehavior() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {boolean} */
         this.isReentrant = true;
+
+        /** @member {string} */
         this.parameters = [];
+
+        /** @member {string} */
         this.preconditions = [];
+
+        /** @member {string} */
         this.postconditions = [];
     }
     // inherits from UMLModelElement
@@ -880,6 +1173,7 @@ define(function (require, exports, module) {
     /**
      * UMLOpaqueBehavior
      * @constructor
+     * @extends UMLBehavior
      */
     function UMLOpaqueBehavior() {
         UMLBehavior.apply(this, arguments);
@@ -892,13 +1186,24 @@ define(function (require, exports, module) {
     /**
      * UMLEvent
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLEvent() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {string} */
         this.kind = EK_ANYRECEIVE;
+
+        /** @member {string} */
         this.value = '';
+
+        /** @member {string} */
         this.expression = '';
+
+        /** @member {UMLOperation} */
         this.targetOperation = null;
+
+        /** @member {UMLSignal} */
         this.targetSignal = null;
     }
     // inherits from UMLModelElement
@@ -915,9 +1220,12 @@ define(function (require, exports, module) {
     /**
      * UMLPackage
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLPackage() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {Array.<UMLModelElement>} */
         this.importedElements = [];
     }
     // inherits from UMLModelElement
@@ -937,9 +1245,12 @@ define(function (require, exports, module) {
     /**
      * UMLModel
      * @constructor
+     * @extends UMLPackage
      */
     function UMLModel() {
         UMLPackage.apply(this, arguments);
+
+        /** @member {string} */
         this.viewpoint = '';
     }
     // inherits from UMLPackage
@@ -950,9 +1261,12 @@ define(function (require, exports, module) {
     /**
      * UMLClass
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLClass() {
         UMLClassifier.apply(this, arguments);
+
+        /** @member {boolean} */
         this.isActive = false;
     }
     // inherits from UMLClassifier
@@ -963,6 +1277,7 @@ define(function (require, exports, module) {
     /**
      * UMLInterface
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLInterface() {
         UMLClassifier.apply(this, arguments);
@@ -971,6 +1286,11 @@ define(function (require, exports, module) {
     UMLInterface.prototype = Object.create(UMLClassifier.prototype);
     UMLInterface.prototype.constructor = UMLInterface;
 
+    /**
+     * Get all implementing classifiers of this interfaces
+     *
+     * @return {Array.<UMLClassifier>}
+     */
     UMLInterface.prototype.getImplementingClassifiers = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -982,6 +1302,7 @@ define(function (require, exports, module) {
     /**
      * UMLSignal
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLSignal() {
         UMLClassifier.apply(this, arguments);
@@ -993,6 +1314,7 @@ define(function (require, exports, module) {
     /**
      * UMLDataType
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLDataType() {
         UMLClassifier.apply(this, arguments);
@@ -1004,6 +1326,7 @@ define(function (require, exports, module) {
     /**
      * UMLPrimitiveType
      * @constructor
+     * @extends UMLDataType
      */
     function UMLPrimitiveType() {
         UMLDataType.apply(this, arguments);
@@ -1015,6 +1338,7 @@ define(function (require, exports, module) {
     /**
      * UMLEnumerationLiteral
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLEnumerationLiteral() {
         UMLModelElement.apply(this, arguments);
@@ -1040,9 +1364,12 @@ define(function (require, exports, module) {
     /**
      * UMLEnumeration
      * @constructor
+     * @extends UMLDataType
      */
     function UMLEnumeration() {
         UMLDataType.apply(this, arguments);
+
+        /** @member {Array.<UMLEnumerationLiteral>} */
         this.literals = [];
     }
     // inherits from UMLDataType
@@ -1052,9 +1379,12 @@ define(function (require, exports, module) {
     /**
      * UMLDependency
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLDependency() {
         UMLDirectedRelationship.apply(this, arguments);
+
+        /** @member {string} */
         this.mapping = '';
     }
     // inherits from UMLDirectedRelationship
@@ -1065,6 +1395,7 @@ define(function (require, exports, module) {
     /**
      * UMLAbstraction
      * @constructor
+     * @extends UMLDependency
      */
     function UMLAbstraction() {
         UMLDependency.apply(this, arguments);
@@ -1077,6 +1408,7 @@ define(function (require, exports, module) {
     /**
      * UMLRealization
      * @constructor
+     * @extends UMLAbstraction
      */
     function UMLRealization() {
         UMLAbstraction.apply(this, arguments);
@@ -1089,9 +1421,12 @@ define(function (require, exports, module) {
     /**
      * UMLGeneralization
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLGeneralization() {
         UMLDirectedRelationship.apply(this, arguments);
+
+        /** @member {string} */
         this.discriminator = '';
     }
     // inherits from UMLDirectedRelationship
@@ -1102,6 +1437,7 @@ define(function (require, exports, module) {
     /**
      * UMLInterfaceRealization
      * @constructor
+     * @extends UMLRealization
      */
     function UMLInterfaceRealization() {
         UMLRealization.apply(this, arguments);
@@ -1114,6 +1450,7 @@ define(function (require, exports, module) {
     /**
      * UMLComponentRealization
      * @constructor
+     * @extends UMLRealization
      */
     function UMLComponentRealization() {
         UMLRealization.apply(this, arguments);
@@ -1126,9 +1463,12 @@ define(function (require, exports, module) {
     /**
      * UMLAssociationEnd
      * @constructor
+     * @extends UMLRelationshipEnd
      */
     function UMLAssociationEnd() {
         UMLRelationshipEnd.apply(this, arguments);
+
+        /** @member {Array.<UMLAttribute>} */
         this.qualifiers = [];
     }
     // inherits from UMLRelationshipEnd
@@ -1151,13 +1491,20 @@ define(function (require, exports, module) {
     /**
      * UMLAssociation
      * @constructor
+     * @extends UMLUndirectedRelationship
      */
     function UMLAssociation() {
         UMLUndirectedRelationship.apply(this, arguments);
+
+        /** @member {UMLAssociationEnd} */
         this.end1 = new UMLAssociationEnd();
         this.end1._parent = this;
+
+        /** @member {UMLAssociationEnd} */
         this.end2 = new UMLAssociationEnd();
         this.end2._parent = this;
+
+        /** @member {boolean} */
         this.isDerived = false;
     }
     // inherits from UMLUndirectedRelationship
@@ -1168,10 +1515,15 @@ define(function (require, exports, module) {
     /**
      * UMLAssociationClassLink
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLAssociationClassLink() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {UMLClass} */
         this.classSide = null;
+
+        /** @member {UMLAssociation} */
         this.associationSide = null;
     }
     // inherits from UMLModelElement
@@ -1191,10 +1543,15 @@ define(function (require, exports, module) {
     /**
      * UMLSlot
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLSlot() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {UMLStructuralFeature} */
         this.definingFeature = null;
+
+        /** @member {string} */
         this.value = '';
     }
     // inherits from UMLModelElement
@@ -1205,16 +1562,26 @@ define(function (require, exports, module) {
     /**
      * UMLInstance
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLInstance() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {UMLClassifier} */
         this.classifier = null;
+
+        /** @member {Array.<UMLSlot>} */
         this.slots = [];
     }
     // inherits from UMLModelElement
     UMLInstance.prototype = Object.create(UMLModelElement.prototype);
     UMLInstance.prototype.constructor = UMLInstance;
 
+    /**
+     * Get type string
+     *
+     * @return {string}
+     */
     UMLInstance.prototype.getTypeString = function () {
         if (_.isString(this.classifier) && (this.classifier.length > 0)) {
             return this.classifier;
@@ -1237,6 +1604,7 @@ define(function (require, exports, module) {
     /**
      * UMLObject
      * @constructor
+     * @extends UMLInstance
      */
     function UMLObject() {
         UMLInstance.apply(this, arguments);
@@ -1249,6 +1617,7 @@ define(function (require, exports, module) {
     /**
      * UMLArtifactInstance
      * @constructor
+     * @extends UMLInstance
      */
     function UMLArtifactInstance() {
         UMLInstance.apply(this, arguments);
@@ -1260,6 +1629,7 @@ define(function (require, exports, module) {
     /**
      * UMLComponentInstance
      * @constructor
+     * @extends UMLInstance
      */
     function UMLComponentInstance() {
         UMLInstance.apply(this, arguments);
@@ -1272,6 +1642,7 @@ define(function (require, exports, module) {
     /**
      * UMLNodeInstance
      * @constructor
+     * @extends UMLInstance
      */
     function UMLNodeInstance() {
         UMLInstance.apply(this, arguments);
@@ -1284,6 +1655,7 @@ define(function (require, exports, module) {
     /**
      * UMLLinkEnd
      * @constructor
+     * @extends UMLRelationshipEnd
      */
     function UMLLinkEnd() {
         UMLRelationshipEnd.apply(this, arguments);
@@ -1296,13 +1668,20 @@ define(function (require, exports, module) {
     /**
      * UMLLink
      * @constructor
+     * @extends UMLUndirectedRelationship
      */
     function UMLLink() {
         UMLUndirectedRelationship.apply(this, arguments);
+
+        /** @member {UMLLinkEnd} */
         this.end1 = new UMLLinkEnd();
         this.end1._parent = this;
+
+        /** @member {UMLLinkEnd} */
         this.end2 = new UMLLinkEnd();
         this.end2._parent = this;
+
+        /** @member {UMLAssociation} */
         this.association = null;
     }
     // inherits from UMLUndirectedRelationship
@@ -1319,11 +1698,18 @@ define(function (require, exports, module) {
     /**
      * UMLPort
      * @constructor
+     * @extends UMLAttribute
      */
     function UMLPort() {
         UMLAttribute.apply(this, arguments);
+
+        /** @member {boolean} */
         this.isBehavior = false;
+
+        /** @member {boolean} */
         this.isService = false;
+
+        /** @member {boolean} */
         this.isConjugated = false;
     }
     // inherits from UMLAttribute
@@ -1334,6 +1720,7 @@ define(function (require, exports, module) {
     /**
      * UMLConnectorEnd
      * @constructor
+     * @extends UMLRelationshipEnd
      */
     function UMLConnectorEnd() {
         UMLRelationshipEnd.apply(this, arguments);
@@ -1346,13 +1733,20 @@ define(function (require, exports, module) {
     /**
      * UMLConnector
      * @constructor
+     * @extends UMLUndirectedRelationship
      */
     function UMLConnector() {
         UMLUndirectedRelationship.apply(this, arguments);
+
+        /** @member {UMLConnectorEnd} */
         this.end1 = new UMLConnectorEnd();
         this.end1._parent = this;
+
+        /** @member {UMLConnectorEnd} */
         this.end2 = new UMLConnectorEnd();
         this.end2._parent = this;
+
+        /** @member {UMLAssociation} */
         this.type = null;
     }
     // inherits from UMLUndirectedRelationship
@@ -1363,6 +1757,7 @@ define(function (require, exports, module) {
     /**
      * UMLCollaboration
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLCollaboration() {
         UMLClassifier.apply(this, arguments);
@@ -1375,9 +1770,12 @@ define(function (require, exports, module) {
     /**
      * UMLCollaborationUse
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLCollaborationUse() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {UMLCollaboration} */
         this.type = null;
     }
     // inherits from UMLModelElement
@@ -1388,9 +1786,12 @@ define(function (require, exports, module) {
     /**
      * UMLRoleBinding
      * @constructor
+     * @extends UMLDependency
      */
     function UMLRoleBinding() {
         UMLDependency.apply(this, arguments);
+
+        /** @member {string} */
         this.roleName = '';
     }
     // inherits from UMLDependency
@@ -1406,9 +1807,12 @@ define(function (require, exports, module) {
     /**
      * UMLArtifact
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLArtifact() {
         UMLClassifier.apply(this, arguments);
+
+        /** @member {string} */
         this.fileName = '';
     }
     // inherits from UMLClassifier
@@ -1418,15 +1822,23 @@ define(function (require, exports, module) {
     /**
      * UMLComponent
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLComponent() {
         UMLClassifier.apply(this, arguments);
+
+        /** @member {boolean} */
         this.isIndirectlyInstantiated = true;
     }
     // inherits from UMLClassifier
     UMLComponent.prototype = Object.create(UMLClassifier.prototype);
     UMLComponent.prototype.constructor = UMLComponent;
 
+    /**
+     * Get all classifier realizing this component
+     *
+     * @return {Array.<UMLClassifier>}
+     */
     UMLComponent.prototype.getRealizingClassifiers = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1439,6 +1851,7 @@ define(function (require, exports, module) {
     /**
      * UMLSubsystem
      * @constructor
+     * @extends UMLComponent
      */
     function UMLSubsystem() {
         UMLComponent.apply(this, arguments);
@@ -1456,6 +1869,7 @@ define(function (require, exports, module) {
     /**
      * UMLNode
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLNode() {
         UMLClassifier.apply(this, arguments);
@@ -1464,6 +1878,11 @@ define(function (require, exports, module) {
     UMLNode.prototype = Object.create(UMLClassifier.prototype);
     UMLNode.prototype.constructor = UMLNode;
 
+    /**
+     * Get all element deployed in this node
+     *
+     * @return {Array.<Element>}
+     */
     UMLNode.prototype.getDeployedElements = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1475,6 +1894,7 @@ define(function (require, exports, module) {
     /**
      * UMLDeployment
      * @constructor
+     * @extends UMLDependency
      */
     function UMLDeployment() {
         UMLDependency.apply(this, arguments);
@@ -1487,6 +1907,7 @@ define(function (require, exports, module) {
     /**
      * UMLCommunicationPath
      * @constructor
+     * @extends UMLAssociation
      */
     function UMLCommunicationPath() {
         UMLAssociation.apply(this, arguments);
@@ -1504,9 +1925,12 @@ define(function (require, exports, module) {
     /**
      * UMLExtensionPoint
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLExtensionPoint() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {string} */
         this.location = "";
     }
     // inherits from UMLModelElement
@@ -1531,20 +1955,33 @@ define(function (require, exports, module) {
     /**
      * UMLUseCase
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLUseCase() {
         UMLClassifier.apply(this, arguments);
+
+        /** @member {Array.<UMLExtensionPoint>} */
         this.extensionPoints = [];
     }
     // inherits from UMLClassifier
     UMLUseCase.prototype = Object.create(UMLClassifier.prototype);
     UMLUseCase.prototype.constructor = UMLUseCase;
 
+    /**
+     * Get all actors associated with this use case
+     *
+     * @return {Array.<UMLActor>}
+     */
     UMLUseCase.prototype.getActors = function () {
         var associated = _.map(this.getAssociationEnds(true), function (e) { return e.reference; });
         return _.filter(associated, function (asso) { return (asso instanceof type.UMLActor); });
     };
 
+    /**
+     * Get use cases directly included in this use case
+     *
+     * @return {Array.<UMLUseCase>}
+     */
     UMLUseCase.prototype.getIncludedUseCases = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1553,6 +1990,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.target; });
     };
 
+    /**
+     * Get use cases extending this use case
+     *
+     * @return {Array.<UMLUseCase>}
+     */
     UMLUseCase.prototype.getExtendingUseCases = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1561,6 +2003,11 @@ define(function (require, exports, module) {
         return _.map(rels, function (g) { return g.source; });
     };
 
+    /**
+     * Get all included use cases
+     *
+     * @return {Array.<UMLUseCase>}
+     */
     UMLUseCase.prototype.getAllIncludedUseCases = function () {
         var includings = this.getIncludedUseCases(),
             size = 0;
@@ -1576,6 +2023,7 @@ define(function (require, exports, module) {
     /**
      * UMLActor
      * @constructor
+     * @extends UMLClassifier
      */
     function UMLActor() {
         UMLClassifier.apply(this, arguments);
@@ -1584,6 +2032,11 @@ define(function (require, exports, module) {
     UMLActor.prototype = Object.create(UMLClassifier.prototype);
     UMLActor.prototype.constructor = UMLActor;
 
+    /**
+     * Get use cases associated with this actor
+     *
+     * @return {Array.<UMLUseCase>}
+     */
     UMLActor.prototype.getUseCases = function () {
         var associated = _.map(this.getAssociationEnds(true), function (e) { return e.reference; });
         return _.filter(associated, function (asso) { return (asso instanceof type.UMLUseCase); });
@@ -1593,6 +2046,7 @@ define(function (require, exports, module) {
     /**
      * UMLInclude
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLInclude() {
         UMLDirectedRelationship.apply(this, arguments);
@@ -1605,10 +2059,15 @@ define(function (require, exports, module) {
     /**
      * UMLExtend
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLExtend() {
         UMLDirectedRelationship.apply(this, arguments);
+
+        /** @member {string} */
         this.condition = "";
+
+        /** @member {Array.<UMLExtensionPoint>} */
         this.extensionLocations = [];
     }
     // inherits from UMLDirectedRelationship
@@ -1618,9 +2077,12 @@ define(function (require, exports, module) {
     /**
      * UMLUseCaseSubject
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLUseCaseSubject() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {UMLClassifier} */
         this.represent = null;
     }
     // inherits from UMLModelElement
@@ -1638,9 +2100,12 @@ define(function (require, exports, module) {
     /**
      * UMLStateMachine
      * @constructor
+     * @extends UMLBehavior
      */
     function UMLStateMachine() {
         UMLBehavior.apply(this, arguments);
+
+        /** @member {Array.<UMLRegion>} */
         this.regions = [];
     }
     // inherits from UMLBehavior
@@ -1651,10 +2116,15 @@ define(function (require, exports, module) {
     /**
      * UMLRegion
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLRegion() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {Array.<UMLVertex>} */
         this.vertices = [];
+
+        /** @member {Array.<UMLTransition>} */
         this.transitions = [];
     }
     // inherits from UMLModelElement
@@ -1669,6 +2139,7 @@ define(function (require, exports, module) {
     /**
      * UMLVertex
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLVertex() {
         UMLModelElement.apply(this, arguments);
@@ -1677,6 +2148,12 @@ define(function (require, exports, module) {
     UMLVertex.prototype = Object.create(UMLModelElement.prototype);
     UMLVertex.prototype.constructor = UMLVertex;
 
+
+    /**
+     * Get incoming transitions
+     *
+     * @return {Array.<UMLTransition>}
+     */
     UMLVertex.prototype.getIncomingTransitions = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1685,6 +2162,11 @@ define(function (require, exports, module) {
         return rels;
     };
 
+    /**
+     * Get outgoing transitions
+     *
+     * @return {Array.<UMLTransition>}
+     */
     UMLVertex.prototype.getOutgoingTransitions = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1696,9 +2178,12 @@ define(function (require, exports, module) {
     /**
      * UMLPseudostate
      * @constructor
+     * @extends UMLVertex
      */
     function UMLPseudostate() {
         UMLVertex.apply(this, arguments);
+
+        /** @member {string} */
         this.kind = PSK_INITIAL;
     }
     // inherits from UMLVertex
@@ -1734,10 +2219,15 @@ define(function (require, exports, module) {
     /**
      * UMLConnectionPointReference
      * @constructor
+     * @extends UMLVertex
      */
     function UMLConnectionPointReference() {
         UMLVertex.apply(this, arguments);
+
+        /** @member {UMLPseudostate} */
         this.entry = [];
+
+        /** @member {UMLPseudostate} */
         this.exit = [];
     }
     // inherits from UMLVertex
@@ -1748,14 +2238,27 @@ define(function (require, exports, module) {
     /**
      * UMLState
      * @constructor
+     * @extends UMLVertex
      */
     function UMLState() {
         UMLVertex.apply(this, arguments);
+
+        /** @member {Array.<UMLRegion>} */
         this.regions = [];
+
+        /** @member {Array.<UMLBehavior>} */
         this.entryActivities = [];
+
+        /** @member {Array.<UMLBehavior>} */
         this.doActivities = [];
+
+        /** @member {Array.<UMLBehavior>} */
         this.exitActivities = [];
+
+        /** @member {UMLStateMachine} */
         this.submachine = null;
+
+        /** @member {UMLConnectionPointReference} */
         this.connections = [];
     }
     // inherits from UMLVertex
@@ -1766,6 +2269,7 @@ define(function (require, exports, module) {
     /**
      * UMLFinalState
      * @constructor
+     * @extends UMLState
      */
     function UMLFinalState() {
         UMLState.apply(this, arguments);
@@ -1778,12 +2282,21 @@ define(function (require, exports, module) {
     /**
      * UMLTransition
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLTransition() {
         UMLDirectedRelationship.apply(this, arguments);
+
+        /** @member {string} */
         this.kind = TK_EXTERNAL;
+
+        /** @member {string} */
         this.guard = '';
+
+        /** @member {Array.<UMLEvent>} */
         this.triggers = [];
+
+        /** @member {Array.<UMLBehavior>} */
         this.effects = [];
     }
     // inherits from UMLDirectedRelationship
@@ -1829,13 +2342,24 @@ define(function (require, exports, module) {
     /**
      * UMLActivity
      * @constructor
+     * @extends UMLActivity
      */
     function UMLActivity() {
         UMLBehavior.apply(this, arguments);
+
+        /** @member {boolean} */
         this.isReadOnly = false;
+
+        /** @member {boolean} */
         this.isSingleExecution = false;
+
+        /** @member {Array.<UMLActivityNode>} */
         this.nodes = [];
+
+        /** @member {Array.<UMLActivityEdge>} */
         this.edges = [];
+
+        /** @member {Array.<UMLActivityGroup>} */
         this.groups = [];
     }
     // inherits from UMLBehavior
@@ -1846,6 +2370,7 @@ define(function (require, exports, module) {
     /**
      * UMLPin
      * @constructor
+     * @extends UMLStructuralFeature
      */
     function UMLPin() {
         UMLStructuralFeature.apply(this, arguments);
@@ -1858,6 +2383,7 @@ define(function (require, exports, module) {
     /**
      * UMLInputPin
      * @constructor
+     * @extends UMLPin
      */
     function UMLInputPin() {
         UMLPin.apply(this, arguments);
@@ -1870,6 +2396,7 @@ define(function (require, exports, module) {
     /**
      * UMLOutputPin
      * @constructor
+     * @extends UMLPin
      */
     function UMLOutputPin() {
         UMLPin.apply(this, arguments);
@@ -1882,6 +2409,7 @@ define(function (require, exports, module) {
     /**
      * UMLActivityNode
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLActivityNode() {
         UMLModelElement.apply(this, arguments);
@@ -1890,6 +2418,12 @@ define(function (require, exports, module) {
     UMLActivityNode.prototype = Object.create(UMLModelElement.prototype);
     UMLActivityNode.prototype.constructor = UMLActivityNode;
 
+
+    /**
+     * Get incoming edges
+     *
+     * @return {Array.<UMLActivityEdge>}
+     */
     UMLActivityNode.prototype.getIncomingEdges = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1898,6 +2432,11 @@ define(function (require, exports, module) {
         return rels;
     };
 
+    /**
+     * Get outgoing edges
+     *
+     * @return {Array.<UMLActivityEdge>}
+     */
     UMLActivityNode.prototype.getOutgoingEdges = function () {
         var self = this,
             rels = Repository.getRelationshipsOf(self, function (r) {
@@ -1910,20 +2449,45 @@ define(function (require, exports, module) {
     /**
      * UMLAction
      * @constructor
+     * @extends UMLActivityNode
      */
     function UMLAction() {
         UMLActivityNode.apply(this, arguments);
+
+        /** @member {string} */
         this.kind = ACK_OPAQUE;
+
+        /** @member {Array.<UMLInputPin>} */
         this.inputs = [];
+
+        /** @member {Array.<UMLOutputPin>} */
         this.outputs = [];
+
+        /** @member {Array.<UMLEvent>} */
         this.triggers = [];
+
+        /** @member {UMLModelElement} */
         this.target = null;
+
+        /** @member {UMLActivity} */
         this.subactivity = null;
+
+        /** @member {boolean} */
         this.isLocallyReentrant = false;
+
+        /** @member {boolean} */
         this.isSynchronous = true;
+
+        /** @member {string} */
         this.language = '';
+
+        /** @member {string} */
         this.body = '';
+
+        /** @member {Array.<UMLConstraint>} */
         this.localPreconditions = [];
+
+        /** @member {Array.<UMLConstraint>} */
         this.localPostconditions = [];
     }
     // inherits from UMLActivityNode
@@ -1963,11 +2527,18 @@ define(function (require, exports, module) {
     /**
      * UMLObjectNode
      * @constructor
+     * @extends UMLActivityNode
      */
     function UMLObjectNode() {
         UMLActivityNode.apply(this, arguments);
+
+        /** @member {UMLClassifier} */
         this.type = null;
+
+        /** @member {boolean} */
         this.isControlType = false;
+
+        /** @member {string} */
         this.ordering = ONOK_FIFO;
     }
     // inherits from UMLActivityNode
@@ -1994,6 +2565,7 @@ define(function (require, exports, module) {
     /**
      * UMLControlNode
      * @constructor
+     * @extends UMLActivityNode
      */
     function UMLControlNode() {
         UMLActivityNode.apply(this, arguments);
@@ -2006,6 +2578,7 @@ define(function (require, exports, module) {
     /**
      * UMLInitialNode
      * @constructor
+     * @extends UMLControlNode
      */
     function UMLInitialNode() {
         UMLControlNode.apply(this, arguments);
@@ -2018,6 +2591,7 @@ define(function (require, exports, module) {
     /**
      * UMLFinalNode
      * @constructor
+     * @extends UMLControlNode
      */
     function UMLFinalNode() {
         UMLControlNode.apply(this, arguments);
@@ -2030,6 +2604,7 @@ define(function (require, exports, module) {
     /**
      * UMLActivityFinalNode
      * @constructor
+     * @extends UMLFinalNode
      */
     function UMLActivityFinalNode() {
         UMLFinalNode.apply(this, arguments);
@@ -2042,6 +2617,7 @@ define(function (require, exports, module) {
     /**
      * UMLFlowFinalNode
      * @constructor
+     * @extends UMLFinalNode
      */
     function UMLFlowFinalNode() {
         UMLFinalNode.apply(this, arguments);
@@ -2054,6 +2630,7 @@ define(function (require, exports, module) {
     /**
      * UMLForkNode
      * @constructor
+     * @extends UMLControlNode
      */
     function UMLForkNode() {
         UMLControlNode.apply(this, arguments);
@@ -2066,6 +2643,7 @@ define(function (require, exports, module) {
     /**
      * UMLJoinNode
      * @constructor
+     * @extends UMLControlNode
      */
     function UMLJoinNode() {
         UMLControlNode.apply(this, arguments);
@@ -2078,6 +2656,7 @@ define(function (require, exports, module) {
     /**
      * UMLMergeNode
      * @constructor
+     * @extends UMLControlNode
      */
     function UMLMergeNode() {
         UMLControlNode.apply(this, arguments);
@@ -2090,6 +2669,7 @@ define(function (require, exports, module) {
     /**
      * UMLDecisionNode
      * @constructor
+     * @extends UMLControlNode
      */
     function UMLDecisionNode() {
         UMLControlNode.apply(this, arguments);
@@ -2102,9 +2682,12 @@ define(function (require, exports, module) {
     /**
      * UMLActivityGroup
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLActivityGroup() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {Array.<UMLActivityGroup>} */
         this.subgroups = [];
     }
     // inherits from UMLModelElement
@@ -2115,9 +2698,16 @@ define(function (require, exports, module) {
     /**
      * UMLActivityPartition
      * @constructor
+     * @extends UMLActivityGroup
      */
     function UMLActivityPartition() {
         UMLActivityGroup.apply(this, arguments);
+
+        /** @member {Array.<UMLActivityNode>} */
+        this.nodes = [];
+
+        /** @member {Array.<UMLActivityEdge>} */
+        this.edges = [];
     }
     // inherits from UMLActivityGroup
     UMLActivityPartition.prototype = Object.create(UMLActivityGroup.prototype);
@@ -2127,14 +2717,22 @@ define(function (require, exports, module) {
         return "icon-UMLSwimlaneVert";
     };
 
+    UMLActivityPartition.prototype.canContainKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLActivityNode");
+    };
 
     /**
      * UMLActivityEdge
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLActivityEdge() {
         UMLDirectedRelationship.apply(this, arguments);
+
+        /** @member {string} */
         this.guard = '';
+
+        /** @member {string} */
         this.weight = '';
     }
     // inherits from UMLDirectedRelationship
@@ -2158,6 +2756,7 @@ define(function (require, exports, module) {
     /**
      * UMLControlFlow
      * @constructor
+     * @extends UMLActivityEdge
      */
     function UMLControlFlow() {
         UMLActivityEdge.apply(this, arguments);
@@ -2170,6 +2769,7 @@ define(function (require, exports, module) {
     /**
      * UMLObjectFlow
      * @constructor
+     * @extends UMLActivityEdge
      */
     function UMLObjectFlow() {
         UMLActivityEdge.apply(this, arguments);
@@ -2187,6 +2787,7 @@ define(function (require, exports, module) {
     /**
      * UMLInteractionFragment
      * @constructor
+     * @extends UMLBehavior
      */
     function UMLInteractionFragment() {
         UMLBehavior.apply(this, arguments);
@@ -2199,11 +2800,18 @@ define(function (require, exports, module) {
     /**
      * UMLInteraction
      * @constructor
+     * @extends UMLInteractionFragment
      */
     function UMLInteraction() {
         UMLInteractionFragment.apply(this, arguments);
+
+        /** @member {UMLMessage} */
         this.messages = [];
+
+        /** @member {UMLMessageEndpoint} */
         this.participants = [];
+
+        /** @member {UMLInteractionFragment} */
         this.fragments = [];
     }
     // inherits from UMLInteractionFragment
@@ -2214,10 +2822,15 @@ define(function (require, exports, module) {
     /**
      * UMLStateInvariant
      * @constructor
+     * @extends UMLInteractionFragment
      */
     function UMLStateInvariant() {
         UMLInteractionFragment.apply(this, arguments);
+
+        /** @member {UMLLifeline} */
         this.covered = null;
+
+        /** @member {string} */
         this.invariant = '';
     }
     // inherits from UMLInteractionFragment
@@ -2228,9 +2841,12 @@ define(function (require, exports, module) {
     /**
      * UMLContinuation
      * @constructor
+     * @extends UMLInteractionFragment
      */
     function UMLContinuation() {
         UMLInteractionFragment.apply(this, arguments);
+
+        /** @member {boolean} */
         this.setting = false;
     }
     // inherits from UMLInteractionFragment
@@ -2241,9 +2857,12 @@ define(function (require, exports, module) {
     /**
      * UMLInteractionOperand
      * @constructor
+     * @extends UMLInteractionFragment
      */
     function UMLInteractionOperand() {
         UMLInteractionFragment.apply(this, arguments);
+
+        /** @member {string} */
         this.guard = '';
     }
     // inherits from UMLInteractionFragment
@@ -2254,10 +2873,15 @@ define(function (require, exports, module) {
     /**
      * UMLCombinedFragment
      * @constructor
+     * @extends UMLInteractionFragment
      */
     function UMLCombinedFragment() {
         UMLInteractionFragment.apply(this, arguments);
+
+        /** @member {string} */
         this.interactionOperator = IOK_SEQ;
+
+        /** @member {UMLInteractionOperand} */
         this.operands = [];
     }
     // inherits from UMLInteractionFragment
@@ -2268,12 +2892,21 @@ define(function (require, exports, module) {
     /**
      * UMLInteractionUse
      * @constructor
+     * @extends UMLInteractionFragment
      */
     function UMLInteractionUse() {
         UMLInteractionFragment.apply(this, arguments);
+
+        /** @member {UMLInteraction} */
         this.refersTo = null;
+
+        /** @member {string} */
         this["arguments"] = '';
+
+        /** @member {string} */
         this.returnValue = '';
+
+        /** @member {UMLStructuralFeature} */
         this.returnValueRecipient = null;
     }
     // inherits from UMLInteractionFragment
@@ -2284,6 +2917,7 @@ define(function (require, exports, module) {
     /**
      * UMLMessageEndpoint
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLMessageEndpoint() {
         UMLModelElement.apply(this, arguments);
@@ -2296,11 +2930,18 @@ define(function (require, exports, module) {
     /**
      * UMLLifeline
      * @constructor
+     * @extends UMLMessageEndpoint
      */
     function UMLLifeline() {
         UMLMessageEndpoint.apply(this, arguments);
+
+        /** @member {string} */
         this.selector = '';
+
+        /** @member {UMLStructuralFeature} */
         this.represent = null;
+
+        /** @member {boolean} */
         this.isMultiInstance = false;
     }
     // inherits from UMLMessageEndpoint
@@ -2332,6 +2973,7 @@ define(function (require, exports, module) {
     /**
      * UMLGate
      * @constructor
+     * @extends UMLMessageEndpoint
      */
     function UMLGate() {
         UMLMessageEndpoint.apply(this, arguments);
@@ -2344,6 +2986,7 @@ define(function (require, exports, module) {
     /**
      * UMLEndpoint
      * @constructor
+     * @extends UMLMessageEndpoint
      */
     function UMLEndpoint() {
         UMLMessageEndpoint.apply(this, arguments);
@@ -2356,13 +2999,24 @@ define(function (require, exports, module) {
     /**
      * UMLMessage
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLMessage() {
         UMLDirectedRelationship.apply(this, arguments);
+
+        /** @member {string} */
         this.messageSort = MS_SYNCHCALL;
+
+        /** @member {UMLOperation} */
         this.signature = null;
+
+        /** @member {UMLConnector} */
         this.connector = null;
+
+        /** @member {string} */
         this["arguments"] = '';
+
+        /** @member {string} */
         this.assignmentTarget = '';
     }
     // inherits from UMLDirectedRelationship
@@ -2419,6 +3073,7 @@ define(function (require, exports, module) {
     /**
      * UMLProfile
      * @constructor
+     * @extends UMLPackage
      */
     function UMLProfile() {
         UMLPackage.apply(this, arguments);
@@ -2435,11 +3090,18 @@ define(function (require, exports, module) {
     /**
      * UMLImage
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLImage() {
         UMLModelElement.apply(this, arguments);
+
+        /** @member {number} */
         this.width = 40;
+
+        /** @member {number} */
         this.height = 40;
+
+        /** @member {string} */
         this.content = '';
     }
     // inherits from UMLModelElement
@@ -2450,9 +3112,12 @@ define(function (require, exports, module) {
     /**
      * UMLStereotype
      * @constructor
+     * @extends UMLClass
      */
     function UMLStereotype() {
         UMLClass.apply(this, arguments);
+
+        /** @member {UMLImage} */
         this.icon = new UMLImage();
         this.icon._parent = this;
     }
@@ -2463,6 +3128,7 @@ define(function (require, exports, module) {
     /**
      * UMLMetaClass
      * @constructor
+     * @extends UMLModelElement
      */
     function UMLMetaClass() {
         UMLModelElement.apply(this, arguments);
@@ -2474,6 +3140,7 @@ define(function (require, exports, module) {
     /**
      * UMLExtension
      * @constructor
+     * @extends UMLDirectedRelationship
      */
     function UMLExtension() {
         UMLDirectedRelationship.apply(this, arguments);

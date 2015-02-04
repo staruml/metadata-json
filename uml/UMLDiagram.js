@@ -193,6 +193,7 @@ define(function (require, exports, module) {
         ACTIVATION_MINHEIGHT = 25,
         LIFELINE_MINWIDTH = 10, // should be even number
         LIFELINE_MINHEIGHT = 50,
+        LIFELINE_TOP_POSITION = 40,
         SEQ_OBJECT_MINHEIGHT = 40,
         SEQ_OBJECT_MINWIDTH = 30,
         MULTI_INSTANCE_MARGIN = 5,
@@ -292,6 +293,7 @@ define(function (require, exports, module) {
     /**
      * UMLDiagram
      * @constructor
+     * @extends Diagram
      */
     function UMLDiagram() {
         Diagram.apply(this, arguments);
@@ -309,6 +311,7 @@ define(function (require, exports, module) {
     /**
      * UMLCompartmentView
      * @constructor
+     * @extends NodeView
      */
     function UMLCompartmentView() {
         NodeView.apply(this, arguments);
@@ -377,6 +380,7 @@ define(function (require, exports, module) {
     /**
      * UMLNameCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLNameCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -445,6 +449,7 @@ define(function (require, exports, module) {
     /**
      * UMLAttributeView
      * @constructor
+     * @extends LabelView
      */
     function UMLAttributeView() {
         LabelView.apply(this, arguments);
@@ -492,6 +497,7 @@ define(function (require, exports, module) {
     /**
      * UMLAttributeCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLAttributeCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -526,6 +532,7 @@ define(function (require, exports, module) {
     /**
      * UMLOperationView
      * @constructor
+     * @extends LabelView
      */
     function UMLOperationView() {
         LabelView.apply(this, arguments);
@@ -580,6 +587,7 @@ define(function (require, exports, module) {
     /**
      * UMLOperationCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLOperationCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -614,6 +622,7 @@ define(function (require, exports, module) {
     /**
      * UMLTemplateParameterView
      * @constructor
+     * @extends LabelView
      */
     function UMLTemplateParameterView() {
         LabelView.apply(this, arguments);
@@ -652,6 +661,7 @@ define(function (require, exports, module) {
     /**
      * UMLTemplateParameterCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLTemplateParameterCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -704,6 +714,7 @@ define(function (require, exports, module) {
     /**
      * UMLGeneralNodeView
      * @constructor
+     * @extends NodeView
      */
     function UMLGeneralNodeView() {
         NodeView.apply(this, arguments);
@@ -1082,6 +1093,7 @@ define(function (require, exports, module) {
     /**
      * UMLFloatingNodeView
      * @constructor
+     * @extends NodeView
      */
     function UMLFloatingNodeView() {
         NodeView.apply(this, arguments);
@@ -1202,6 +1214,7 @@ define(function (require, exports, module) {
     /**
      * UMLGeneralEdgeView
      * @constructor
+     * @extends EdgeView
      */
     function UMLGeneralEdgeView() {
         EdgeView.apply(this, arguments);
@@ -1281,6 +1294,7 @@ define(function (require, exports, module) {
     /**
      * UMLClassifierView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLClassifierView() {
         UMLGeneralNodeView.apply(this, arguments);
@@ -1400,6 +1414,7 @@ define(function (require, exports, module) {
     /**
      * UMLUndirectedRelationshipView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLUndirectedRelationshipView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -1594,6 +1609,7 @@ define(function (require, exports, module) {
     /**
      * UMLClassDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLClassDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -1622,10 +1638,11 @@ define(function (require, exports, module) {
     /**
      * UMLClassView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLClassView() {
         UMLClassifierView.apply(this, arguments);
-        this.fillColor  = PreferenceManager.get("uml.class.fillColor", "#ffffff");
+        this.fillColor  = PreferenceManager.get("uml.class.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.class.stereotypeDisplay", UML.SD_LABEL);
         this.suppressAttributes = PreferenceManager.get("uml.class.suppressAttributes", false);
         this.suppressOperations = PreferenceManager.get("uml.class.suppressOperations", false);
@@ -1646,6 +1663,7 @@ define(function (require, exports, module) {
     /**
      * UMLInterfaceView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLInterfaceView() {
         UMLClassifierView.apply(this, arguments);
@@ -1654,7 +1672,7 @@ define(function (require, exports, module) {
         this.depViews = null;
         this.relViews = null;
 
-        this.fillColor  = PreferenceManager.get("uml.interface.fillColor", "#ffffff");
+        this.fillColor  = PreferenceManager.get("uml.interface.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.interface.stereotypeDisplay", UML.SD_ICON);
         this.suppressAttributes = PreferenceManager.get("uml.interface.suppressAttributes", true);
         this.suppressOperations = PreferenceManager.get("uml.interface.suppressOperations", true);
@@ -1751,10 +1769,11 @@ define(function (require, exports, module) {
     /**
      * UMLSignalView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLSignalView() {
         UMLClassifierView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.signal.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.signal.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLClassifierView
     UMLSignalView.prototype = Object.create(UMLClassifierView.prototype);
@@ -1768,10 +1787,11 @@ define(function (require, exports, module) {
     /**
      * UMLDataTypeView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLDataTypeView() {
         UMLClassifierView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.datatype.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.datatype.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.suppressAttributes = true;
         this.suppressOperations = true;
     }
@@ -1787,10 +1807,11 @@ define(function (require, exports, module) {
     /**
      * UMLPrimitiveTypeView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLPrimitiveTypeView() {
         UMLClassifierView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.datatype.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.datatype.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.suppressAttributes = true;
         this.suppressOperations = true;
     }
@@ -1806,6 +1827,7 @@ define(function (require, exports, module) {
     /**
      * UMLEnumerationLiteralView
      * @constructor
+     * @extends LabelView
      */
     function UMLEnumerationLiteralView() {
         LabelView.apply(this, arguments);
@@ -1848,6 +1870,7 @@ define(function (require, exports, module) {
     /**
      * UMLEnumerationLiteralCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLEnumerationLiteralCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -1883,6 +1906,7 @@ define(function (require, exports, module) {
     /**
      * UMLEnumerationView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLEnumerationView() {
         UMLClassifierView.apply(this, arguments);
@@ -1895,7 +1919,7 @@ define(function (require, exports, module) {
         this.enumerationLiteralCompartment.parentStyle = true;
         this.addSubView(this.enumerationLiteralCompartment);
 
-        this.fillColor  = PreferenceManager.get("uml.enumeration.fillColor", "#ffffff");
+        this.fillColor  = PreferenceManager.get("uml.enumeration.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.enumeration.stereotypeDisplay", UML.SD_LABEL);
         this.suppressAttributes = PreferenceManager.get("uml.enumeration.suppressAttributes", true);
         this.suppressOperations = PreferenceManager.get("uml.enumeration.suppressOperations", true);
@@ -1942,6 +1966,7 @@ define(function (require, exports, module) {
     /**
      * UMLGeneralizationView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLGeneralizationView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -1960,6 +1985,7 @@ define(function (require, exports, module) {
     /**
      * UMLDependencyView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLDependencyView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -2003,6 +2029,7 @@ define(function (require, exports, module) {
     /**
      * UMLInterfaceRealizationView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLInterfaceRealizationView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -2047,6 +2074,7 @@ define(function (require, exports, module) {
     /**
      * UMLQualifierCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLQualifierCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -2098,6 +2126,7 @@ define(function (require, exports, module) {
     /**
      * UMLAssociationView
      * @constructor
+     * @extends UMLUndirectedRelationshipView
      */
     function UMLAssociationView() {
         UMLUndirectedRelationshipView.apply(this, arguments);
@@ -2201,6 +2230,7 @@ define(function (require, exports, module) {
     /**
      * UMLAssociationClassLinkView
      * @constructor
+     * @extends EdgeView
      */
     function UMLAssociationClassLinkView() {
         EdgeView.apply(this, arguments);
@@ -2223,6 +2253,7 @@ define(function (require, exports, module) {
     /**
      * UMLPackageDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLPackageDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -2241,10 +2272,11 @@ define(function (require, exports, module) {
     /**
      * UMLPackageView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLPackageView() {
         UMLGeneralNodeView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.package.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.package.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLPackageView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -2293,10 +2325,11 @@ define(function (require, exports, module) {
     /**
      * UMLModelView
      * @constructor
+     * @extends UMLPackageView
      */
     function UMLModelView() {
         UMLPackageView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.model.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.model.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLPackageView
     UMLModelView.prototype = Object.create(UMLPackageView.prototype);
@@ -2312,10 +2345,11 @@ define(function (require, exports, module) {
     /**
      * UMLSubsystemView
      * @constructor
+     * @extends UMLPackageView
      */
     function UMLSubsystemView() {
         UMLPackageView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.subsystem.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.subsystem.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLPackageView
     UMLSubsystemView.prototype = Object.create(UMLPackageView.prototype);
@@ -2333,6 +2367,7 @@ define(function (require, exports, module) {
     /**
      * UMLContainmentView
      * @constructor
+     * @extends EdgeView
      */
     function UMLContainmentView() {
         EdgeView.apply(this, arguments);
@@ -2356,6 +2391,7 @@ define(function (require, exports, module) {
     /**
      * UMLCompositeStructureDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLCompositeStructureDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -2384,11 +2420,12 @@ define(function (require, exports, module) {
     /**
      * UMLPortView
      * @constructor
+     * @extends UMLFloatingNodeView
      */
     function UMLPortView() {
         UMLFloatingNodeView.apply(this, arguments);
         this.sizable = Core.SZ_NONE;
-        this.fillColor = PreferenceManager.get("uml.port.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.port.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from LabelView
     UMLPortView.prototype = Object.create(UMLFloatingNodeView.prototype);
@@ -2423,11 +2460,12 @@ define(function (require, exports, module) {
     /**
      * UMLPartView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLPartView() {
         UMLGeneralNodeView.apply(this, arguments);
         this.containerChangeable = false;
-        this.fillColor = PreferenceManager.get("uml.part.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.part.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLPartView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -2451,6 +2489,7 @@ define(function (require, exports, module) {
     /**
      * UMLConnectorView
      * @constructor
+     * @extends UMLUndirectedRelationshipView
      */
     function UMLConnectorView() {
         UMLUndirectedRelationshipView.apply(this, arguments);
@@ -2467,6 +2506,7 @@ define(function (require, exports, module) {
     /**
      * UMLCollaborationView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLCollaborationView() {
         UMLGeneralNodeView.apply(this, arguments);
@@ -2477,7 +2517,7 @@ define(function (require, exports, module) {
         this.templateParameterCompartment.parentStyle = true;
         this.addSubView(this.templateParameterCompartment);
 
-        this.fillColor = PreferenceManager.get("uml.collaboration.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.collaboration.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLCollaborationView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -2566,10 +2606,11 @@ define(function (require, exports, module) {
     /**
      * UMLCollaborationUseView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLCollaborationUseView() {
         UMLGeneralNodeView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.collaborationuse.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.collaborationuse.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLCollaborationUseView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -2618,6 +2659,7 @@ define(function (require, exports, module) {
     /**
      * UMLRoleBindingView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLRoleBindingView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -2665,6 +2707,7 @@ define(function (require, exports, module) {
     /**
      * UMLObjectDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLObjectDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -2684,6 +2727,7 @@ define(function (require, exports, module) {
     /**
      * UMLSlotView
      * @constructor
+     * @extends LabelView
      */
     function UMLSlotView() {
         LabelView.apply(this, arguments);
@@ -2724,6 +2768,7 @@ define(function (require, exports, module) {
     /**
      * UMLSlotCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLSlotCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -2758,6 +2803,7 @@ define(function (require, exports, module) {
     /**
      * UMLObjectView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLObjectView() {
         UMLGeneralNodeView.apply(this, arguments);
@@ -2768,7 +2814,7 @@ define(function (require, exports, module) {
         this.slotCompartment.parentStyle = true;
         this.addSubView(this.slotCompartment);
 
-        this.fillColor = PreferenceManager.get("uml.object.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.object.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLObjectView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -2815,6 +2861,7 @@ define(function (require, exports, module) {
     /**
      * UMLLinkView
      * @constructor
+     * @extends UMLUndirectedRelationshipView
      */
     function UMLLinkView() {
         UMLUndirectedRelationshipView.apply(this, arguments);
@@ -2836,6 +2883,7 @@ define(function (require, exports, module) {
     /**
      * UMLComponentDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLComponentDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -2862,7 +2910,7 @@ define(function (require, exports, module) {
 
     /**
      * UMLArtifactViewMixin
-     * @private
+     * @mixin
      */
     var UMLArtifactViewMixin = {
 
@@ -2901,6 +2949,8 @@ define(function (require, exports, module) {
     /**
      * UMLArtifactView
      * @constructor
+     * @mixes UMLArtifactViewMixin
+     * @extends UMLClassifierView
      */
     function UMLArtifactView() {
         UMLClassifierView.apply(this, arguments);
@@ -2908,7 +2958,7 @@ define(function (require, exports, module) {
         // mixin UMLArtifactViewMixin
         _.extend(UMLArtifactView.prototype, UMLArtifactViewMixin);
 
-        this.fillColor  = PreferenceManager.get("uml.artifact.fillColor", "#ffffff");
+        this.fillColor  = PreferenceManager.get("uml.artifact.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.artifact.stereotypeDisplay", UML.SD_ICON);
         this.suppressAttributes = PreferenceManager.get("uml.artifact.suppressAttributes", true);
         this.suppressOperations = PreferenceManager.get("uml.artifact.suppressOperations", true);
@@ -2925,6 +2975,8 @@ define(function (require, exports, module) {
     /**
      * UMLArtifactInstanceView
      * @constructor
+     * @mixes UMLArtifactViewMixin
+     * @extends UMLGeneralNodeView
      */
     function UMLArtifactInstanceView() {
         UMLGeneralNodeView.apply(this, arguments);
@@ -2932,7 +2984,7 @@ define(function (require, exports, module) {
         // mixin UMLArtifactViewMixin
         _.extend(UMLArtifactInstanceView.prototype, UMLArtifactViewMixin);
 
-        this.fillColor = PreferenceManager.get("uml.artifactinstance.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.artifactinstance.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay = PreferenceManager.get("uml.artifact.stereotypeDisplay", UML.SD_ICON);
     }
     // inherits from UMLGeneralNodeView
@@ -2952,7 +3004,6 @@ define(function (require, exports, module) {
 
     /**
      * UMLComponentViewMixin
-     * @private
      * @mixin
      */
     var UMLComponentViewMixin = {
@@ -3025,6 +3076,8 @@ define(function (require, exports, module) {
     /**
      * UMLComponentView
      * @constructor
+     * @mixes UMLComponentViewMixin
+     * @extends UMLClassifierView
      */
     function UMLComponentView() {
         UMLClassifierView.apply(this, arguments);
@@ -3032,7 +3085,7 @@ define(function (require, exports, module) {
         // mixin UMLComponentViewMixin
         _.extend(UMLComponentView.prototype, UMLComponentViewMixin);
 
-        this.fillColor = PreferenceManager.get("uml.component.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.component.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.component.stereotypeDisplay", UML.SD_LABEL);
         this.suppressAttributes = PreferenceManager.get("uml.component.suppressAttributes", true);
         this.suppressOperations = PreferenceManager.get("uml.component.suppressOperations", true);
@@ -3045,13 +3098,15 @@ define(function (require, exports, module) {
     /**
      * UMLComponentInstanceView
      * @constructor
+     * @mixes UMLComponentViewMixin
+     * @extends UMLGeneralNodeView
      */
     function UMLComponentInstanceView() {
         UMLGeneralNodeView.apply(this, arguments);
         // mixin UMLComponentViewMixin
         _.extend(UMLComponentInstanceView.prototype, UMLComponentViewMixin);
 
-        this.fillColor = PreferenceManager.get("uml.componentinstance.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.componentinstance.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.component.stereotypeDisplay", UML.SD_LABEL);
     }
     // inherits from UMLGeneralNodeView
@@ -3069,6 +3124,7 @@ define(function (require, exports, module) {
     /**
      * UMLComponentRealizationView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLComponentRealizationView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -3094,6 +3150,7 @@ define(function (require, exports, module) {
     /**
      * UMLDeploymentDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLDeploymentDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -3121,7 +3178,7 @@ define(function (require, exports, module) {
 
     /**
      * UMLNodeViewMixin
-     * @private
+     * @mixin
      */
     var UMLNodeViewMixin = {
 
@@ -3221,6 +3278,8 @@ define(function (require, exports, module) {
     /**
      * UMLNodeView
      * @constructor
+     * @mixes UMLNodeViewMixin
+     * @extends UMLClassifierView
      */
     function UMLNodeView() {
         UMLClassifierView.apply(this, arguments);
@@ -3229,7 +3288,7 @@ define(function (require, exports, module) {
         // mixin UMLNodeViewMixin
         _.extend(UMLNodeView.prototype, UMLNodeViewMixin);
 
-        this.fillColor = PreferenceManager.get("uml.node.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.node.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.node.stereotypeDisplay", UML.SD_LABEL);
         this.suppressAttributes = PreferenceManager.get("uml.node.suppressAttributes", true);
         this.suppressOperations = PreferenceManager.get("uml.node.suppressOperations", true);
@@ -3242,6 +3301,8 @@ define(function (require, exports, module) {
     /**
      * UMLNodeInstanceView
      * @constructor
+     * @mixes UMLNodeViewMixin
+     * @extends UMLGeneralNodeView
      */
     function UMLNodeInstanceView() {
         UMLGeneralNodeView.apply(this, arguments);
@@ -3249,7 +3310,7 @@ define(function (require, exports, module) {
         // mixin UMLNodeViewMixin
         _.extend(UMLNodeInstanceView.prototype, UMLNodeViewMixin);
 
-        this.fillColor = PreferenceManager.get("uml.nodeinstance.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.nodeinstance.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.node.stereotypeDisplay", UML.SD_LABEL);
     }
     // inherits from UMLGeneralNodeView
@@ -3267,6 +3328,7 @@ define(function (require, exports, module) {
     /**
      * UMLDeploymentView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLDeploymentView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -3292,6 +3354,7 @@ define(function (require, exports, module) {
     /**
      * UMLCommunicationPathView
      * @constructor
+     * @extends UMLAssociationView
      */
     function UMLCommunicationPathView() {
         UMLAssociationView.apply(this, arguments);
@@ -3314,6 +3377,7 @@ define(function (require, exports, module) {
     /**
      * UMLUseCaseDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLUseCaseDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -3326,6 +3390,7 @@ define(function (require, exports, module) {
         return (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLClassifier) ||
+               (model instanceof type.UMLUseCaseSubject) ||
                (model instanceof type.UMLInstance) ||
                (model instanceof type.UMLGeneralization) ||
                (model instanceof type.UMLDependency) ||
@@ -3347,6 +3412,7 @@ define(function (require, exports, module) {
     /**
      * UMLExtensionPointView
      * @constructor
+     * @extends LabelView
      */
     function UMLExtensionPointView() {
         LabelView.apply(this, arguments);
@@ -3387,6 +3453,7 @@ define(function (require, exports, module) {
     /**
      * UMLExtensionPointCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLExtensionPointCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -3421,6 +3488,7 @@ define(function (require, exports, module) {
     /**
      * UMLUseCaseView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLUseCaseView() {
         UMLClassifierView.apply(this, arguments);
@@ -3431,7 +3499,7 @@ define(function (require, exports, module) {
         this.extensionPointCompartment.parentStyle = true;
         this.addSubView(this.extensionPointCompartment);
 
-        this.fillColor = PreferenceManager.get("uml.usecase.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.usecase.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.usecase.stereotypeDisplay", UML.SD_LABEL);
         this.suppressAttributes = PreferenceManager.get("uml.usecase.suppressAttributes", true);
         this.suppressOperations = PreferenceManager.get("uml.usecase.suppressOperations", true);
@@ -3625,12 +3693,13 @@ define(function (require, exports, module) {
     /**
      * UMLActorView
      * @constructor
+     * @extends UMLClassifierView
      */
     function UMLActorView() {
         UMLClassifierView.apply(this, arguments);
         this.iconRatio = ACTOR_RATIO_PERCENT;
 
-        this.fillColor = PreferenceManager.get("uml.actor.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.actor.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this.stereotypeDisplay  = PreferenceManager.get("uml.actor.stereotypeDisplay", UML.SD_LABEL);
         this.suppressAttributes = PreferenceManager.get("uml.actor.suppressAttributes", true);
         this.suppressOperations = PreferenceManager.get("uml.actor.suppressOperations", true);
@@ -3699,6 +3768,7 @@ define(function (require, exports, module) {
     /**
      * UMLIncludeView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLIncludeView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -3723,6 +3793,7 @@ define(function (require, exports, module) {
     /**
      * UMLExtendView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLExtendView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -3747,6 +3818,7 @@ define(function (require, exports, module) {
     /**
      * UMLUseCaseSubjectView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLUseCaseSubjectView() {
         UMLGeneralNodeView.apply(this, arguments);
@@ -3791,6 +3863,7 @@ define(function (require, exports, module) {
     /**
      * UMLStatechartDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLStatechartDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -3817,6 +3890,7 @@ define(function (require, exports, module) {
     /**
      * UMLPseudostateView
      * @constructor
+     * @extends UMLFloatingNodeView
      */
     function UMLPseudostateView() {
         UMLFloatingNodeView.apply(this, arguments);
@@ -4013,6 +4087,7 @@ define(function (require, exports, module) {
     /**
      * UMLFinalStateView
      * @constructor
+     * @extends NodeView
      */
     function UMLFinalStateView() {
         NodeView.apply(this, arguments);
@@ -4054,6 +4129,7 @@ define(function (require, exports, module) {
     /**
      * UMLConnectionPointReferenceView
      * @constructor
+     * @extends UMLFloatingNodeView
      */
     function UMLConnectionPointReferenceView() {
         UMLFloatingNodeView.apply(this, arguments);
@@ -4123,6 +4199,7 @@ define(function (require, exports, module) {
     /**
      * UMLInternalActivityView
      * @constructor
+     * @extends LabelView
      */
     function UMLInternalActivityView() {
         LabelView.apply(this, arguments);
@@ -4164,6 +4241,7 @@ define(function (require, exports, module) {
     /**
      * UMLInternalActivityCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLInternalActivityCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -4199,6 +4277,7 @@ define(function (require, exports, module) {
     /**
      * UMLRegionView
      * @constructor
+     * @extends NodeView
      */
     function UMLRegionView() {
         NodeView.apply(this, arguments);
@@ -4257,6 +4336,7 @@ define(function (require, exports, module) {
     /**
      * UMLDecompositionCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLDecompositionCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -4310,6 +4390,7 @@ define(function (require, exports, module) {
     /**
      * UMLStateView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLStateView() {
         UMLGeneralNodeView.apply(this, arguments);
@@ -4325,7 +4406,7 @@ define(function (require, exports, module) {
         this.decompositionCompartment.parentStyle = true;
         this.addSubView(this.decompositionCompartment);
 
-        this.fillColor = PreferenceManager.get("uml.state.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.state.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLStateView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -4402,7 +4483,7 @@ define(function (require, exports, module) {
                 this.internalActivityCompartment.getRight(),
                 this.internalActivityCompartment.top);
         }
-        if (this.decompositionCompartment.visible) {
+        if (this.decompositionCompartment.visible && this.decompositionCompartment.subViews.length > 0) {
             canvas.line(
                 this.decompositionCompartment.left,
                 this.decompositionCompartment.top,
@@ -4420,6 +4501,7 @@ define(function (require, exports, module) {
     /**
      * UMLTransitionView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLTransitionView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -4452,6 +4534,7 @@ define(function (require, exports, module) {
     /**
      * UMLActivityDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLActivityDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -4462,9 +4545,11 @@ define(function (require, exports, module) {
 
     UMLActivityDiagram.prototype.canAcceptModel = function (model) {
         return (model instanceof type.UMLConstraint) ||
+               (model instanceof type.UMLActivity) ||
                (model instanceof type.UMLAction) ||
                (model instanceof type.UMLActivityNode) ||
-               (model instanceof type.UMLActivityPartition);
+               (model instanceof type.UMLActivityPartition) ||
+               (model instanceof type.UMLPin);
     }
 
     UMLActivityDiagram.prototype.layout = function (direction, separations) {
@@ -4478,6 +4563,7 @@ define(function (require, exports, module) {
     /**
      * UMLPinView
      * @constructor
+     * @extends UMLFloatingNodeView
      */
     function UMLPinView() {
         UMLFloatingNodeView.apply(this, arguments);
@@ -4589,6 +4675,7 @@ define(function (require, exports, module) {
     /**
      * UMLInputPinView
      * @constructor
+     * @extends UMLPinView
      */
     function UMLInputPinView() {
         UMLPinView.apply(this, arguments);
@@ -4612,6 +4699,7 @@ define(function (require, exports, module) {
     /**
      * UMLOutputPinView
      * @constructor
+     * @extends UMLPinView
      */
     function UMLOutputPinView() {
         UMLPinView.apply(this, arguments);
@@ -4635,10 +4723,12 @@ define(function (require, exports, module) {
     /**
      * UMLActionView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLActionView() {
         UMLGeneralNodeView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.action.fillColor", "#ffffff");
+        this.containerChangeable = true;
+        this.fillColor = PreferenceManager.get("uml.action.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLActionView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -4647,7 +4737,9 @@ define(function (require, exports, module) {
     UMLActionView.prototype.update = function (canvas) {
         UMLGeneralNodeView.prototype.update.call(this, canvas);
         if (this.model) {
-            // ...
+            if (this.model.subactivity instanceof type.UMLActivity) {
+                this.nameCompartment.nameLabel.text = this.model.name + ":" + this.model.subactivity.name;
+            }
         }
     }
 
@@ -4764,10 +4856,12 @@ define(function (require, exports, module) {
     /**
      * UMLObjectNodeView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLObjectNodeView() {
         UMLGeneralNodeView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.objectnode.fillColor", "#ffffff");
+        this.containerChangeable = true;
+        this.fillColor = PreferenceManager.get("uml.objectnode.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLObjectNodeView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -4790,9 +4884,11 @@ define(function (require, exports, module) {
     /**
      * UMLControlNodeView
      * @constructor
+     * @extends NodeView
      */
     function UMLControlNodeView() {
         NodeView.apply(this, arguments);
+        this.containerChangeable = true;
         this.sizable = Core.SZ_FREE;
     }
     // inherits from NodeView
@@ -4915,6 +5011,7 @@ define(function (require, exports, module) {
     /**
      * UMLControlFlowView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLControlFlowView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -4941,6 +5038,7 @@ define(function (require, exports, module) {
     /**
      * UMLObjectFlowView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLObjectFlowView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -4967,6 +5065,7 @@ define(function (require, exports, module) {
     /**
      * UMLSwimlaneView
      * @constructor
+     * @extends NodeView
      */
     function UMLSwimlaneView() {
         NodeView.apply(this, arguments);
@@ -4985,6 +5084,12 @@ define(function (require, exports, module) {
     // inherits from NodeView
     UMLSwimlaneView.prototype = Object.create(NodeView.prototype);
     UMLSwimlaneView.prototype.constructor = UMLSwimlaneView;
+
+    UMLSwimlaneView.prototype.canContainViewKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLActionView") ||
+               MetaModelManager.isKindOf(kind, "UMLControlNodeView") ||
+               MetaModelManager.isKindOf(kind, "UMLObjectNodeView");
+    }
 
     UMLSwimlaneView.prototype.update = function (canvas) {
         if (this.model) {
@@ -5059,6 +5164,7 @@ define(function (require, exports, module) {
     /**
      * UMLSequenceDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLSequenceDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -5078,9 +5184,13 @@ define(function (require, exports, module) {
     }
 
     UMLSequenceDiagram.prototype.drawDiagram = function (canvas, drawSelection) {
+        var i,
+            len,
+            view;
+
         // Regulate sequence number of message views
-        for (var i = 0, len = this.ownedViews.length; i < len; i++) {
-            var view = this.ownedViews[i];
+        for (i = 0, len = this.ownedViews.length; i < len; i++) {
+            view = this.ownedViews[i];
             if (view instanceof UMLSeqMessageView) {
                 view.regulateSequenceNumber();
             }
@@ -5096,6 +5206,7 @@ define(function (require, exports, module) {
     /**
      * UMLLinePartView (Line Part of LifelineView)
      * @constructor
+     * @extends NodeView
      */
     function UMLLinePartView() {
         NodeView.apply(this, arguments);
@@ -5118,7 +5229,7 @@ define(function (require, exports, module) {
         for (var i = 0, len = this.getDiagram().ownedViews.length; i < len; i++) {
             if (this.getDiagram().ownedViews[i] instanceof UMLSeqMessageView) {
                 var msg = this.getDiagram().ownedViews[i];
-                if (msg.head == this) {
+                if (msg.head === this) {
                     if (msg.activation.visible && (msg.activation.top <= yPosition) && (msg.activation.getBottom() > yPosition)) {
                         if (frontMostActivation != null) {
                             if (msg.activation.top > frontMostActivation.top) {
@@ -5136,8 +5247,25 @@ define(function (require, exports, module) {
 
     UMLLinePartView.prototype.sizeObject = function (canvas) {
         NodeView.prototype.sizeObject.call(this, canvas);
+        // Auto-expanding Lifeline
+        var bottomMost = 0;
+        for (var i = 0, len = this.getDiagram().ownedViews.length; i < len; i++) {
+            if (this.getDiagram().ownedViews[i] instanceof UMLSeqMessageView) {
+                var msg = this.getDiagram().ownedViews[i];
+                if (msg.model && (msg.model.source === this.model || msg.model.target === this.model)) {
+                    var box = msg.getBoundingBox(canvas);
+                    if (bottomMost < box.y2) {
+                        bottomMost = box.y2;
+                    }
+                }
+            }
+        }
         this.minWidth = 1;
-        this.minHeight = LIFELINE_MINHEIGHT;
+        if (bottomMost > (this.minHeight + this.top)) {
+            this.minHeight = (bottomMost - this.top) + 15;
+        } else {
+            this.minHeight = LIFELINE_MINHEIGHT;
+        }
         this.sizeConstraints();
     }
 
@@ -5156,15 +5284,17 @@ define(function (require, exports, module) {
     /**
      * UMLSeqLifelineView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLSeqLifelineView() {
         UMLGeneralNodeView.apply(this, arguments);
+        this.movable = Core.MM_HORZ;
 
         /** @member {UMLLinePartView} */
         this.linePart = new UMLLinePartView();
         this.addSubView(this.linePart);
 
-        this.fillColor = PreferenceManager.get("uml.lifeline.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.lifeline.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLSeqLifelineView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -5184,6 +5314,10 @@ define(function (require, exports, module) {
                     this.iconRatio = USECASE_RATIO_PERCENT;
                     this.arrangeObject(canvas);
                     UMLUseCaseView.prototype.drawIcon.call(this, canvas, this.iconRect);
+                } else if (this.model.represent.type instanceof type.UMLInterface) {
+                    this.iconRatio = 100;
+                    this.arrangeObject(canvas);
+                    UMLInterfaceView.prototype.drawBallNotation.call(this, canvas, this.iconRect);
                 } else if (this.model.represent.type instanceof type.UMLArtifact) {
                     this.iconRatio = ARTIFACT_RATIO_PERCENT;
                     this.arrangeObject(canvas);
@@ -5241,7 +5375,23 @@ define(function (require, exports, module) {
     }
 
     UMLSeqLifelineView.prototype.arrangeCommon = function (canvas) {
-         this.mainRect.setRect(this.left, this.top, this.getRight(), this.getBottom());
+        // If a create message is connected, Y position should be determined by the Message's Y position.
+        var _createMessage = null;
+        for (var i = 0, len = this.getDiagram().ownedViews.length; i < len; i++) {
+            var v = this.getDiagram().ownedViews[i];
+            if (v instanceof UMLSeqMessageView &&
+                v.model.messageSort === UML.MS_CREATEMESSAGE &&
+                v.head === this.linePart) {
+                _createMessage = v;
+                break;
+            }
+        }
+        if (_createMessage) {
+            this.top = Math.round(_createMessage.points.getPoint(1).y - (SEQ_OBJECT_MINHEIGHT / 2));
+        } else {
+            this.top = LIFELINE_TOP_POSITION;
+        }
+        this.mainRect.setRect(this.left, this.top, this.getRight(), this.getBottom());
     }
 
     UMLSeqLifelineView.prototype.arrangeAsCanonicalForm = function (canvas, showLabel) {
@@ -5249,7 +5399,7 @@ define(function (require, exports, module) {
         UMLGeneralNodeView.prototype.arrangeAsCanonicalForm.call(this, canvas, showLabel);
         this.nameCompartment.height = SEQ_OBJECT_MINHEIGHT;
         this.linePart.top = this.nameCompartment.getBottom() + 1;
-        this.linePart.left = this.left + (this.width / 2);
+        this.linePart.left = Math.round(this.left + (this.width / 2));
         this.linePart.setBottom(this.getBottom());
     }
 
@@ -5257,7 +5407,7 @@ define(function (require, exports, module) {
         // not inherited: must not be affected by 'AutoResize' attribute.
         UMLGeneralNodeView.prototype.arrangeAsDecorationForm.call(this, canvas, showLabel);
         this.linePart.top = this.nameCompartment.getBottom() + 1;
-        this.linePart.left = this.left + (this.width / 2);
+        this.linePart.left = Math.round(this.left + (this.width / 2));
         this.linePart.setBottom(this.getBottom());
     }
 
@@ -5269,7 +5419,7 @@ define(function (require, exports, module) {
         var r2 = new Rect(this.mainRect.x1, this.mainRect.y1 + this.iconRect.getHeight(), this.mainRect.x2, this.mainRect.y2);
         this.arrangeAllCompartments(r2, canvas);
         this.linePart.top = this.nameCompartment.getBottom() + 1;
-        this.linePart.left = this.left + (this.width / 2);
+        this.linePart.left = Math.round(this.left + (this.width / 2));
         this.linePart.setBottom(this.getBottom());
     }
 
@@ -5349,6 +5499,7 @@ define(function (require, exports, module) {
     /**
      * UMLMessageEndpointView
      * @constructor
+     * @extends NodeView
      */
     function UMLMessageEndpointView() {
         NodeView.apply(this, arguments);
@@ -5399,6 +5550,7 @@ define(function (require, exports, module) {
     /**
      * UMLEndpointView
      * @constructor
+     * @extends UMLMessageEndpointView
      */
     function UMLEndpointView() {
         UMLMessageEndpointView.apply(this, arguments);
@@ -5416,6 +5568,7 @@ define(function (require, exports, module) {
     /**
      * UMLGateView
      * @constructor
+     * @extends UMLMessageEndpointView
      */
     function UMLGateView() {
         UMLMessageEndpointView.apply(this, arguments);
@@ -5433,6 +5586,7 @@ define(function (require, exports, module) {
     /**
      * UMLActivationView
      * @constructor
+     * @extends NodeView
      */
     function UMLActivationView() {
         NodeView.apply(this, arguments);
@@ -5520,10 +5674,12 @@ define(function (require, exports, module) {
     /**
      * UMLSeqMessageView
      * @constructor
+     * @extends EdgeView
      */
     function UMLSeqMessageView() {
         EdgeView.apply(this, arguments);
         this.lineStyle = Core.LS_RECTILINEAR;
+        this.zIndex = 1;
 
         /** @member {EdgeLabelView} */
         this.nameLabel = new EdgeLabelView();
@@ -5660,9 +5816,9 @@ define(function (require, exports, module) {
                 this.headEndStyle = Core.ES_SOLID_ARROW;
             }
             // stereotype
-            if (this.model.messageSort == UML.MS_CREATEMESSAGE) {
+            if (this.model.messageSort === UML.MS_CREATEMESSAGE) {
                 this.stereotypeLabel.text = "«create»";
-            } else if (this.model.messageSort == UML.MS_DELETEMESSAGE) {
+            } else if (this.model.messageSort === UML.MS_DELETEMESSAGE) {
                 this.stereotypeLabel.text = "«destroy»";
             } else if (hasValue(this.model.stereotype)) {
                 this.stereotypeLabel.text = this.model.getStereotypeString();
@@ -5702,6 +5858,15 @@ define(function (require, exports, module) {
             this.tail.top = this.points.getPoint(1).y - (this.tail.height / 2);
         }
         EdgeView.prototype.arrange.call(this, canvas);
+        // if create message, head's X position should be the left of Lifeline.
+        if (this.model.messageSort === UML.MS_CREATEMESSAGE) {
+             if (this.points.getPoint(1).x > this.points.getPoint(0).x) {
+                 if (this.head._parent instanceof UMLSeqLifelineView) {
+                     var lifeline = this.head._parent;
+                     this.points.getPoint(1).x = lifeline.left;
+                 }
+             }
+        }
     }
 
     UMLSeqMessageView.prototype.arrangeObject = function (canvas) {
@@ -5715,16 +5880,16 @@ define(function (require, exports, module) {
             toActivation   = (toLifeline instanceof UMLLinePartView ? toLifeline.getActivationAt(this.points.getPoint(this.points.count() - 1).y) : null);
 
         // (1) in case of Self message
-        if (this.head == this.tail) {
+        if (this.head === this.tail) {
             this._fixPointCount(4, this.points.getPoint(0).x, this.points.getPoint(0).y);
-            if ((fromActivation != null) && fromActivation.visible) {
+            if ((fromActivation !== null) && fromActivation.visible) {
                 this.points.setPoint(0, new Point(fromActivation.getRight(), this.points.getPoint(0).y));
             } else {
                 this.points.setPoint(0, new Point(fromLifeline.getRight(), this.points.getPoint(0).y));
             }
             this.points.setPoint(1, new Point(this.points.getPoint(0).x + SELF_MESSAGE_WIDTH, this.points.getPoint(0).y));
             this.points.setPoint(2, new Point(this.points.getPoint(0).x + SELF_MESSAGE_WIDTH, this.points.getPoint(0).y + SELF_MESSAGE_HEIGHT));
-            if ((toActivation != null) && toActivation.visible) {
+            if ((toActivation !== null) && toActivation.visible) {
                 this.points.setPoint(3, new Point(this.activation.getRight(), this.points.getPoint(0).y + SELF_MESSAGE_HEIGHT));
             } else {
                 this.points.setPoint(3, new Point(this.tail.getRight(), this.points.getPoint(0).y + SELF_MESSAGE_HEIGHT));
@@ -5732,12 +5897,12 @@ define(function (require, exports, module) {
         // (2) in case of left-to-right directed message
         } else if (this.points.getPoint(1).x > this.points.getPoint(0).x) {
             this._fixPointCount(2, this.points.getPoint(0).x, this.points.getPoint(0).y);
-            if ((fromActivation != null) && fromActivation.visible) {
+            if ((fromActivation !== null) && fromActivation.visible) {
                 this.points.setPoint(0, new Point(fromActivation.getRight(), this.points.getPoint(0).y));
             } else {
                 this.points.setPoint(0, new Point(fromLifeline.getRight(), this.points.getPoint(0).y));
             }
-            if ((toActivation != null) && toActivation.visible) {
+            if ((toActivation !== null) && toActivation.visible) {
                 this.points.setPoint(1, new Point(this.activation.left, this.points.getPoint(0).y));
             } else {
                 this.points.setPoint(1, new Point(this.head.left, this.points.getPoint(0).y));
@@ -5745,12 +5910,12 @@ define(function (require, exports, module) {
         // (3) in case of right-to-left direced message
         } else {
             this._fixPointCount(2, this.points.getPoint(0).x, this.points.getPoint(0).y);
-            if ((fromActivation != null) && fromActivation.visible) {
+            if ((fromActivation !== null) && fromActivation.visible) {
                 this.points.setPoint(0, new Point(fromActivation.left, this.points.getPoint(0).y));
             } else {
                 this.points.setPoint(0, new Point(fromLifeline.left, this.points.getPoint(0).y));
             }
-            if ((toActivation != null) && toActivation.visible) {
+            if ((toActivation !== null) && toActivation.visible) {
                 this.points.setPoint(1, new Point(this.activation.getRight(), this.points.getPoint(0).y));
             } else {
                 this.points.setPoint(1, new Point(this.head.getRight(), this.points.getPoint(0).y));
@@ -5812,10 +5977,12 @@ define(function (require, exports, module) {
     /**
      * UMLStateInvariantView
      * @constructor
+     * @extends NodeView
      */
     function UMLStateInvariantView() {
         NodeView.apply(this, arguments);
         this.movable = Core.MM_VERT;
+        this.zIndex = 1;
 
         /** @member {LabelView} */
         this.invariantLabel = new LabelView();
@@ -5874,9 +6041,11 @@ define(function (require, exports, module) {
     /**
      * UMLContinuationView
      * @constructor
+     * @extends NodeView
      */
     function UMLContinuationView() {
         NodeView.apply(this, arguments);
+        this.zIndex = 1;
 
         /** @member {LabelView} */
         this.nameLabel = new LabelView();
@@ -5930,8 +6099,9 @@ define(function (require, exports, module) {
 
 
     /**
-      * UMLCustomFrameView
+     * UMLCustomFrameView
      * @constructor
+     * @extends NodeView
      */
     function UMLCustomFrameView() {
         NodeView.apply(this, arguments);
@@ -5990,8 +6160,9 @@ define(function (require, exports, module) {
 
 
     /**
-      * UMLFrameView
+     * UMLFrameView
      * @constructor
+     * @extends UMLCustomFrameView
      */
     function UMLFrameView() {
         UMLCustomFrameView.apply(this, arguments);
@@ -6032,6 +6203,7 @@ define(function (require, exports, module) {
     /**
      * UMLInteractionOperandView
      * @constructor
+     * @extends NodeView
      */
     function UMLInteractionOperandView() {
         NodeView.apply(this, arguments);
@@ -6120,6 +6292,7 @@ define(function (require, exports, module) {
     /**
      * UMLInteractionOperandCompartmentView
      * @constructor
+     * @extends UMLCompartmentView
      */
     function UMLInteractionOperandCompartmentView() {
         UMLCompartmentView.apply(this, arguments);
@@ -6161,11 +6334,13 @@ define(function (require, exports, module) {
 
 
     /**
-      * UMLCombinedFragmentView
+     * UMLCombinedFragmentView
      * @constructor
+     * @extends UMLCustomFrameView
      */
     function UMLCombinedFragmentView() {
         UMLCustomFrameView.apply(this, arguments);
+        this.zIndex = 1;
 
         /** @member {UMLInteractionOperandCompartmentView} */
         this.operandCompartment = new UMLInteractionOperandCompartmentView();
@@ -6256,9 +6431,11 @@ define(function (require, exports, module) {
     /**
      * UMLInteractionUseView
      * @constructor
+     * @extends NodeView
      */
     function UMLInteractionUseView() {
         NodeView.apply(this, arguments);
+        this.zIndex = 1;
 
         /** @member {LabelView} */
         this.nameLabel = new LabelView();
@@ -6318,8 +6495,8 @@ define(function (require, exports, module) {
         var y = this.frameTypeLabel.getBottom() + COMPARTMENT_BOTTOM_PADDING,
             h = y - this.top,
             x = this.frameTypeLabel.getRight() + COMPARTMENT_RIGHT_PADDING + h / 2;
-        canvas.polyline([new Point(this.left, this.top), new Point(this.getRight(), this.top), new Point(this.getRight(), this.getBottom()), new Point(this.left, this.getBottom()), new Point(this.left, this.top)]);
-        canvas.fillPolygon([new Point(this.left, this.top), new Point(this.left, y), new Point(x - h / 2, y), new Point(x, this.top + h / 2), new Point(x, this.top), new Point(this.left, this.top)]);
+        canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
+        canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.polygon([new Point(this.left, this.top), new Point(this.left, y), new Point(x - h / 2, y), new Point(x, this.top + h / 2), new Point(x, this.top), new Point(this.left, this.top)]);
     }
 
@@ -6347,6 +6524,7 @@ define(function (require, exports, module) {
     /**
      * UMLCommunicationDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLCommunicationDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -6368,10 +6546,11 @@ define(function (require, exports, module) {
     /**
      * UMLCommLifelineView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLCommLifelineView() {
         UMLGeneralNodeView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.lifeline.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.lifeline.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLCommLifelineView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -6399,6 +6578,10 @@ define(function (require, exports, module) {
                     this.iconRatio = USECASE_RATIO_PERCENT;
                     this.arrangeObject(canvas);
                     UMLUseCaseView.prototype.drawIcon.call(this, canvas, this.iconRect);
+                } else if (this.model.represent.type instanceof type.UMLInterface) {
+                    this.iconRatio = 100;
+                    this.arrangeObject(canvas);
+                    UMLInterfaceView.prototype.drawBallNotation.call(this, canvas, this.iconRect);
                 } else if (this.model.represent.type instanceof type.UMLArtifact) {
                     this.iconRatio = ARTIFACT_RATIO_PERCENT;
                     this.arrangeObject(canvas);
@@ -6467,6 +6650,7 @@ define(function (require, exports, module) {
     /**
      * UMLCommMessageView
      * @constructor
+     * @extends EdgeNodeView
      */
     function UMLCommMessageView() {
         EdgeNodeView.apply(this, arguments);
@@ -6719,6 +6903,7 @@ define(function (require, exports, module) {
     /**
      * UMLProfileDiagram
      * @constructor
+     * @extends UMLDiagram
      */
     function UMLProfileDiagram() {
         UMLDiagram.apply(this, arguments);
@@ -6742,6 +6927,7 @@ define(function (require, exports, module) {
     /**
      * UMLProfileView
      * @constructor
+     * @extends UMLPackageView
      */
     function UMLProfileView() {
         UMLPackageView.apply(this, arguments);
@@ -6758,10 +6944,11 @@ define(function (require, exports, module) {
     /**
      * UMLMetaClassView
      * @constructor
+     * @extends UMLGeneralNodeView
      */
     function UMLMetaClassView() {
         UMLGeneralNodeView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.metaclass.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.metaclass.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLMetaClassView.prototype = Object.create(UMLGeneralNodeView.prototype);
@@ -6774,10 +6961,11 @@ define(function (require, exports, module) {
     /**
      * UMLStereotypeView
      * @constructor
+     * @extends UMLClassView
      */
     function UMLStereotypeView() {
         UMLClassView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.stereotype.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.stereotype.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLClassView
     UMLStereotypeView.prototype = Object.create(UMLClassView.prototype);
@@ -6791,6 +6979,7 @@ define(function (require, exports, module) {
     /**
      * UMLExtensionView
      * @constructor
+     * @extends UMLGeneralEdgeView
      */
     function UMLExtensionView() {
         UMLGeneralEdgeView.apply(this, arguments);
@@ -6817,6 +7006,7 @@ define(function (require, exports, module) {
     /**
      * UMLCustomTextView
      * @constructor
+     * @extends NodeView
      */
     function UMLCustomTextView() {
         NodeView.apply(this, arguments);
@@ -6883,6 +7073,7 @@ define(function (require, exports, module) {
     /**
      * UMLTextView
      * @constructor
+     * @extends UMLCustomTextView
      */
     function UMLTextView() {
         UMLCustomTextView.apply(this, arguments);
@@ -6895,10 +7086,11 @@ define(function (require, exports, module) {
     /**
      * UMLCustomNoteView
      * @constructor
+     * @extends UMLCustomTextView
      */
     function UMLCustomNoteView() {
         UMLCustomTextView.apply(this, arguments);
-        this.fillColor = PreferenceManager.get("uml.note.fillColor", "#ffffff");
+        this.fillColor = PreferenceManager.get("uml.note.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
         this._rightPadding = NOTE_FOLDING_SIZE;
     }
     // inherits from UMLCustomTextView
@@ -6924,6 +7116,7 @@ define(function (require, exports, module) {
     /**
      * UMLNoteView
      * @constructor
+     * @extends UMLCustomNoteView
      */
     function UMLNoteView() {
         UMLCustomNoteView.apply(this, arguments);
@@ -6936,6 +7129,7 @@ define(function (require, exports, module) {
     /**
      * UMLConstraintView
      * @constructor
+     * @extends UMLCustomNoteView
      */
     function UMLConstraintView() {
         UMLCustomNoteView.apply(this, arguments);
@@ -6962,6 +7156,7 @@ define(function (require, exports, module) {
     /**
      * UMLNoteLinkView
      * @constructor
+     * @extends EdgeView
      */
     function UMLNoteLinkView() {
         EdgeView.apply(this, arguments);
@@ -6975,6 +7170,7 @@ define(function (require, exports, module) {
     /**
      * UMLConstraintLinkView
      * @constructor
+     * @extends EdgeView
      */
     function UMLConstraintLinkView() {
         EdgeView.apply(this, arguments);
@@ -6988,6 +7184,7 @@ define(function (require, exports, module) {
     /**
      * ShapeView
      * @constructor
+     * @extends NodeView
      */
     function ShapeView() {
         NodeView.apply(this, arguments);
@@ -7000,6 +7197,7 @@ define(function (require, exports, module) {
     /**
      * RectangleView
      * @constructor
+     * @extends ShapeView
      */
     function RectangleView() {
         ShapeView.apply(this, arguments);
@@ -7018,6 +7216,7 @@ define(function (require, exports, module) {
     /**
      * RoundRectView
      * @constructor
+     * @extends ShapeView
      */
     function RoundRectView() {
         ShapeView.apply(this, arguments);
@@ -7037,6 +7236,7 @@ define(function (require, exports, module) {
     /**
      * EllipseView
      * @constructor
+     * @extends ShapeView
      */
     function EllipseView() {
         ShapeView.apply(this, arguments);

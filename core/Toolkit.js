@@ -148,7 +148,7 @@ define(function (require, exports, module) {
         canvas.context.translate(0.5, 0.5);
         canvas.color = SELECTION_BORDER_COLOR;
         canvas.alpha = 1;
-        canvas.rect(x1, y1, x2, y2, 2);
+        canvas.rect(x1, y1, x2, y2);
         canvas.context.translate(-0.5, -0.5);
         canvas.restoreState();
     }

@@ -97,7 +97,7 @@ define(function (require, exports, module) {
         ATTR_KIND_REFS   = 'refs',
         ATTR_KIND_OBJ    = 'obj',
         ATTR_KIND_OBJS   = 'objs',
-        ATTR_KIND_VAR    = 'var', // variant type (prim or ref)
+        ATTR_KIND_VAR    = 'var',
         ATTR_KIND_CUSTOM = 'custom';
 
     /**
@@ -875,6 +875,7 @@ define(function (require, exports, module) {
      * Model
      *
      * @constructor
+     * @extends Element
      */
     function Model() {
         Element.apply(this, arguments);
@@ -989,6 +990,7 @@ define(function (require, exports, module) {
      * Tag
      *
      * @constructor
+     * @extends Element
      */
     function Tag() {
         Model.apply(this, arguments);
@@ -1018,6 +1020,7 @@ define(function (require, exports, module) {
      * ExtensibleModel
      *
      * @constructor
+     * @extends Model
      */
     function ExtensibleModel() {
         Model.apply(this, arguments);
@@ -1086,6 +1089,7 @@ define(function (require, exports, module) {
      * Relationship
      *
      * @constructor
+     * @extends ExtensibleModel
      */
     function Relationship() {
         ExtensibleModel.apply(this, arguments);
@@ -1101,6 +1105,7 @@ define(function (require, exports, module) {
      * DirectedRelationship
      *
      * @constructor
+     * @extends Relationship
      */
     function DirectedRelationship() {
         Relationship.apply(this, arguments);
@@ -1121,7 +1126,11 @@ define(function (require, exports, module) {
             console.log(this);
             return "(?→?)";
         }
-        return "(" + this.source.name + "→" + this.target.name + ")";
+        var _text = "(" + this.source.name + "→" + this.target.name + ")";
+        if (this.name && this.name.length > 0) {
+            _text = this.name + " " + _text;
+        }
+        return _text;
     };
 
 
@@ -1129,6 +1138,7 @@ define(function (require, exports, module) {
      * RelationshipEnd
      *
      * @constructor
+     * @extends ExtensibleModel
      */
     function RelationshipEnd() {
         ExtensibleModel.apply(this, arguments);
@@ -1149,6 +1159,7 @@ define(function (require, exports, module) {
      * UndirectedRelationship
      *
      * @constructor
+     * @extends Relationship
      */
     function UndirectedRelationship() {
         Relationship.apply(this, arguments);
@@ -1173,6 +1184,7 @@ define(function (require, exports, module) {
      * View
      *
      * @constructor
+     * @extends Element
      */
     function View() {
         Element.apply(this, arguments);
@@ -1636,7 +1648,7 @@ define(function (require, exports, module) {
     /**
      * NodeView
      * @constructor
-     * @augments module:core/Core.View
+     * @extends View
      */
     function NodeView() {
         View.apply(this, arguments);
@@ -1826,7 +1838,7 @@ define(function (require, exports, module) {
     /**
      * EdgeView
      * @constructor
-     * @augments module:core/Core.View
+     * @extends View
      */
     function EdgeView() {
         View.apply(this, arguments);
@@ -2317,7 +2329,7 @@ define(function (require, exports, module) {
     /**
      * LabelView
      * @constructor
-     * @augments module:core/Core.NodeView
+     * @extends NodeView
      */
     function LabelView() {
         NodeView.apply(this, arguments);
@@ -2422,7 +2434,7 @@ define(function (require, exports, module) {
     /**
      * ParasiticView
      * @constructor
-     * @augments module:core/Core.NodeView
+     * @extends NodeView
      */
     function ParasiticView() {
         NodeView.apply(this, arguments);
@@ -2455,7 +2467,7 @@ define(function (require, exports, module) {
     /**
      * NodeParasiticView
      * @constructor
-     * @augments module:core/Core.ParasiticView
+     * @extends ParasiticView
      */
     function NodeParasiticView() {
         ParasiticView.apply(this, arguments);
@@ -2466,9 +2478,6 @@ define(function (require, exports, module) {
     NodeParasiticView.prototype = Object.create(ParasiticView.prototype);
     NodeParasiticView.prototype.constructor = NodeParasiticView;
 
-    /**
-     *
-     */
     NodeParasiticView.prototype.arrange = function (canvas) {
         ParasiticView.prototype.arrange.call(this, canvas);
         var node = null;
@@ -2491,7 +2500,7 @@ define(function (require, exports, module) {
     /**
      * EdgeParasiticView
      * @constructor
-     * @augments module:core/Core.ParasiticView
+     * @extends ParasiticView
      */
     function EdgeParasiticView() {
         ParasiticView.apply(this, arguments);
@@ -2503,9 +2512,6 @@ define(function (require, exports, module) {
     EdgeParasiticView.prototype = Object.create(ParasiticView.prototype);
     EdgeParasiticView.prototype.constructor = EdgeParasiticView;
 
-    /**
-     *
-     */
     EdgeParasiticView.prototype.arrangeObject = function (canvas) {
         ParasiticView.prototype.arrangeObject.call(this, canvas);
         var edge, midPointIndex, p, p1, p2;
@@ -2547,7 +2553,7 @@ define(function (require, exports, module) {
     /**
      * NodeLabelView
      * @constructor
-     * @augments module:core/Core.NodeParasiticView
+     * @extends NodeParasiticView
      */
     function NodeLabelView() {
         NodeParasiticView.apply(this, arguments);
@@ -2567,9 +2573,6 @@ define(function (require, exports, module) {
     NodeLabelView.prototype = Object.create(NodeParasiticView.prototype);
     NodeLabelView.prototype.constructor = NodeLabelView;
 
-    /**
-     *
-     */
     NodeLabelView.prototype.sizeObject = function (canvas) {
         NodeParasiticView.prototype.sizeObject.call(this, canvas);
         this.assignStyleToCanvas(canvas);
@@ -2580,16 +2583,10 @@ define(function (require, exports, module) {
         this.height = this.minHeight;
     };
 
-    /**
-     *
-     */
     NodeLabelView.prototype.arrange = function (canvas) {
         NodeParasiticView.prototype.arrange.call(this, canvas);
     };
 
-    /**
-     *
-     */
     NodeLabelView.prototype.draw = function (canvas) {
         this.assignStyleToCanvas(canvas);
         canvas.textOut(this.left, this.top, this.text, 0, false, this.underline);
@@ -2599,7 +2596,7 @@ define(function (require, exports, module) {
     /**
      * EdgeLabelView
      * @constructor
-     * @augments module:core/Core.EdgeParasiticView
+     * @extends EdgeParasiticView
      */
     function EdgeLabelView() {
         EdgeParasiticView.apply(this, arguments);
@@ -2618,9 +2615,6 @@ define(function (require, exports, module) {
     EdgeLabelView.prototype = Object.create(EdgeParasiticView.prototype);
     EdgeLabelView.prototype.constructor = EdgeLabelView;
 
-    /**
-     *
-     */
     EdgeLabelView.prototype.sizeObject = function (canvas) {
         EdgeParasiticView.prototype.sizeObject.call(this, canvas);
         this.assignStyleToCanvas(canvas);
@@ -2631,16 +2625,10 @@ define(function (require, exports, module) {
         this.height = this.minHeight;
     };
 
-    /**
-     *
-     */
     EdgeLabelView.prototype.arrange = function (canvas) {
         EdgeParasiticView.prototype.arrange.call(this, canvas);
     };
 
-    /**
-     *
-     */
     EdgeLabelView.prototype.draw = function (canvas) {
         this.assignStyleToCanvas(canvas);
         canvas.textOut(this.left, this.top, this.text, 0, false, this.underline);
@@ -2651,7 +2639,7 @@ define(function (require, exports, module) {
     /**
      * NodeNodeView
      * @constructor
-     * @augments module:core/Core.NodeParasiticView
+     * @extends NodeParasiticView
      */
     function NodeNodeView() {
         NodeParasiticView.apply(this, arguments);
@@ -2664,7 +2652,7 @@ define(function (require, exports, module) {
     /**
      * EdgeNodeView
      * @constructor
-     * @augments module:core/Core.EdgeParasiticView
+     * @extends EdgeParasiticView
      */
     function EdgeNodeView() {
         EdgeParasiticView.apply(this, arguments);
@@ -2678,6 +2666,7 @@ define(function (require, exports, module) {
      * Diagram
      *
      * @constructor
+     * @extends ExtensibleModel
      */
     function Diagram() {
         ExtensibleModel.apply(this, arguments);
@@ -3105,6 +3094,7 @@ define(function (require, exports, module) {
      * Project
      *
      * @constructor
+     * @extends ExtensibleModel
      */
     function Project() {
         ExtensibleModel.apply(this, arguments);

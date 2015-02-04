@@ -753,6 +753,10 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLActivityGroup",
             "view": "UMLSwimlaneView",
+            "attributes": [
+                { "name": "nodes", "kind": "objs", "type": "UMLActivityNode" },
+                { "name": "edges", "kind": "objs", "type": "UMLActivityEdge" }
+            ],
             "ordering": 1423
         },
         "UMLActivityEdge": {

@@ -1,14 +1,14 @@
 {
     "name": "metadata-json",
     "description": "Framework for metadata encoded by Metadata-JSON.",
-    "homepage": "https://github.com/niklauslee/metadata-json",
+    "homepage": "https://github.com/staruml/metadata-json",
     "author": {
         "name": "Minkyu Lee",
         "email": "niklaus.lee@gmail.com"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/niklauslee/metadata-json.git"
+        "url": "git://github.com/staruml/metadata-json.git"
     },
     "main": "metadata-json.js",
     "version": "0.8.10",

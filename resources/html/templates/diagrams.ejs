@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
+        <meta charset="UTF-8">
         <title>All Diagrams</title>
         <% include head %>
     </head>
     <body>
         <div>
             <h1>All Diagrams</h1>
-            
+
             <!-- Diagrams -->
 
             <% var _diagrams = mdjson.Repository.getInstancesOf("Diagram"); %>
@@ -26,8 +27,8 @@
                     <% }); %>
                 </div>
             </section>
-            <% } %>            
+            <% } %>
 
-        </div>        
-    </body>    
+        </div>
+    </body>
 </html>

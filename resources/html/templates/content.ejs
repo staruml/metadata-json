@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
+        <meta charset="UTF-8">
         <title><%= element.name %></title>
         <% include head %>
     </head>
     <body>
         <div>
-                        
+
             <!-- Name Title -->
 
             <h1><%=: element | toName %></h1>
-            
+
             <!-- Type and Stereotype -->
-            
+
             <section style="margin-top: .5em;">
                 <span class="alert alert-info">
                     <span class="node-icon <%=: element | toIcon %>"></span>
@@ -35,9 +36,9 @@
                     <span class="label label-info"><%-: terms[i] | toValue %></span>
                 <% } %>
             </section>
-            
+
             <!-- Diagram -->
-            
+
             <% if (element instanceof type.Diagram) { %>
             <section>
                 <h3>Diagram</h3>
@@ -46,7 +47,7 @@
             <% } %>
 
             <!-- Description -->
-            
+
             <% if (element instanceof type.ExtensibleModel) { %>
             <section>
                 <h3>Description</h3>
@@ -61,7 +62,7 @@
             <% } %>
 
             <!-- Specification -->
-            
+
             <% if ((element instanceof type.UMLConstraint || element instanceof type.UMLOperation) && (element.specification.length > 0)) { %>
             <section>
                 <h3>Specification</h3>
@@ -70,7 +71,7 @@
             <% } %>
 
             <!-- Directed Relationship -->
-            
+
             <% if (element instanceof type.DirectedRelationship && element.source && element.target) { %>
             <section class="element-list">
                 <table width="100%">
@@ -101,18 +102,18 @@
                         <td width="50%" style="padding-right: 1em">
                             <h3>End1</h3>
                             <% var elem = element.end1, properties = elem.getMetaAttributes(); %>
-                            <% include properties %>                            
+                            <% include properties %>
                         </td>
                         <td width="50%" style="padding-right: 1em">
                             <h3>End2</h3>
                             <% var elem = element.end2, properties = elem.getMetaAttributes(); %>
-                            <% include properties %>                            
+                            <% include properties %>
                         </td>
                     </tr>
                 </table>
             </section>
             <% } %>
-            
+
             <!-- Classifier -->
 
             <% if (element instanceof type.UMLClassifier) { %>
@@ -194,7 +195,7 @@
                     </tr>
                     <% }); %>
                 </table>
-            </section>            
+            </section>
             <% } %>
 
             <!-- Literals -->
@@ -216,8 +217,8 @@
                     </tr>
                     <% }); %>
                 </table>
-            </section>            
-            <% } %>            
+            </section>
+            <% } %>
 
             <!-- Attributes -->
 
@@ -240,7 +241,7 @@
                     </tr>
                     <% }); %>
                 </table>
-            </section>            
+            </section>
             <% } %>
 
             <!-- Operations -->
@@ -284,8 +285,8 @@
                     </tr>
                     <% }); %>
                 </table>
-            </section>            
-            <% } %>            
+            </section>
+            <% } %>
 
             <!-- Parameters -->
 
@@ -308,7 +309,7 @@
                     </tr>
                     <% }); %>
                 </table>
-            </section>            
+            </section>
             <% } %>
 
             <!-- Diagrams -->
@@ -337,8 +338,8 @@
                     <% }); %>
                 </div>
             </section>
-            <% } %>            
-            
+            <% } %>
+
             <!-- Behavior -->
 
             <% if (element instanceof type.UMLBehavior) { %>
@@ -494,7 +495,7 @@
                     </tr>
                     <% }); %>
                 </table>
-            </section>            
+            </section>
             <% } %>
 
             <!-- Constraints, Dependencies, Dependants -->
@@ -520,6 +521,6 @@
             <% var title = "Owned Elements", list = element.ownedElements || []; %>
             <% include list %>
 
-        </div>        
-    </body>    
+        </div>
+    </body>
 </html>

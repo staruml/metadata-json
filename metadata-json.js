@@ -29,6 +29,9 @@ requirejs.config({
         "uml/UML-rules"          : __dirname + "/uml/UML-rules",
         "uml/UML"                : __dirname + "/uml/UML",
         "uml/UMLDiagram"         : __dirname + "/uml/UMLDiagram",
+        "erd/ERD-meta"           : __dirname + "/erd/ERD-meta",
+        "erd/ERD-rules"          : __dirname + "/erd/ERD-rules",
+        "erd/ERD"                : __dirname + "/erd/ERD",
         "lib/PDFGraphics"        : __dirname + "/lib/PDFGraphics"
     }
 });
@@ -44,12 +47,15 @@ var _global          = requirejs("core/Global").global,
     Validator        = requirejs("core/Validator"),
     UML              = requirejs("uml/UML"),
     UMLDiagram       = requirejs("uml/UMLDiagram"),
+    ERD              = requirejs("erd/ERD"),
     PDFGraphics      = requirejs("lib/PDFGraphics");
 
 requirejs("core/Core-meta");
 requirejs("core/Core-rules");
 requirejs("uml/UML-meta");
 requirejs("uml/UML-rules");
+requirejs("erd/ERD-meta");
+requirejs("erd/ERD-rules");
 
 
 /**
@@ -96,6 +102,7 @@ exports.Repository       = Repository;
 exports.Validator        = Validator;
 exports.UML              = UML;
 exports.UMLDiagram       = UMLDiagram;
+exports.ERD              = ERD;
 exports.PDFGraphics      = PDFGraphics;
 
 exports.loadFromFile     = loadFromFile;

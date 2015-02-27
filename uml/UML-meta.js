@@ -854,6 +854,7 @@ define(function (require, exports, module) {
                 { "name": "represent",       "kind": "ref",  "type": "UMLStructuralFeature", "visible": true },
                 { "name": "isMultiInstance", "kind": "prim", "type": "Boolean", "visible": true }
             ],
+            "view": "UMLCommLifelineView",
             "ordering": 1428
         },
         "UMLGate": {

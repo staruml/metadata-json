@@ -963,10 +963,17 @@ define(function (require, exports, module) {
      * @return {Array.<UMLOperation>}
      */
     UMLClassifier.prototype.getInheritedOperations = function () {
-        var ancestors = this.getAncestors(),
-            inherited = [];
+        var ancestors  = this.getAncestors(),
+            interfaces = this.getInterfaces(),
+            inherited  = [];
         _.each(ancestors, function (e) {
             if (Array.isArray(e.operations)) {
+                Array.prototype.push.apply(inherited, e.operations);
+            }
+        });
+        _.each(interfaces, function (e) {
+            if (Array.isArray(e.operations)) {
+                Array.prototype.push.apply(inherited, e.getInheritedOperations());
                 Array.prototype.push.apply(inherited, e.operations);
             }
         });

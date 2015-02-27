@@ -12,7 +12,7 @@
  *
  */
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true, evil: true */
+/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true, evil: true, loopfunc: true */
 /*global define, $, _, window, meta, type, appshell */
 
 define(function (require, exports, module) {
@@ -1173,10 +1173,11 @@ define(function (require, exports, module) {
         cp[2] = new Point(Math.round((r.y1 - c.y) / lean + c.x), r.y1); // top
         cp[3] = new Point(Math.round((r.y2 - c.y) / lean + c.x), r.y2); // bottom
 
+        var i;
         if (Coord.ptInRect2(p, r)) {
             var idx = 0;
             var md = Math.sqrt(Math.square(cp[0].x - p.x) + Math.square(cp[0].y - p.y));
-            for (var i = 1; i <= 3; i++) {
+            for (i = 1; i <= 3; i++) {
                 var d = Math.sqrt(Math.square(cp[i].x - p.x) + Math.square(cp[i].y - p.y));
                 if (d < md) {
                     md = d;
@@ -1189,7 +1190,7 @@ define(function (require, exports, module) {
             Coord.normalizeRect(cpRect);
             c.x = cpRect.x1; c.y = cpRect.y1;
             p.x = cpRect.x2; p.y = cpRect.y2;
-            var i = -1;
+            i = -1;
             do {
                 i++;
             } while (!(((r.x1 <= cp[i].x) && (cp[i].x <= r.x2) &&
@@ -1336,7 +1337,7 @@ define(function (require, exports, module) {
             this.attributeCompartment,
             this.operationCompartment
         ];
-    }
+    };
 
     UMLClassifierView.prototype.update = function (canvas) {
         // attributeCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
@@ -1364,7 +1365,7 @@ define(function (require, exports, module) {
         this.attributeCompartment.visible = !this.suppressAttributes;
         this.operationCompartment.visible = !this.suppressOperations;
         UMLGeneralNodeView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLClassifierView.prototype.sizeObject = function (canvas) {
         UMLGeneralNodeView.prototype.sizeObject.call(this, canvas);
@@ -1375,7 +1376,7 @@ define(function (require, exports, module) {
             this.minWidth = Math.max(this.minWidth, this.templateParameterCompartment.width) + TEMPLATEPARAMETERCOMPARTMENT_LEFT_MARGIN + TEMPLATEPARAMETERCOMPARTMENT_RIGHT_OCCUPY;
             this.minHeight = this.minHeight + this.templateParameterCompartment.height - TEMPLATEPARAMETERCOMPARTMENT_OVERLAP;
         }
-    }
+    };
 
 
     UMLClassifierView.prototype.arrangeCommon = function (canvas) {
@@ -1390,7 +1391,7 @@ define(function (require, exports, module) {
                 y2 = this.getBottom();
             this.mainRect.setRect(x1, y1, x2, y2);
         }
-    }
+    };
 
     UMLClassifierView.prototype.drawObject = function (canvas) {
         UMLGeneralNodeView.prototype.drawObject.call(this, canvas);
@@ -1408,7 +1409,7 @@ define(function (require, exports, module) {
                 this.operationCompartment.getRight(),
                 this.operationCompartment.top);
         }
-    }
+    };
 
 
     /**
@@ -1489,10 +1490,10 @@ define(function (require, exports, module) {
                 this.headRoleNameLabel.text = this.model.end2.getString(this.showVisibility);
             }
             // isDerived
-            if (this.model.end1.isDerived == true) {
+            if (this.model.end1.isDerived === true) {
                 this.tailRoleNameLabel.text = "/ " + this.tailRoleNameLabel.text;
             }
-            if (this.model.end2.isDerived == true) {
+            if (this.model.end2.isDerived === true) {
                 this.headRoleNameLabel.text = "/ " + this.headRoleNameLabel.text;
             }
 
@@ -1632,7 +1633,7 @@ define(function (require, exports, module) {
                (model instanceof type.UMLAssociation) ||
                (model instanceof type.UMLLink) ||
                (model instanceof type.UMLConnector);
-    }
+    };
 
 
     /**
@@ -1705,7 +1706,7 @@ define(function (require, exports, module) {
 
     UMLInterfaceView.prototype.getStereotypeLabelText = function () {
         return "«interface»";
-    }
+    };
 
     UMLInterfaceView.prototype.update = function (canvas) {
         UMLClassifierView.prototype.update.call(this, canvas);
@@ -1715,10 +1716,10 @@ define(function (require, exports, module) {
         this.depViews = this.collectSupplierDependencyViews();
         this.relViews = this.collectSupplierRealizationViews();
         UMLClassifierView.prototype.arrangeCommon.call(this, canvas);
-    }
+    };
 
     UMLInterfaceView.prototype.drawShadowAsIconicForm = function (canvas) {
-        if ((this.relViews.length > 0) || (this.depViews.length == 0)) {
+        if ((this.relViews.length > 0) || (this.depViews.length === 0)) {
             canvas.fillEllipse(
                 this.iconRect.x1 + SHADOW_OFFSET,
                 this.iconRect.y1 + SHADOW_OFFSET,
@@ -1781,7 +1782,7 @@ define(function (require, exports, module) {
 
     UMLSignalView.prototype.getStereotypeLabelText = function () {
         return "«signal»";
-    }
+    };
 
 
     /**
@@ -1801,7 +1802,7 @@ define(function (require, exports, module) {
 
     UMLDataTypeView.prototype.getStereotypeLabelText = function () {
         return "«dataType»";
-    }
+    };
 
 
     /**
@@ -1821,7 +1822,7 @@ define(function (require, exports, module) {
 
     UMLPrimitiveTypeView.prototype.getStereotypeLabelText = function () {
         return "«primitiveType»";
-    }
+    };
 
 
     /**
@@ -1859,12 +1860,12 @@ define(function (require, exports, module) {
             this.text = this.model.getString(options);
         }
         LabelView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLEnumerationLiteralView.prototype.size = function (canvas) {
         LabelView.prototype.size.call(this, canvas);
         this.height = this.minHeight;
-    }
+    };
 
 
     /**
@@ -1900,7 +1901,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCompartmentView.prototype.update.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -1936,11 +1937,11 @@ define(function (require, exports, module) {
             this.attributeCompartment,
             this.operationCompartment
         ];
-    }
+    };
 
     UMLEnumerationView.prototype.getStereotypeLabelText = function () {
         return "«enumeration»";
-    }
+    };
 
     UMLEnumerationView.prototype.update = function (canvas) {
         // enumerationLiteralCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
@@ -1949,7 +1950,7 @@ define(function (require, exports, module) {
         }
         this.enumerationLiteralCompartment.visible = !this.suppressLiterals;
         UMLClassifierView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLEnumerationView.prototype.drawObject = function (canvas) {
         UMLClassifierView.prototype.drawObject.call(this, canvas);
@@ -1960,7 +1961,7 @@ define(function (require, exports, module) {
                 this.enumerationLiteralCompartment.getRight(),
                 this.enumerationLiteralCompartment.top);
         }
-    }
+    };
 
 
     /**
@@ -1980,7 +1981,7 @@ define(function (require, exports, module) {
 
     UMLGeneralizationView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLClassifier);
-    }
+    };
 
     /**
      * UMLDependencyView
@@ -2003,13 +2004,13 @@ define(function (require, exports, module) {
         this.headEndStyle = Core.ES_STICK_ARROW;
         if (this.head instanceof UMLInterfaceView) {
             var v = this.head;
-            if (((v.stereotypeDisplay === UML.SD_ICON) || (v.stereotypeDisplay === UML.SD_ICON_LABEL)) && (v.stereotypeIcon === null)) {
+            if ((v.stereotypeDisplay === UML.SD_ICON) || (v.stereotypeDisplay === UML.SD_ICON_LABEL)) {
                 this.lineMode = Core.LM_SOLID;
                 this.headEndStyle = Core.ES_FLAT;
                 var c = this.points.count();
                 var p = Coord.junction(v.iconRect, this.points.getPoint(c - 1));
                 this.points.setPoint(c - 1, p);
-                if ((this.lineStyle === Core.LS_RECTILINEAR) && (c >= 2)) {
+                if ((this.lineStyle === Core.LS_RECTILINEAR || this.lineStyle === Core.LS_ROUNDRECT) && (c >= 2)) {
                     var p2 = this.points.getPoint(c - 2);
                     if (Math.abs(p2.x - p.x) > Math.abs(p2.y - p.y)) {
                         p2.y = p.y;
@@ -2024,7 +2025,7 @@ define(function (require, exports, module) {
 
     UMLDependencyView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLModelElement);
-    }
+    };
 
     /**
      * UMLInterfaceRealizationView
@@ -2047,13 +2048,13 @@ define(function (require, exports, module) {
         this.headEndStyle = Core.ES_TRIANGLE;
         if (this.head instanceof UMLInterfaceView) {
             var v = this.head;
-            if (((v.stereotypeDisplay === UML.SD_ICON) || (v.stereotypeDisplay === UML.SD_ICON_LABEL)) && (v.stereotypeIcon == null)) {
+            if ((v.stereotypeDisplay === UML.SD_ICON) || (v.stereotypeDisplay === UML.SD_ICON_LABEL)) {
                 this.lineMode = Core.LM_SOLID;
                 this.headEndStyle = Core.ES_FLAT;
                 var c = this.points.count();
                 var p = Coord.junction(v.iconRect, this.points.getPoint(c - 1));
                 this.points.setPoint(c - 1, p);
-                if ((this.lineStyle === Core.LS_RECTILINEAR) && (c >= 2)) {
+                if ((this.lineStyle === Core.LS_RECTILINEAR || this.lineStyle === Core.LS_ROUNDRECT) && (c >= 2)) {
                     var p2 = this.points.getPoint(c - 2);
                     if (Math.abs(p2.x - p.x) > Math.abs(p2.y - p.y)) {
                         p2.y = p.y;
@@ -2069,7 +2070,7 @@ define(function (require, exports, module) {
     UMLInterfaceRealizationView.prototype.canConnectTo = function (view, isTail) {
         return (isTail && view.model instanceof type.UMLClassifier) ||
                (!isTail && view.model instanceof type.UMLInterface);
-    }
+    };
 
     /**
      * UMLQualifierCompartmentView
@@ -2102,7 +2103,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCompartmentView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLQualifierCompartmentView.prototype.drawShadow = function (canvas) {
         canvas.storeState();
@@ -2120,7 +2121,7 @@ define(function (require, exports, module) {
     UMLQualifierCompartmentView.prototype.drawObject = function (canvas) {
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
 
     /**
@@ -2163,7 +2164,7 @@ define(function (require, exports, module) {
         UMLUndirectedRelationshipView.prototype.sizeObject.call(this, canvas);
         this.tailQualifiersCompartment.sizeObject(canvas);
         this.headQualifiersCompartment.sizeObject(canvas);
-    }
+    };
 
     UMLAssociationView.prototype.arrangeQualifierCompartment = function (canvas, qv, isTail) {
         var jp, nv, p1, pn;
@@ -2225,7 +2226,7 @@ define(function (require, exports, module) {
 
     UMLAssociationView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLClassifier);
-    }
+    };
 
     /**
      * UMLAssociationClassLinkView
@@ -2242,7 +2243,7 @@ define(function (require, exports, module) {
 
     UMLAssociationClassLinkView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLClass || view.model instanceof type.UMLAssociation);
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -2266,7 +2267,7 @@ define(function (require, exports, module) {
         return (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLDependency);
-    }
+    };
 
 
     /**
@@ -2284,27 +2285,27 @@ define(function (require, exports, module) {
 
     UMLPackageView.prototype.update = function (canvas) {
         UMLGeneralNodeView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLPackageView.prototype.sizeObject = function (canvas) {
         UMLGeneralNodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = Math.max(this.minWidth, PACKAGE_MINWIDTH);
         this.minHeight = Math.max(PACKAGE_TAB_HEIGHT + this.minHeight, PACKAGE_MINHEIGHT);
-    }
+    };
 
     UMLPackageView.prototype.arrangeCommon = function (canvas) {
         UMLGeneralNodeView.prototype.arrangeCommon.call(this, canvas);
         if ((this.stereotypeDisplay !== UML.SD_ICON) && (this.stereotypeDisplay !== UML.SD_ICON_LABEL)) {
             this.mainRect.setRect(this.left, this.top + PACKAGE_TAB_HEIGHT, this.getRight(), this.getBottom());
         }
-    }
+    };
 
     UMLPackageView.prototype.drawShadowAsCanonicalForm = function (canvas, showLabel) {
         var tabRightX = this.left + (this.getRight() - this.left) * 2 / 5,
             tabBottomY = this.top + PACKAGE_TAB_HEIGHT;
         canvas.fillRect(this.left + SHADOW_OFFSET, this.top + SHADOW_OFFSET, tabRightX + SHADOW_OFFSET, tabBottomY + SHADOW_OFFSET);
         canvas.fillRect(this.left + SHADOW_OFFSET, tabBottomY - 1 + SHADOW_OFFSET, this.getRight() + SHADOW_OFFSET, this.getBottom() + SHADOW_OFFSET);
-    }
+    };
 
     UMLPackageView.prototype.drawAsCanonicalForm = function (canvas, showLabel) {
         var tabRightX = this.left + (this.getRight() - this.left) * 2 / 5,
@@ -2319,7 +2320,7 @@ define(function (require, exports, module) {
     UMLPackageView.prototype.drawAsDecorationForm = function (canvas, showLabel) {
         this.drawAsCanonicalForm(canvas, showLabel);
         UMLGeneralNodeView.prototype.drawAsDecorationForm.call(this, canvas, showLabel);
-    }
+    };
 
 
     /**
@@ -2379,7 +2380,7 @@ define(function (require, exports, module) {
 
     UMLContainmentView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLModelElement);
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -2414,7 +2415,7 @@ define(function (require, exports, module) {
                (model instanceof type.UMLAssociation) ||
                (model instanceof type.UMLLink) ||
                (model instanceof type.UMLConnector);
-    }
+    };
 
 
     /**
@@ -2435,7 +2436,7 @@ define(function (require, exports, module) {
         UMLFloatingNodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = PORT_MINWIDTH;
         this.minHeight = PORT_MINHEIGHT;
-    }
+    };
 
     UMLPortView.prototype.arrange = function (canvas) {
         if (this.containerView) {
@@ -2448,13 +2449,13 @@ define(function (require, exports, module) {
             this.setBottom(p.y + PORT_MINHEIGHT / 2);
         }
         UMLFloatingNodeView.prototype.arrange.call(this, canvas);
-    }
+    };
 
     UMLPortView.prototype.drawObject = function (canvas) {
         UMLFloatingNodeView.prototype.drawObject.call(this, canvas);
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
 
     /**
@@ -2474,16 +2475,15 @@ define(function (require, exports, module) {
     UMLPartView.prototype.update = function (canvas) {
         UMLGeneralNodeView.prototype.update.call(this, canvas);
         if (this.model && (this.model instanceof type.UMLAttribute)) {
-            this.text = this.model.getString();
-            this.underline = (this.model.isStatic == true);
+            this.nameCompartment.nameLabel.underline = (this.model.isStatic === true);
         }
-    }
+    };
 
     UMLPartView.prototype.drawObject = function (canvas) {
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
         UMLGeneralNodeView.prototype.drawObject.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -2500,7 +2500,7 @@ define(function (require, exports, module) {
 
     UMLConnectorView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLModelElement);
-    }
+    };
 
 
     /**
@@ -2536,7 +2536,7 @@ define(function (require, exports, module) {
             }
         }
         UMLGeneralNodeView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLCollaborationView.prototype.drawShadowAsCanonicalForm = function (canvas, showLabel) {
         canvas.fillEllipse(
@@ -2560,7 +2560,7 @@ define(function (require, exports, module) {
         }
         this.minWidth = w;
         this.minHeight = h;
-    }
+    };
 
 
     UMLCollaborationView.prototype.arrangeObject = function (canvas) {
@@ -2586,7 +2586,7 @@ define(function (require, exports, module) {
             this.nameCompartment.setRight(this.getRight());
             this.nameCompartment.arrange(canvas);
         }
-    }
+    };
 
     UMLCollaborationView.prototype.drawObject = function (canvas) {
         var r = new Rect();
@@ -2600,7 +2600,7 @@ define(function (require, exports, module) {
         }
         canvas.fillEllipse(r.x1, r.y1, r.x2, r.y2);
         canvas.ellipse(r.x1, r.y1, r.x2, r.y2, [5]);
-    }
+    };
 
 
     /**
@@ -2621,7 +2621,7 @@ define(function (require, exports, module) {
         if (this.model.type && this.model.type.name) {
             this.nameCompartment.nameLabel.text = this.model.name + ": " + this.model.type.name;
         }
-    }
+    };
 
     UMLCollaborationUseView.prototype.drawShadowAsCanonicalForm = function (canvas) {
         canvas.fillEllipse(
@@ -2639,7 +2639,7 @@ define(function (require, exports, module) {
         var h = Math.max(Math.trunc(Math.sqrt(2) * this.nameCompartment.minHeight), COLLABORATION_MINHEIGHT);
         this.minWidth = w;
         this.minHeight = h;
-    }
+    };
 
     UMLCollaborationUseView.prototype.arrangeObject = function (canvas) {
         UMLGeneralNodeView.prototype.arrangeObject.call(this, canvas);
@@ -2647,13 +2647,13 @@ define(function (require, exports, module) {
         this.nameCompartment.top = ((this.getBottom() + this.top) / 2) - (this.nameCompartment.height / 2);
         this.nameCompartment.setRight(this.getRight());
         this.nameCompartment.arrange(canvas);
-    }
+    };
 
     UMLCollaborationUseView.prototype.drawObject = function (canvas) {
         var r = new Rect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.fillEllipse(r.x1, r.y1, r.x2, r.y2);
         canvas.ellipse(r.x1, r.y1, r.x2, r.y2, [5]);
-    }
+    };
 
 
     /**
@@ -2696,7 +2696,7 @@ define(function (require, exports, module) {
     UMLRoleBindingView.prototype.canConnectTo = function (view, isTail) {
         return (isTail && view.model instanceof type.UMLCollaborationUse) ||
                (!isTail && view.model instanceof type.UMLAttribute);
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -2721,7 +2721,7 @@ define(function (require, exports, module) {
                (model instanceof type.UMLClassifier) ||
                (model instanceof type.UMLDependency) ||
                (model instanceof type.UMLLink);
-    }
+    };
 
 
     /**
@@ -2747,22 +2747,22 @@ define(function (require, exports, module) {
         }
         if (this.model) {
             var text = "";
-            if (this.model.attribute != null) {
-                text += this.model.attribute.name;
+            if (this.model.definingFeature !== null) {
+                text += this.model.definingFeature.name;
             } else {
                 text += this.model.name;
             }
-            getValue()
+            getValue();
             text += getValue(" = ", this.model.value, "");
             this.text = text;
         }
         LabelView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLSlotView.prototype.size = function (canvas) {
         LabelView.prototype.size.call(this, canvas);
         this.height = this.minHeight;
-    }
+    };
 
 
     /**
@@ -2797,7 +2797,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCompartmentView.prototype.update.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -2834,7 +2834,7 @@ define(function (require, exports, module) {
                 this.slotCompartment.visible = false;
             }
         }
-    }
+    };
 
     UMLObjectView.prototype.drawObject = function (canvas) {
         UMLGeneralNodeView.prototype.drawObject.call(this, canvas);
@@ -2855,7 +2855,7 @@ define(function (require, exports, module) {
                 this.slotCompartment.getRight(),
                 this.slotCompartment.top);
         }
-    }
+    };
 
 
     /**
@@ -2872,7 +2872,7 @@ define(function (require, exports, module) {
 
     UMLLinkView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLInstance);
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -2906,7 +2906,7 @@ define(function (require, exports, module) {
                (model instanceof type.UMLAssociation) ||
                (model instanceof type.UMLLink) ||
                (model instanceof type.UMLConnector);
-    }
+    };
 
     /**
      * UMLArtifactViewMixin
@@ -2969,7 +2969,7 @@ define(function (require, exports, module) {
 
     UMLArtifactView.prototype.getStereotypeLabelText = function () {
         return "«artifact»";
-    }
+    };
 
 
     /**
@@ -2993,14 +2993,14 @@ define(function (require, exports, module) {
 
     UMLArtifactInstanceView.prototype.getStereotypeLabelText = function () {
         return "«artifact»";
-    }
+    };
 
     UMLArtifactInstanceView.prototype.update = function (canvas) {
         UMLGeneralNodeView.prototype.update.call(this, canvas);
         if (this.model) {
             this.nameCompartment.nameLabel.text = this.model.getString(this);
         }
-    }
+    };
 
     /**
      * UMLComponentViewMixin
@@ -3068,6 +3068,12 @@ define(function (require, exports, module) {
             canvas.rect(this.left, this.top + 7, this.left + 20, this.top + 17);
             canvas.fillRect(this.left, this.top + 27, this.left + 20, this.top + 37);
             canvas.rect(this.left, this.top + 27, this.left + 20, this.top + 37);
+        },
+
+        drawAsDecorationForm: function (canvas, showLabel) {
+            canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
+            canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
+            UMLGeneralNodeView.prototype.drawAsDecorationForm.call(this, canvas, showLabel);
         }
 
     };
@@ -3118,7 +3124,7 @@ define(function (require, exports, module) {
         if (this.model) {
             this.nameCompartment.nameLabel.text = this.model.getString(this);
         }
-    }
+    };
 
 
     /**
@@ -3139,7 +3145,7 @@ define(function (require, exports, module) {
     UMLComponentRealizationView.prototype.canConnectTo = function (view, isTail) {
         return (isTail && view.model instanceof type.UMLClassifier) ||
                (!isTail && view.model instanceof type.UMLComponent);
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -3173,7 +3179,7 @@ define(function (require, exports, module) {
                (model instanceof type.UMLAssociation) ||
                (model instanceof type.UMLLink) ||
                (model instanceof type.UMLConnector);
-    }
+    };
 
 
     /**
@@ -3271,6 +3277,12 @@ define(function (require, exports, module) {
             canvas.polygon([new Point(this.left, this.top+NODE_STATIC_MARGIN), new Point(r-NODE_STATIC_MARGIN, this.top+NODE_STATIC_MARGIN), new Point(r-NODE_STATIC_MARGIN, b), new Point(this.left, b)]);
             canvas.polygon([new Point(this.left, this.top+NODE_STATIC_MARGIN), new Point(this.left+NODE_STATIC_MARGIN, this.top), new Point(r, this.top), new Point(r-NODE_STATIC_MARGIN, this.top+NODE_STATIC_MARGIN)]);
             canvas.polygon([new Point(r, this.top), new Point(r-NODE_STATIC_MARGIN, this.top+NODE_STATIC_MARGIN), new Point(r-NODE_STATIC_MARGIN, b), new Point(r, b-NODE_STATIC_MARGIN)]);
+        },
+
+        drawAsDecorationForm: function (canvas, showLabel) {
+            canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
+            canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
+            UMLGeneralNodeView.prototype.drawAsDecorationForm.call(this, canvas, showLabel);
         }
     };
 
@@ -3322,7 +3334,7 @@ define(function (require, exports, module) {
         if (this.model) {
             this.nameCompartment.nameLabel.text = this.model.getString(this);
         }
-    }
+    };
 
 
     /**
@@ -3344,12 +3356,12 @@ define(function (require, exports, module) {
         UMLGeneralEdgeView.prototype.update.call(this, canvas);
         this.stereotypeLabel.visible = true;
         this.stereotypeLabel.text = "«deploy»";
-    }
+    };
 
     UMLDeploymentView.prototype.canConnectTo = function (view, isTail) {
         return (isTail && view.model instanceof type.UMLClassifier) ||
                (!isTail && view.model instanceof type.UMLNode);
-    }
+    };
 
     /**
      * UMLCommunicationPathView
@@ -3365,7 +3377,7 @@ define(function (require, exports, module) {
 
     UMLCommunicationPathView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLNode);
-    }
+    };
 
 
     /**************************************************************************
@@ -3399,14 +3411,14 @@ define(function (require, exports, module) {
                (model instanceof type.UMLAssociation) ||
                (model instanceof type.UMLLink) ||
                (model instanceof type.UMLConnector);
-    }
+    };
 
     UMLUseCaseDiagram.prototype.layout = function (direction, separations) {
         if (!direction) {
             direction = Core.DIRECTION_RL;
         }
         UMLDiagram.prototype.layout.call(this, direction, separations);
-    }
+    };
 
 
     /**
@@ -3442,12 +3454,12 @@ define(function (require, exports, module) {
             this.text = this.model.getString(options);
         }
         LabelView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLExtensionPointView.prototype.size = function (canvas) {
         LabelView.prototype.size.call(this, canvas);
         this.height = this.minHeight;
-    }
+    };
 
 
     /**
@@ -3482,7 +3494,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCompartmentView.prototype.update.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -3515,7 +3527,7 @@ define(function (require, exports, module) {
             this.operationCompartment,
             this.extensionPointCompartment
         ];
-    }
+    };
 
     UMLUseCaseView.prototype.update = function (canvas) {
         // extensionPointCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
@@ -3530,7 +3542,7 @@ define(function (require, exports, module) {
             }
         }
         UMLClassifierView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLUseCaseView.prototype.sizeAsCanonicalForm = function (canvas, showLabel) {
         UMLClassifierView.prototype.sizeAsCanonicalForm.call(this, canvas, showLabel);
@@ -3558,13 +3570,13 @@ define(function (require, exports, module) {
             h = h + this.extensionPointCompartment.minHeight;
         }
         this.minHeight = h;
-    }
+    };
 
     UMLUseCaseView.prototype.sizeAsIconicForm = function (canvas, showLabel) {
         var sz = this.getSizeOfAllCompartments(canvas);
         this.minWidth = Math.max(sz.x, USECASE_ICON_MINWIDTH);
         this.minHeight = USECASE_ICON_MINHEIGHT + sz.y;
-    }
+    };
 
     UMLUseCaseView.prototype.arrangeAsCanonicalForm = function (canvas, showLabel) {
         UMLClassifierView.prototype.arrangeAsCanonicalForm.call(this, canvas, showLabel);
@@ -3671,7 +3683,7 @@ define(function (require, exports, module) {
             canvas.fillRect(this.mainRect.x1, this.mainRect.y1, this.mainRect.x2, this.mainRect.y2);
             canvas.rect(this.mainRect.x1, this.mainRect.y1, this.mainRect.x2, this.mainRect.y2);
         }
-    }
+    };
 
     UMLUseCaseView.prototype.drawAsCanonicalForm = function (canvas) {
         var r = new Rect(this.left, this.top, this.getRight(), this.getBottom());
@@ -3710,13 +3722,13 @@ define(function (require, exports, module) {
 
     UMLActorView.prototype.sizeAsCanonicalForm = function (canvas, showLabel) {
         this.sizeAsIconicForm(canvas, showLabel);
-    }
+    };
 
     UMLActorView.prototype.sizeAsIconicForm = function (canvas, showLabel) {
         var sz = this.getSizeOfAllCompartments(canvas);
         this.minWidth = Math.max(sz.x, ACTOR_ICON_MINWIDTH);
         this.minHeight = ACTOR_ICON_MINHEIGHT + sz.y;
-    }
+    };
 
     UMLActorView.prototype.arrangeAsCanonicalForm = function (canvas, showLabel) {
         this.arrangeAsIconicForm(canvas, showLabel);
@@ -3758,7 +3770,7 @@ define(function (require, exports, module) {
             canvas.fillRect(this.mainRect.x1, this.mainRect.y1, this.mainRect.x2, this.mainRect.y2);
             canvas.rect(this.mainRect.x1, this.mainRect.y1, this.mainRect.x2, this.mainRect.y2);
         }
-    }
+    };
 
     UMLActorView.prototype.drawAsCanonicalForm = function (canvas) {
         this.drawAsIconicForm(canvas);
@@ -3784,11 +3796,11 @@ define(function (require, exports, module) {
         UMLGeneralEdgeView.prototype.update.call(this, canvas);
         this.stereotypeLabel.visible = true;
         this.stereotypeLabel.text = "«include»";
-    }
+    };
 
     UMLIncludeView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLUseCase);
-    }
+    };
 
     /**
      * UMLExtendView
@@ -3809,11 +3821,11 @@ define(function (require, exports, module) {
         UMLGeneralEdgeView.prototype.update.call(this, canvas);
         this.stereotypeLabel.visible = true;
         this.stereotypeLabel.text = "«extend»";
-    }
+    };
 
     UMLExtendView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLUseCase);
-    }
+    };
 
     /**
      * UMLUseCaseSubjectView
@@ -3833,7 +3845,7 @@ define(function (require, exports, module) {
         if (this.model.represent && this.model.represent.name) {
             this.nameCompartment.nameLabel.text = this.model.represent.name;
         }
-    }
+    };
 
     UMLUseCaseSubjectView.prototype.drawShadowAsCanonicalForm = function (canvas) {
         canvas.fillRect(
@@ -3845,13 +3857,13 @@ define(function (require, exports, module) {
 
     UMLUseCaseSubjectView.prototype.arrangeObject = function (canvas) {
         UMLGeneralNodeView.prototype.arrangeObject.call(this, canvas);
-    }
+    };
 
     UMLUseCaseSubjectView.prototype.drawObject = function (canvas) {
         var r = new Rect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.fillRect(r.x1, r.y1, r.x2, r.y2);
         canvas.rect(r.x1, r.y1, r.x2, r.y2);
-    }
+    };
 
 
     /**************************************************************************
@@ -3877,14 +3889,14 @@ define(function (require, exports, module) {
                (model instanceof type.UMLState) ||
                (model instanceof type.UMLPseudostate) ||
                (model instanceof type.UMLConnectionPointReference);
-    }
+    };
 
     UMLStatechartDiagram.prototype.layout = function (direction, separations) {
         if (!direction) {
             direction = Core.DIRECTION_RL;
         }
         UMLDiagram.prototype.layout.call(this, direction, separations);
-    }
+    };
 
 
     /**
@@ -3964,13 +3976,13 @@ define(function (require, exports, module) {
             break;
         }
         this.sizeConstraints();
-    }
+    };
 
     UMLPseudostateView.prototype.arrange = function (canvas) {
         UMLFloatingNodeView.prototype.arrange.call(this, canvas);
         this.stereotypeLabel.visible = false;
         this.nameLabel.visible = false;
-    }
+    };
 
     UMLPseudostateView.prototype.drawShadow = function (canvas) {
         canvas.storeState();
@@ -4013,7 +4025,7 @@ define(function (require, exports, module) {
     };
 
     UMLPseudostateView.prototype.drawObject = function (canvas) {
-        var x, y, sz;
+        var x, y, sz, p, d;
         switch (this.model.kind) {
         case UML.PSK_INITIAL:
             canvas.fillColor = this.lineColor;
@@ -4069,19 +4081,19 @@ define(function (require, exports, module) {
         case UML.PSK_EXITPOINT:
             canvas.fillEllipse(this.left, this.top, this.getRight(), this.getBottom());
             canvas.ellipse(this.left, this.top, this.getRight(), this.getBottom());
-            var p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()))
-            var d = Math.round(Math.sqrt(2) * this.width / 4);
+            p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()));
+            d = Math.round(Math.sqrt(2) * this.width / 4);
             canvas.line(p.x - d, p.y - d, p.x + d, p.y + d);
             canvas.line(p.x + d, p.y - d, p.x - d, p.y + d);
             break;
         case UML.PSK_TERMINATE:
-            var p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()))
-            var d = Math.round(Math.sqrt(2) * this.width / 4);
+            p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()));
+            d = Math.round(Math.sqrt(2) * this.width / 4);
             canvas.line(p.x - d, p.y - d, p.x + d, p.y + d);
             canvas.line(p.x + d, p.y - d, p.x - d, p.y + d);
             break;
         }
-    }
+    };
 
 
     /**
@@ -4103,7 +4115,7 @@ define(function (require, exports, module) {
         this.minWidth = FINALSTATE_MINWIDTHH;
         this.minHeight = FINALSTATE_MINHEIGHT;
         this.sizeConstraints();
-    }
+    };
 
     UMLFinalStateView.prototype.drawShadow = function (canvas) {
         canvas.storeState();
@@ -4123,7 +4135,7 @@ define(function (require, exports, module) {
         canvas.ellipse(this.left, this.top, this.getRight(), this.getBottom());
         canvas.fillColor = this.lineColor;
         canvas.fillEllipse(this.left+5, this.top+5, this.getRight()-5, this.getBottom()-5);
-    }
+    };
 
 
     /**
@@ -4157,13 +4169,13 @@ define(function (require, exports, module) {
                 this.nameLabel.text = connectedPoints.join(", ");
             }
         }
-    }
+    };
 
     UMLConnectionPointReferenceView.prototype.sizeObject = function (canvas) {
         UMLFloatingNodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = CONNECTIONPOINT_MINWIDTH;
         this.minHeight = CONNECTIONPOINT_MINHEIGHT;
-    }
+    };
 
     UMLConnectionPointReferenceView.prototype.arrange = function (canvas) {
         if (this.containerView) {
@@ -4176,7 +4188,7 @@ define(function (require, exports, module) {
             this.setBottom(p.y + CONNECTIONPOINT_MINHEIGHT / 2);
         }
         UMLFloatingNodeView.prototype.arrange.call(this, canvas);
-    }
+    };
 
     UMLConnectionPointReferenceView.prototype.drawObject = function (canvas) {
         UMLFloatingNodeView.prototype.drawObject.call(this, canvas);
@@ -4184,7 +4196,7 @@ define(function (require, exports, module) {
             // draw exitPoint
             canvas.fillEllipse(this.left, this.top, this.getRight(), this.getBottom());
             canvas.ellipse(this.left, this.top, this.getRight(), this.getBottom());
-            var p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()))
+            var p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()));
             var d = Math.round(Math.sqrt(2) * this.width / 4);
             canvas.line(p.x - d, p.y - d, p.x + d, p.y + d);
             canvas.line(p.x + d, p.y - d, p.x - d, p.y + d);
@@ -4193,7 +4205,7 @@ define(function (require, exports, module) {
             canvas.fillEllipse(this.left, this.top, this.getRight(), this.getBottom());
             canvas.ellipse(this.left, this.top, this.getRight(), this.getBottom());
         }
-    }
+    };
 
 
     /**
@@ -4230,12 +4242,12 @@ define(function (require, exports, module) {
             this.text = text;
         }
         LabelView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLInternalActivityView.prototype.size = function (canvas) {
         LabelView.prototype.size.call(this, canvas);
         this.height = this.minHeight;
-    }
+    };
 
 
     /**
@@ -4271,7 +4283,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCompartmentView.prototype.update.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -4292,7 +4304,7 @@ define(function (require, exports, module) {
 
     UMLRegionView.prototype._isTopRegionView = function () {
         var result = true;
-        if (this._parent != null) {
+        if (this._parent !== null) {
             for (var i = 0, len = this._parent.subViews.length; i < len; i++) {
                 var v = this._parent.subViews[i];
                 if ((v instanceof UMLRegionView) && (v !== this)) {
@@ -4304,33 +4316,33 @@ define(function (require, exports, module) {
             }
         }
         return result;
-    }
+    };
 
     UMLRegionView.prototype.update = function (canvas) {
         NodeView.prototype.update.call(this, canvas);
         if (this._parent) {
             this.visible = this._parent.visible;
         }
-    }
+    };
 
     UMLRegionView.prototype.sizeObject = function (canvas) {
         this.minWidth = REGION_MINWIDTH;
         this.minHeight = REGION_MINHEIGHT;
         NodeView.prototype.sizeObject.call(this, canvas);
-    }
+    };
 
     UMLRegionView.prototype.drawObject = function (canvas) {
         NodeView.prototype.drawObject.call(this, canvas);
         if (!this._isTopRegionView()) {
             canvas.line(this.left, this.top, this.getRight(), this.top, [10,3]);
         }
-    }
+    };
 
     UMLRegionView.prototype.canContainViewKind = function (kind) {
         return MetaModelManager.isKindOf(kind, "UMLStateView") ||
                MetaModelManager.isKindOf(kind, "UMLPseudostateView") ||
                MetaModelManager.isKindOf(kind, "UMLFinalStateView");
-    }
+    };
 
 
     /**
@@ -4374,7 +4386,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCompartmentView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLDecompositionCompartmentView.prototype.sizeObject = function (canvas) {
         UMLCompartmentView.prototype.sizeObject.call(this, canvas);
@@ -4384,7 +4396,7 @@ define(function (require, exports, module) {
             h += regionView.height;
         }
         this.minHeight = h;
-    }
+    };
 
 
     /**
@@ -4418,7 +4430,7 @@ define(function (require, exports, module) {
             this.internalActivityCompartment,
             this.decompositionCompartment
         ];
-    }
+    };
 
     UMLStateView.prototype.update = function (canvas) {
         // internalActivityCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
@@ -4437,23 +4449,23 @@ define(function (require, exports, module) {
             } else {
                 this.internalActivityCompartment.visible = false;
             }
-            if (this.model.submachine != null) {
+            if (this.model.submachine !== null) {
                 this.nameCompartment.nameLabel.text = this.model.name + ": " + this.model.submachine.name;
             }
         }
-    }
+    };
 
     UMLStateView.prototype.sizeObject = function (canvas) {
         UMLGeneralNodeView.prototype.sizeObject.call(this, canvas);
         var sz = this.getSizeOfAllCompartments(canvas);
         this.minWidth = Math.max(sz.x, STATE_MINWIDTH);
-        if (this.model.submachine != null) {
+        if (this.model.submachine !== null) {
             this.minHeight = Math.max(sz.y + 16, STATE_MINHEIGHT);
         } else {
             this.minHeight = Math.max(sz.y, STATE_MINHEIGHT);
         }
         this.sizeConstraints();
-    }
+    };
 
     UMLStateView.prototype.drawShadowAsCanonicalForm = function (canvas, showLabel) {
         canvas.fillRoundRect(
@@ -4467,11 +4479,11 @@ define(function (require, exports, module) {
 
     UMLStateView.prototype.drawShadowAsDecorationForm = function (canvas) {
         this.drawShadowAsCanonicalForm(canvas);
-    }
+    };
 
     UMLStateView.prototype.drawShadowAsIconicForm = function (canvas) {
         this.drawShadowAsCanonicalForm(canvas);
-    }
+    };
 
     UMLStateView.prototype.drawObject = function (canvas) {
         canvas.fillRoundRect(this.left, this.top, this.getRight(), this.getBottom(), STATE_ROUND);
@@ -4490,12 +4502,12 @@ define(function (require, exports, module) {
                 this.decompositionCompartment.getRight(),
                 this.decompositionCompartment.top);
         }
-        if (this.model.submachine != null) {
+        if (this.model.submachine !== null) {
             canvas.ellipse(this.getRight()-26, this.getBottom()-16, this.getRight()-20, this.getBottom()-10);
             canvas.line(this.getRight()-20, this.getBottom()-13, this.getRight()-14, this.getBottom()-13);
             canvas.ellipse(this.getRight()-14, this.getBottom()-16, this.getRight()-8, this.getBottom()-10);
         }
-    }
+    };
 
 
     /**
@@ -4519,11 +4531,11 @@ define(function (require, exports, module) {
             this.nameLabel.text = this.model.getString();
             this.nameLabel.visible = (this.nameLabel.text.length > 0);
         }
-    }
+    };
 
     UMLTransitionView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLVertex);
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -4550,14 +4562,14 @@ define(function (require, exports, module) {
                (model instanceof type.UMLActivityNode) ||
                (model instanceof type.UMLActivityPartition) ||
                (model instanceof type.UMLPin);
-    }
+    };
 
     UMLActivityDiagram.prototype.layout = function (direction, separations) {
         if (!direction) {
             direction = Core.DIRECTION_BT;
         }
         UMLDiagram.prototype.layout.call(this, direction, separations);
-    }
+    };
 
 
     /**
@@ -4590,7 +4602,7 @@ define(function (require, exports, module) {
         UMLFloatingNodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = PIN_MINWIDTH;
         this.minHeight = PIN_MINHEIGHT;
-    }
+    };
 
     UMLPinView.prototype.getPosition = function (canvas) {
         if (this.containerView) {
@@ -4607,7 +4619,7 @@ define(function (require, exports, module) {
             }
         }
         return "else"; // default
-    }
+    };
 
     UMLPinView.prototype.drawArrow = function (canvas, direction) {
         var MARGIN = 2;
@@ -4639,7 +4651,7 @@ define(function (require, exports, module) {
             canvas.line(r.x, r.y, r.x - 3, r.y + 3);
             break;
         }
-    }
+    };
 
     UMLPinView.prototype.arrange = function (canvas) {
         if (this.containerView) {
@@ -4654,7 +4666,7 @@ define(function (require, exports, module) {
                     this.left = p.x - PIN_MINWIDTH + 1;
                 }
                 if (r.y1 < p.y) {
-                    this.top = p.y
+                    this.top = p.y;
                 } else {
                     this.top = p.y - PIN_MINHEIGHT + 1;
                 }
@@ -4663,13 +4675,13 @@ define(function (require, exports, module) {
             this.height = this.minHeight;
         }
         UMLFloatingNodeView.prototype.arrange.call(this, canvas);
-    }
+    };
 
     UMLPinView.prototype.drawObject = function (canvas) {
         UMLFloatingNodeView.prototype.drawObject.call(this, canvas);
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
 
     /**
@@ -4693,7 +4705,7 @@ define(function (require, exports, module) {
         case "left":   this.drawArrow(canvas, "right"); break;
         case "right":  this.drawArrow(canvas, "left");  break;
         }
-    }
+    };
 
 
     /**
@@ -4717,7 +4729,7 @@ define(function (require, exports, module) {
         case "left":   this.drawArrow(canvas, "left"); break;
         case "right":  this.drawArrow(canvas, "right");  break;
         }
-    }
+    };
 
 
     /**
@@ -4741,21 +4753,22 @@ define(function (require, exports, module) {
                 this.nameCompartment.nameLabel.text = this.model.name + ":" + this.model.subactivity.name;
             }
         }
-    }
+    };
 
     UMLActionView.prototype.sizeObject = function (canvas) {
         UMLGeneralNodeView.prototype.sizeObject.call(this, canvas);
         var sz = this.getSizeOfAllCompartments(canvas);
         this.minWidth = Math.max(sz.x, ACTION_MINWIDTH);
-        if (this.model.submachine != null) {
+        if (this.model.submachine !== null) {
             this.minHeight = Math.max(sz.y + 16, ACTION_MINHEIGHT);
         } else {
             this.minHeight = Math.max(sz.y, ACTION_MINHEIGHT);
         }
         this.sizeConstraints();
-    }
+    };
 
     UMLActionView.prototype.drawShadowAsCanonicalForm = function (canvas, showLabel) {
+        var p;
         switch (this.model.kind) {
         case UML.ACK_OPAQUE:
         case UML.ACK_CREATE:
@@ -4775,18 +4788,18 @@ define(function (require, exports, module) {
             );
             break;
         case UML.ACK_SENDSIGNAL:
-            var p = [
+            p = [
                 new Point(this.left + SHADOW_OFFSET, this.top + SHADOW_OFFSET),
                 new Point(this.left + SHADOW_OFFSET, this.getBottom() + SHADOW_OFFSET),
                 new Point(this.getRight() - this.height / 4 + SHADOW_OFFSET, this.getBottom() + SHADOW_OFFSET),
                 new Point(this.getRight() + SHADOW_OFFSET, this.top + this.height / 2 + SHADOW_OFFSET),
                 new Point(this.getRight() - this.height / 4 + SHADOW_OFFSET, this.top + SHADOW_OFFSET)
             ];
-            canvas.fillPolygon(p)
+            canvas.fillPolygon(p);
             break;
         case UML.ACK_ACCEPTSIGNAL:
         case UML.ACK_ACCEPTEVENT:
-            var p = [
+            p = [
                 new Point(this.left + SHADOW_OFFSET, this.top + SHADOW_OFFSET),
                 new Point(this.getRight() + SHADOW_OFFSET, this.top + SHADOW_OFFSET),
                 new Point(this.getRight() + SHADOW_OFFSET, this.getBottom() + SHADOW_OFFSET),
@@ -4801,11 +4814,11 @@ define(function (require, exports, module) {
 
     UMLActionView.prototype.drawShadowAsDecorationForm = function (canvas) {
         this.drawShadowAsCanonicalForm(canvas);
-    }
+    };
 
     UMLActionView.prototype.drawShadowAsIconicForm = function (canvas) {
         this.drawShadowAsCanonicalForm(canvas);
-    }
+    };
 
     UMLActionView.prototype.drawObject = function (canvas) {
         switch (this.model.kind) {
@@ -4834,7 +4847,7 @@ define(function (require, exports, module) {
                 new Point(this.getRight(), this.top + this.height / 2),
                 new Point(this.getRight() - this.height / 4, this.top)
             ];
-            canvas.fillPolygon(polygon)
+            canvas.fillPolygon(polygon);
             canvas.polygon(polygon);
             break;
         case UML.ACK_ACCEPTSIGNAL:
@@ -4850,7 +4863,7 @@ define(function (require, exports, module) {
             canvas.polygon(p);
             break;
         }
-    }
+    };
 
 
     /**
@@ -4872,13 +4885,13 @@ define(function (require, exports, module) {
         if (this.model) {
             this.nameCompartment.nameLabel.text = this.model.getString();
         }
-    }
+    };
 
     UMLObjectNodeView.prototype.drawObject = function (canvas) {
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
         UMLGeneralNodeView.prototype.drawObject.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -4938,7 +4951,7 @@ define(function (require, exports, module) {
             this.minHeight = DECISIONNODE_MINHEIGHT;
         }
         this.sizeConstraints();
-    }
+    };
 
     UMLControlNodeView.prototype.drawShadow = function (canvas) {
         canvas.storeState();
@@ -4981,7 +4994,7 @@ define(function (require, exports, module) {
         } else if (this.model instanceof type.UMLFlowFinalNode) {
             canvas.fillEllipse(this.left, this.top, this.getRight(), this.getBottom());
             canvas.ellipse(this.left, this.top, this.getRight(), this.getBottom());
-            var p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()))
+            var p = Coord.getCenter(new Rect(this.left, this.top, this.getRight(), this.getBottom()));
             var d = Math.round(Math.sqrt(2) * this.width / 4);
             canvas.line(p.x - d, p.y - d, p.x + d, p.y + d);
             canvas.line(p.x + d, p.y - d, p.x - d, p.y + d);
@@ -5005,7 +5018,7 @@ define(function (require, exports, module) {
             canvas.fillPolygon([new Point(this.left, y), new Point(x, this.top), new Point(this.getRight(), y), new Point(x, this.getBottom()), new Point(this.left, y)]);
             canvas.polygon([new Point(this.left, y), new Point(x, this.top), new Point(this.getRight(), y), new Point(x, this.getBottom()), new Point(this.left, y)]);
         }
-    }
+    };
 
 
     /**
@@ -5029,11 +5042,11 @@ define(function (require, exports, module) {
             this.nameLabel.text = this.model.getString();
             this.nameLabel.visible = (this.nameLabel.text.length > 0);
         }
-    }
+    };
 
     UMLControlFlowView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLActivityNode);
-    }
+    };
 
     /**
      * UMLObjectFlowView
@@ -5056,11 +5069,11 @@ define(function (require, exports, module) {
             this.nameLabel.text = this.model.getString();
             this.nameLabel.visible = (this.nameLabel.text.length > 0);
         }
-    }
+    };
 
     UMLObjectFlowView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLActivityNode);
-    }
+    };
 
     /**
      * UMLSwimlaneView
@@ -5088,8 +5101,9 @@ define(function (require, exports, module) {
     UMLSwimlaneView.prototype.canContainViewKind = function (kind) {
         return MetaModelManager.isKindOf(kind, "UMLActionView") ||
                MetaModelManager.isKindOf(kind, "UMLControlNodeView") ||
-               MetaModelManager.isKindOf(kind, "UMLObjectNodeView");
-    }
+               MetaModelManager.isKindOf(kind, "UMLObjectNodeView") ||
+               MetaModelManager.isKindOf(kind, "UMLFinalStateView");
+    };
 
     UMLSwimlaneView.prototype.update = function (canvas) {
         if (this.model) {
@@ -5101,7 +5115,7 @@ define(function (require, exports, module) {
                 this.nameLabel.direction = Core.DK_VERT;
             }
         }
-    }
+    };
 
     UMLSwimlaneView.prototype.sizeObject = function (canvas) {
         NodeView.prototype.sizeObject.call(this, canvas);
@@ -5117,7 +5131,7 @@ define(function (require, exports, module) {
             h = this.nameLabel.minHeight + SWIMLANE_HEADER_LEFT_MARGIN + SWIMLANE_HEADER_RIGHT_MARGIN;
             this.minHeight = Math.max(h, SWIMLANE_HORIZ_MINHEIGHT);
         }
-    }
+    };
 
     UMLSwimlaneView.prototype.arrangeObject = function (canvas) {
         // not inherited (SwimlaneView must not be affected by 'AutoResize' attribute.
@@ -5136,7 +5150,7 @@ define(function (require, exports, module) {
             this.nameLabel.top = this.top;
             this.nameLabel.setBottom(this.getBottom());
         }
-    }
+    };
 
     UMLSwimlaneView.prototype.drawObject = function (canvas) {
         NodeView.prototype.drawObject.call(this, canvas);
@@ -5153,7 +5167,7 @@ define(function (require, exports, module) {
             canvas.polyline([new Point(this.getRight(), this.top), new Point(this.left, this.top), new Point(this.left, this.getBottom()), new Point(this.getRight(), this.getBottom())]);
         }
         canvas.lineWidth = 1;
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -5177,11 +5191,18 @@ define(function (require, exports, module) {
     UMLSequenceDiagram.prototype.constructor = UMLSequenceDiagram;
 
     UMLSequenceDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
-               (model instanceof type.UMLClassifier) ||
-               (model instanceof type.UMLCombinedFragment) ||
-               (model instanceof type.UMLInteractionUse);
-    }
+        if (model instanceof type.UMLMessageEndpoint ||
+            model instanceof type.UMLCombinedFragment ||
+            model instanceof type.UMLStateInvariant ||
+            model instanceof type.UMLInteractionUse ||
+            model instanceof type.UMLContinuation ||
+            model instanceof type.UMLMessage) {
+            return _.every(this.ownedViews, function (v) { return v.model !== model; });
+        } else {
+            return (model instanceof type.UMLConstraint) ||
+                   (model instanceof type.UMLClassifier);
+        }
+    };
 
     UMLSequenceDiagram.prototype.drawDiagram = function (canvas, drawSelection) {
         var i,
@@ -5196,11 +5217,11 @@ define(function (require, exports, module) {
             }
         }
         UMLDiagram.prototype.drawDiagram.call(this, canvas, drawSelection);
-    }
+    };
 
     UMLSequenceDiagram.prototype.layout = function (direction, separations) {
         // TODO: Layout for Sequence Diagram
-    }
+    };
 
 
     /**
@@ -5231,7 +5252,7 @@ define(function (require, exports, module) {
                 var msg = this.getDiagram().ownedViews[i];
                 if (msg.head === this) {
                     if (msg.activation.visible && (msg.activation.top <= yPosition) && (msg.activation.getBottom() > yPosition)) {
-                        if (frontMostActivation != null) {
+                        if (frontMostActivation !== null) {
                             if (msg.activation.top > frontMostActivation.top) {
                                 frontMostActivation = msg.activation;
                             }
@@ -5243,7 +5264,7 @@ define(function (require, exports, module) {
             }
         }
         return frontMostActivation;
-    }
+    };
 
     UMLLinePartView.prototype.sizeObject = function (canvas) {
         NodeView.prototype.sizeObject.call(this, canvas);
@@ -5267,18 +5288,18 @@ define(function (require, exports, module) {
             this.minHeight = LIFELINE_MINHEIGHT;
         }
         this.sizeConstraints();
-    }
+    };
 
     UMLLinePartView.prototype.arrangeObject = function (canvas) {
         NodeView.prototype.arrangeObject.call(this, canvas);
         this.width = this.minWidth;
-    }
+    };
 
     UMLLinePartView.prototype.drawObject = function (canvas) {
         NodeView.prototype.drawObject.call(this, canvas);
         var c = this.left + (this.width / 2);
         canvas.line(c, this.top, c, this.getBottom(), [3]);
-    }
+    };
 
 
     /**
@@ -5341,7 +5362,7 @@ define(function (require, exports, module) {
                 UMLGeneralNodeView.prototype.drawIcon.call(this, canvas, rect);
             }
         }
-    }
+    };
 
     UMLSeqLifelineView.prototype.update = function () {
         UMLGeneralNodeView.prototype.update.call(this);
@@ -5353,26 +5374,26 @@ define(function (require, exports, module) {
             this.nameCompartment.nameLabel.text = this.model.getString(this);
             this.nameCompartment.nameLabel.underline = false;
         }
-    }
+    };
 
     UMLSeqLifelineView.prototype.sizeAsCanonicalForm = function (canvas, showLabel) {
         var sz = this.getSizeOfAllCompartments(canvas);
         this.minWidth = Math.max(SEQ_OBJECT_MINWIDTH, sz.x + COMPARTMENT_LEFT_PADDING + COMPARTMENT_RIGHT_PADDING);
         this.minHeight = Math.max(SEQ_OBJECT_MINHEIGHT, sz.y) + this.linePart.minHeight;
-    }
+    };
 
     UMLSeqLifelineView.prototype.sizeAsDecorationForm = function (canvas, showLabel) {
         var sz = this.getSizeOfAllCompartments(canvas);
         this.minWidth = Math.max(SEQ_OBJECT_MINWIDTH, this.nameCompartment.minWidth + DECORATION_ICON_WIDTH + COMPARTMENT_LEFT_PADDING + COMPARTMENT_RIGHT_PADDING);
         this.minHeight = Math.max(SEQ_OBJECT_MINHEIGHT, sz.y) + this.linePart.minHeight;
         this.sizeConstraints();
-    }
+    };
 
     UMLSeqLifelineView.prototype.sizeAsIconicForm = function (canvas, showLabel) {
         var sz = this.getSizeOfAllCompartments(canvas);
         this.minWidth = Math.max(sz.x, ICONICVIEW_ICONMINWIDTH);
         this.minHeight = ICONICVIEW_ICONMINHEIGHT + sz.y + this.linePart.minHeight;
-    }
+    };
 
     UMLSeqLifelineView.prototype.arrangeCommon = function (canvas) {
         // If a create message is connected, Y position should be determined by the Message's Y position.
@@ -5392,7 +5413,7 @@ define(function (require, exports, module) {
             this.top = LIFELINE_TOP_POSITION;
         }
         this.mainRect.setRect(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
     UMLSeqLifelineView.prototype.arrangeAsCanonicalForm = function (canvas, showLabel) {
         // not inherited: must not be affected by 'AutoResize' attribute.
@@ -5401,7 +5422,7 @@ define(function (require, exports, module) {
         this.linePart.top = this.nameCompartment.getBottom() + 1;
         this.linePart.left = Math.round(this.left + (this.width / 2));
         this.linePart.setBottom(this.getBottom());
-    }
+    };
 
     UMLSeqLifelineView.prototype.arrangeAsDecorationForm = function (canvas, showLabel) {
         // not inherited: must not be affected by 'AutoResize' attribute.
@@ -5409,7 +5430,7 @@ define(function (require, exports, module) {
         this.linePart.top = this.nameCompartment.getBottom() + 1;
         this.linePart.left = Math.round(this.left + (this.width / 2));
         this.linePart.setBottom(this.getBottom());
-    }
+    };
 
     UMLSeqLifelineView.prototype.arrangeAsIconicForm = function (canvas, showLabel) {
         // UMLGeneralNodeView.prototype.arrangeAsIconicForm.call(this, canvas);
@@ -5421,11 +5442,11 @@ define(function (require, exports, module) {
         this.linePart.top = this.nameCompartment.getBottom() + 1;
         this.linePart.left = Math.round(this.left + (this.width / 2));
         this.linePart.setBottom(this.getBottom());
-    }
+    };
 
     UMLSeqLifelineView.prototype.drawCommon = function (canvas) {
         // draw nothing
-    }
+    };
 
     UMLSeqLifelineView.prototype.drawAsCanonicalForm = function (canvas, showLabel) {
         UMLGeneralNodeView.prototype.drawAsCanonicalForm.call(this, canvas);
@@ -5439,7 +5460,7 @@ define(function (require, exports, module) {
             canvas.line(this.left + CLASS_ACTIVE_VERTLINE_WIDTH, this.nameCompartment.top, this.left + CLASS_ACTIVE_VERTLINE_WIDTH, this.nameCompartment.getBottom());
             canvas.line(this.getRight() - CLASS_ACTIVE_VERTLINE_WIDTH, this.nameCompartment.top, this.getRight() - CLASS_ACTIVE_VERTLINE_WIDTH, this.nameCompartment.getBottom());
         }
-    }
+    };
 
     UMLSeqLifelineView.prototype.drawAsDecorationForm = function (canvas) {
         var r = new Rect(this.left, this.top, this.getRight(), this.nameCompartment.getBottom());
@@ -5461,7 +5482,7 @@ define(function (require, exports, module) {
 
     UMLSeqLifelineView.prototype.drawShadowAsCanonicalForm = function (canvas) {
         canvas.fillRect(this.left + SHADOW_OFFSET, this.top + SHADOW_OFFSET, this.getRight() + SHADOW_OFFSET, this.nameCompartment.getBottom() + SHADOW_OFFSET);
-    }
+    };
 
     UMLSeqLifelineView.prototype.drawShadowAsDecorationForm = function (canvas) {
         canvas.fillRect(this.left + SHADOW_OFFSET, this.top + SHADOW_OFFSET, this.getRight() + SHADOW_OFFSET, this.nameCompartment.getBottom() + SHADOW_OFFSET);
@@ -5483,14 +5504,14 @@ define(function (require, exports, module) {
      */
     UMLSeqLifelineView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLSeqLifelineView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     var MESSAGEENDPOINT_MINWIDTH = 15,
@@ -5514,7 +5535,7 @@ define(function (require, exports, module) {
         NodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = MESSAGEENDPOINT_MINWIDTH;
         this.minHeight = MESSAGEENDPOINT_MINHEIGHT;
-    }
+    };
 
     /**
      * Movable freely when nothing connected,
@@ -5530,21 +5551,21 @@ define(function (require, exports, module) {
             this.movable = Core.MM_FREE;
         }
         NodeView.prototype.arrangeObject.call(this, canvas);
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLMessageEndpointView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLMessageEndpointView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**
@@ -5562,7 +5583,7 @@ define(function (require, exports, module) {
     UMLEndpointView.prototype.drawObject = function (canvas) {
         canvas.fillColor = this.lineColor;
         canvas.fillEllipse(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
 
     /**
@@ -5580,7 +5601,7 @@ define(function (require, exports, module) {
     UMLGateView.prototype.drawObject = function (canvas) {
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
 
     /**
@@ -5601,7 +5622,7 @@ define(function (require, exports, module) {
         NodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = ACTIVATION_MINWIDTH;
         this.minHeight = ACTIVATION_MINHEIGHT;
-    }
+    };
 
     UMLActivationView.prototype.arrangeObject = function (canvas) {
         var messageView      = this._parent,
@@ -5611,14 +5632,14 @@ define(function (require, exports, module) {
         this.top = messageView.points.getPoint(messageView.points.count() - 1).y;
         this.width = ACTIVATION_MINWIDTH;
         // Left position extrudes a little right than Parent Activation
-        if (parentActivation != null) {
+        if (parentActivation !== null) {
             this.left = parentActivation.left + (ACTIVATION_MINWIDTH / 2);
         } else {
             this.left = linePart.left - (ACTIVATION_MINWIDTH / 2);
         }
         // if Activation is not shown
         if (!this.visible) {
-            if (parentActivation != null) {
+            if (parentActivation !== null) {
                 this.left = parentActivation.left;
             } else {
                 this.left = linePart.left;
@@ -5649,26 +5670,26 @@ define(function (require, exports, module) {
             }
         }
         NodeView.prototype.arrangeObject.call(this, canvas);
-    }
+    };
 
     UMLActivationView.prototype.drawObject = function (canvas) {
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLActivationView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLActivationView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**
@@ -5726,7 +5747,7 @@ define(function (require, exports, module) {
                 this.points.add(new Point(xpos, ypos));
             }
         }
-    }
+    };
 
     /**
      * @private
@@ -5747,7 +5768,7 @@ define(function (require, exports, module) {
             }
         }
         return seqNum;
-    }
+    };
 
     /**
      * @private
@@ -5761,7 +5782,7 @@ define(function (require, exports, module) {
             }
         }
         return -1;
-    }
+    };
 
     UMLSeqMessageView.prototype.regulateSequenceNumber = function () {
         // var fromLine       = this.tail,
@@ -5781,7 +5802,7 @@ define(function (require, exports, module) {
             interaction.messages.remove(msg);
             interaction.messages.insert(sn2, msg);
         }
-    }
+    };
 
     UMLSeqMessageView.prototype.update = function () {
         EdgeView.prototype.update.call(this);
@@ -5795,11 +5816,11 @@ define(function (require, exports, module) {
             this.nameLabel.text = this.model.getString(options);
             this.nameLabel.visible = (this.nameLabel.text.length > 0);
             this.stereotypeLabel.visible = (this.stereotypeLabel.text.length > 0);
-            this.activation.visible = (this.head instanceof UMLLinePartView
-                                      && options.showActivation
-                                      && ((this.model.messageSort === UML.MS_SYNCHCALL) ||
-                                          (this.model.messageSort === UML.MS_ASYNCHCALL) ||
-                                          (this.model.messageSort === UML.MS_DELETEMESSAGE)));
+            this.activation.visible = (this.head instanceof UMLLinePartView &&
+                                       options.showActivation &&
+                                       ((this.model.messageSort === UML.MS_SYNCHCALL) ||
+                                        (this.model.messageSort === UML.MS_ASYNCHCALL) ||
+                                        (this.model.messageSort === UML.MS_DELETEMESSAGE)));
             // line style
             if ((this.model.messageSort === UML.MS_REPLY) || (this.model.messageSort === UML.MS_CREATEMESSAGE)) {
                 this.lineMode = Core.LM_DOT;
@@ -5845,7 +5866,7 @@ define(function (require, exports, module) {
                 Repository.bypassFieldAssign(this.propertyLabel, 'model', this.model);
             }
         }
-    }
+    };
 
     UMLSeqMessageView.prototype.arrange = function (canvas) {
         // arrange activation
@@ -5867,7 +5888,7 @@ define(function (require, exports, module) {
                  }
              }
         }
-    }
+    };
 
     UMLSeqMessageView.prototype.arrangeObject = function (canvas) {
         // default variable values
@@ -5922,7 +5943,7 @@ define(function (require, exports, module) {
             }
         }
         this.update();
-    }
+    };
 
     UMLSeqMessageView.prototype.drawObject = function (canvas) {
         EdgeView.prototype.drawObject.call(this, canvas);
@@ -5933,7 +5954,7 @@ define(function (require, exports, module) {
             canvas.line(center - 10, bottom - 10, center + 10, bottom + 10);
             canvas.line(center + 10, bottom - 10, center - 10, bottom + 10);
         }
-    }
+    };
 
     /**
      *
@@ -5951,28 +5972,28 @@ define(function (require, exports, module) {
             this.points.add(new Point(x1, y1));
             this.points.add(new Point(x1, y1));
         }
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLSeqMessageView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLSeqMessageView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
     /**
      * Determine where it can be connected to
      */
     UMLSeqMessageView.prototype.canConnectTo = function (view, isTail) {
         return (view.model && view.model instanceof type.UMLMessageEndpoint);
-    }
+    };
 
     /**
      * UMLStateInvariantView
@@ -5999,14 +6020,14 @@ define(function (require, exports, module) {
         if (this.model) {
             this.invariantLabel.text = "{" + this.model.invariant + "}";
         }
-    }
+    };
 
     UMLStateInvariantView.prototype.sizeObject = function (canvas) {
         NodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = Math.max(this.invariantLabel.minWidth, STATEINVARIANT_MINWIDTH);
         this.minHeight = Math.max(this.invariantLabel.minHeight, STATEINVARIANT_MINHEIGHT);
         this.sizeConstraints();
-    }
+    };
 
     UMLStateInvariantView.prototype.arrangeObject = function (canvas) {
         NodeView.prototype.arrangeObject.call(this, canvas);
@@ -6015,27 +6036,27 @@ define(function (require, exports, module) {
         }
         this.invariantLabel.top  = this.top + (this.height - this.invariantLabel.height) / 2;
         this.invariantLabel.left  = this.left + (this.width - this.invariantLabel.width) / 2;
-    }
+    };
 
     UMLStateInvariantView.prototype.drawObject = function (canvas) {
         canvas.fillRoundRect(this.left, this.top, this.getRight(), this.getBottom(), STATE_ROUND);
         canvas.roundRect(this.left, this.top, this.getRight(), this.getBottom(), STATE_ROUND);
         NodeView.prototype.drawObject.call(this, canvas);
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLStateInvariantView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLStateInvariantView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**
@@ -6062,40 +6083,40 @@ define(function (require, exports, module) {
         if (this.model) {
             this.nameLabel.text = this.model.name;
         }
-    }
+    };
 
     UMLContinuationView.prototype.sizeObject = function (canvas) {
         NodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = Math.max(this.nameLabel.minWidth, CONTINUATION_MINWIDTH);
         this.minHeight = Math.max(this.nameLabel.minHeight, CONTINUATION_MINHEIGHT);
         this.sizeConstraints();
-    }
+    };
 
     UMLContinuationView.prototype.arrangeObject = function (canvas) {
         NodeView.prototype.arrangeObject.call(this, canvas);
         this.nameLabel.top  = this.top + (this.height - this.nameLabel.height) / 2;
         this.nameLabel.left  = this.left + (this.width - this.nameLabel.width) / 2;
-    }
+    };
 
     UMLContinuationView.prototype.drawObject = function (canvas) {
         canvas.fillRoundRect(this.left, this.top, this.getRight(), this.getBottom(), STATE_ROUND);
         canvas.roundRect(this.left, this.top, this.getRight(), this.getBottom(), STATE_ROUND);
         NodeView.prototype.drawObject.call(this, canvas);
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLContinuationView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLContinuationView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**
@@ -6131,7 +6152,7 @@ define(function (require, exports, module) {
         w = w + COMPARTMENT_LEFT_PADDING + COMPARTMENT_RIGHT_PADDING + h / 2;
         this.minWidth = Math.max(w + FRAME_CONTENT_MINWIDTH, FRAME_MINWIDTH);
         this.sizeConstraints();
-    }
+    };
 
     UMLCustomFrameView.prototype.arrangeObject = function (canvas) {
         NodeView.prototype.arrangeObject.call(this, canvas);
@@ -6146,7 +6167,7 @@ define(function (require, exports, module) {
         }
         this.nameLabel.top = this.top + COMPARTMENT_TOP_PADDING;
         this.nameLabel.setRight(this.nameLabel.left + this.nameLabel.minWidth);
-    }
+    };
 
     UMLCustomFrameView.prototype.drawObject = function (canvas) {
         NodeView.prototype.drawObject.call(this, canvas);
@@ -6156,7 +6177,7 @@ define(function (require, exports, module) {
         canvas.polyline([new Point(this.left, this.top), new Point(this.getRight(), this.top), new Point(this.getRight(), this.getBottom()), new Point(this.left, this.getBottom()), new Point(this.left, this.top)]);
         canvas.fillPolygon([new Point(this.left, this.top), new Point(this.left, y), new Point(x - h / 2, y), new Point(x, this.top + h / 2), new Point(x, this.top), new Point(this.left, this.top)]);
         canvas.polygon([new Point(this.left, this.top), new Point(this.left, y), new Point(x - h / 2, y), new Point(x, this.top + h / 2), new Point(x, this.top), new Point(this.left, this.top)]);
-    }
+    };
 
 
     /**
@@ -6197,7 +6218,7 @@ define(function (require, exports, module) {
                 this.nameLabel.text = this.model.name;
             }
         }
-    }
+    };
 
 
     /**
@@ -6224,7 +6245,7 @@ define(function (require, exports, module) {
 
     UMLInteractionOperandView.prototype._isTopOperandView = function () {
         var result = true;
-        if (this._parent != null) {
+        if (this._parent !== null) {
             for (var i = 0, len = this._parent.subViews.length; i < len; i++) {
                 var v = this._parent.subViews[i];
                 if ((v instanceof UMLInteractionOperandView) && (v !== this)) {
@@ -6236,7 +6257,7 @@ define(function (require, exports, module) {
             }
         }
         return result;
-    }
+    };
 
     UMLInteractionOperandView.prototype.update = function (canvas) {
         NodeView.prototype.update.call(this, canvas);
@@ -6251,13 +6272,13 @@ define(function (require, exports, module) {
             }
             this.guardLabel.visible = (this.guardLabel.text.length > 0);
         }
-    }
+    };
 
     UMLInteractionOperandView.prototype.sizeObject = function (canvas) {
         NodeView.prototype.sizeObject.call(this, canvas);
         this.minWidth = Math.max(this.guardLabel.minWidth + INTERACTIONOPERAND_GUARD_HORZ_MARGIN * 2, INTERACTIONOPERAND_MINWIDTH);
         this.minHeight = Math.max(this.guardLabel.minHeight + INTERACTIONOPERAND_GUARD_VERT_MARGIN * 2, INTERACTIONOPERAND_MINHEIGHT);
-    }
+    };
 
     UMLInteractionOperandView.prototype.arrangeObject = function (canvas) {
         NodeView.prototype.arrangeObject.call(this, canvas);
@@ -6265,28 +6286,28 @@ define(function (require, exports, module) {
         this.guardLabel.top = this.top + INTERACTIONOPERAND_GUARD_VERT_MARGIN;
         this.guardLabel.width = this.guardLabel.minWidth;
         this.guardLabel.height = this.guardLabel.minHeight;
-    }
+    };
 
     UMLInteractionOperandView.prototype.drawObject = function (canvas) {
         NodeView.prototype.drawObject.call(this, canvas);
         if (!this._isTopOperandView()) {
             canvas.line(this.left, this.top, this.getRight(), this.top, [10,3]);
         }
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLInteractionOperandView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLInteractionOperandView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**
@@ -6330,7 +6351,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCompartmentView.prototype.update.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -6353,8 +6374,8 @@ define(function (require, exports, module) {
 
     UMLCombinedFragmentView.prototype._carryOnOperandViews = function () {
         if (this.subViews.length > 0) {
-            var interOpViews = [];
-            for(var i = 0, len = this.subViews.length; i < len; i++) {
+            var i, len, interOpViews = [];
+            for(i = 0, len = this.subViews.length; i < len; i++) {
                 if (this.subViews[i] instanceof UMLInteractionOperandView) {
                     interOpViews.push(this.subViews[i]);
                 }
@@ -6363,7 +6384,7 @@ define(function (require, exports, module) {
                 _.sortBy(interOpViews, function (view) { return view.top; });
                 var firstIOV = interOpViews[0];
                 firstIOV.top = Math.max(this.frameTypeLabel.getBottom(), this.nameLabel.getBottom()) + COMPARTMENT_BOTTOM_PADDING;
-                for (var i = 1; i <= (interOpViews.length - 1); i++) {
+                for (i = 1; i <= (interOpViews.length - 1); i++) {
                     interOpViews[i].top = interOpViews[i - 1].getBottom();
                 }
                 var lastIOV = interOpViews[interOpViews.length - 1];
@@ -6371,7 +6392,7 @@ define(function (require, exports, module) {
                 this.minHeight = lastIOV.top + lastIOV.minHeight - this.top;
             }
         }
-    }
+    };
 
     UMLCombinedFragmentView.prototype.update = function (canvas) {
         if (this.operandCompartment.model !== this.model) {
@@ -6390,7 +6411,7 @@ define(function (require, exports, module) {
             }
         }
         UMLCustomFrameView.prototype.update.call(this, canvas);
-    }
+    };
 
     UMLCombinedFragmentView.prototype.sizeObject = function (canvas) {
         UMLCustomFrameView.prototype.sizeObject.call(this, canvas);
@@ -6398,7 +6419,7 @@ define(function (require, exports, module) {
             var h = Math.max(this.frameTypeLabel.height, this.nameLabel.height) + COMPARTMENT_TOP_PADDING + COMPARTMENT_BOTTOM_PADDING;
             this.minHeight = h + this.operandCompartment.height;
         }
-    }
+    };
 
 
     UMLCombinedFragmentView.prototype.arrangeObject = function (canvas) {
@@ -6411,21 +6432,21 @@ define(function (require, exports, module) {
             this.operandCompartment.height = this.height - h;
             this.operandCompartment.arrange(canvas);
         }
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLCombinedFragmentView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLCombinedFragmentView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**
@@ -6469,7 +6490,7 @@ define(function (require, exports, module) {
             }
             this.nameLabel.text = s;
         }
-    }
+    };
 
     UMLInteractionUseView.prototype.sizeObject = function (canvas) {
         NodeView.prototype.sizeObject.call(this, canvas);
@@ -6479,7 +6500,7 @@ define(function (require, exports, module) {
         w = w + COMPARTMENT_LEFT_PADDING + COMPARTMENT_RIGHT_PADDING;
         this.minWidth = Math.max(w, FRAME_MINWIDTH);
         this.sizeConstraints();
-    }
+    };
 
     UMLInteractionUseView.prototype.arrangeObject = function (canvas) {
         NodeView.prototype.arrangeObject.call(this, canvas);
@@ -6488,7 +6509,7 @@ define(function (require, exports, module) {
         this.frameTypeLabel.setRight(this.frameTypeLabel.left + this.frameTypeLabel.minWidth);
         this.nameLabel.top = this.top + (this.height - this.nameLabel.height) / 2;
         this.nameLabel.left = this.left + (this.width - this.nameLabel.width) / 2;
-    }
+    };
 
     UMLInteractionUseView.prototype.drawObject = function (canvas) {
         NodeView.prototype.drawObject.call(this, canvas);
@@ -6498,21 +6519,21 @@ define(function (require, exports, module) {
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.polygon([new Point(this.left, this.top), new Point(this.left, y), new Point(x - h / 2, y), new Point(x, this.top + h / 2), new Point(x, this.top), new Point(this.left, this.top)]);
-    }
+    };
 
     /**
      * Cannot be copied to clipboard.
      */
     UMLInteractionUseView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLInteractionUseView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**************************************************************************
@@ -6536,12 +6557,14 @@ define(function (require, exports, module) {
     UMLCommunicationDiagram.prototype.constructor = UMLCommunicationDiagram;
 
     UMLCommunicationDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
-               (model instanceof type.UMLInstance) ||
-               (model instanceof type.UMLClassifier) ||
-               (model instanceof type.UMLFrame);
-    }
-
+        if (model instanceof type.UMLLifeline ||
+            model instanceof type.UMLMessage) {
+            return _.every(this.ownedViews, function (v) { return v.model !== model; });
+        } else {
+            return (model instanceof type.UMLConstraint) ||
+                   (model instanceof type.UMLClassifier);
+        }
+    };
 
     /**
      * UMLCommLifelineView
@@ -6562,7 +6585,7 @@ define(function (require, exports, module) {
             this.nameCompartment.nameLabel.text = this.model.getString(this);
             this.nameCompartment.nameLabel.underline = false;
         }
-    }
+    };
 
     UMLCommLifelineView.prototype.drawIcon = function (canvas, rect) {
         if (this.model) {
@@ -6605,7 +6628,7 @@ define(function (require, exports, module) {
                 UMLGeneralNodeView.prototype.drawIcon.call(this, canvas, rect);
             }
         }
-    }
+    };
 
     UMLCommLifelineView.prototype.drawAsCanonicalForm = function (canvas, showLabel) {
         UMLGeneralNodeView.prototype.drawAsCanonicalForm.call(this, canvas);
@@ -6615,7 +6638,7 @@ define(function (require, exports, module) {
         }
         canvas.fillRect(r.x1, r.y1, r.x2, r.y2);
         canvas.rect(r.x1, r.y1, r.x2, r.y2);
-    }
+    };
 
     UMLCommLifelineView.prototype.drawAsDecorationForm = function (canvas) {
         var r = new Rect(this.left, this.top, this.getRight(), this.getBottom());
@@ -6637,14 +6660,14 @@ define(function (require, exports, module) {
      */
     UMLCommLifelineView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLCommLifelineView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
 
     /**
@@ -6752,7 +6775,7 @@ define(function (require, exports, module) {
         var a = rt.y2 - rt.y1;
         var b = (rt.x2 - rt.x1 + 0.00001);
         var th = Math.atan(a / b);
-        if (((a < 0) && (b < 0)) || ((a > 0) && (b < 0)) || ((a == 0) && (b < 0))) {
+        if (((a < 0) && (b < 0)) || ((a > 0) && (b < 0)) || ((a === 0) && (b < 0))) {
             th = th + Math.PI;
         }
         var th1 = th - Math.PI / 8;
@@ -6768,7 +6791,7 @@ define(function (require, exports, module) {
         // this.setBottom(Math.max(this.headPoint.y, this.tailPoint.y));
         this.width = Math.max(this.headPoint.x, this.tailPoint.x) - Math.min(this.headPoint.x, this.tailPoint.x);
         this.height = Math.max(this.headPoint.y, this.tailPoint.y) - Math.min(this.headPoint.y, this.tailPoint.y);
-    }
+    };
 
     UMLCommMessageView.prototype.update = function () {
         EdgeNodeView.prototype.update.call(this);
@@ -6805,7 +6828,7 @@ define(function (require, exports, module) {
                 Repository.bypassFieldAssign(this.propertyLabel, 'model', this.model);
             }
         }
-    }
+    };
 
     UMLCommMessageView.prototype.containsPoint = function (canvas, x, y) {
         var r = this.getBoundingBox(canvas);
@@ -6851,7 +6874,7 @@ define(function (require, exports, module) {
         */
         // call Update here because Action's changed are not reflected
         this.update();
-    }
+    };
 
     UMLCommMessageView.prototype.drawObject = function (canvas) {
         EdgeNodeView.prototype.drawObject.call(this, canvas);
@@ -6872,7 +6895,7 @@ define(function (require, exports, module) {
             canvas.fillPolygon([this.arrowPoint1, this.headPoint, this.arrowPoint2]);
             canvas.fillColor = this.fillColor;
         }
-    }
+    };
 
     UMLCommMessageView.prototype.drawSelection = function (canvas) {
         Toolkit.drawHighlighter(canvas, this.tailPoint.x, this.tailPoint.y, Toolkit.DEFAULT_HALF_HIGHLIGHTER_SIZE, true, Toolkit.HIGHLIGHTER_COLOR);
@@ -6885,14 +6908,14 @@ define(function (require, exports, module) {
      */
     UMLCommMessageView.prototype.canCopy = function () {
         return false;
-    }
+    };
 
     /**
      * Cannnot be deleted view only.
      */
     UMLCommMessageView.prototype.canDelete = function () {
         return false;
-    }
+    };
 
     /**************************************************************************
      *                                                                        *
@@ -6921,7 +6944,7 @@ define(function (require, exports, module) {
                (model instanceof type.UMLInterfaceRealization) ||
                (model instanceof type.UMLComponentRealization) ||
                (model instanceof type.UMLAssociation);
-    }
+    };
 
 
     /**
@@ -6938,7 +6961,7 @@ define(function (require, exports, module) {
 
     UMLProfileView.prototype.getStereotypeLabelText = function () {
         return "«profile»";
-    }
+    };
 
 
     /**
@@ -6956,7 +6979,7 @@ define(function (require, exports, module) {
 
     UMLMetaClassView.prototype.getStereotypeLabelText = function () {
         return "«metaClass»";
-    }
+    };
 
     /**
      * UMLStereotypeView
@@ -6973,7 +6996,7 @@ define(function (require, exports, module) {
 
     UMLStereotypeView.prototype.getStereotypeLabelText = function () {
         return "«stereotype»";
-    }
+    };
 
 
     /**
@@ -6994,7 +7017,7 @@ define(function (require, exports, module) {
     UMLExtensionView.prototype.canConnectTo = function (view, isTail) {
         return (isTail && view.model instanceof type.UMLStereotype) ||
                (!isTail && view.model instanceof type.UMLMetaClass);
-    }
+    };
 
 
     /**************************************************************************
@@ -7025,18 +7048,19 @@ define(function (require, exports, module) {
     UMLCustomTextView.prototype.constructor = UMLCustomTextView;
 
     UMLCustomTextView.prototype.sizeObject = function (canvas) {
-        var size, minW, minH, w, h;
+        var size, marg, minW, minH, w, h;
         var lines = null;
         if (this.text && this.text.length > 0) {
             lines = this.text.split("\n");
         }
-        var w = 0, h = 0;
+        w = 0;
+        h = 0;
         if (lines !== null && lines.length > 0) {
             for (var i = 0, len = lines.length; i < len; i++) {
                 if (this.wordWrap) {
-                    var marg = COMPARTMENT_LEFT_PADDING + COMPARTMENT_RIGHT_PADDING + this._rightPadding,
-                        minW = canvas.textExtent(lines[i], 1).x,
-                        minH = canvas.textExtent(lines[i], this.width - marg).y;
+                    marg = COMPARTMENT_LEFT_PADDING + COMPARTMENT_RIGHT_PADDING + this._rightPadding;
+                    minW = canvas.textExtent(lines[i], 1).x;
+                    minH = canvas.textExtent(lines[i], this.width - marg).y;
                     w = Math.max(w, minW);
                     h = h + minH + 2;
                 } else {
@@ -7051,7 +7075,7 @@ define(function (require, exports, module) {
         this.minWidth = Math.max(CUSTOM_TEXT_MINWIDTH, w);
         this.minHeight = Math.max(CUSTOM_TEXT_MINHEIGHT, h);
         NodeView.prototype.sizeObject.call(this, canvas);
-    }
+    };
 
     UMLCustomTextView.prototype.drawObject = function (canvas) {
         NodeView.prototype.drawObject.call(this, canvas);
@@ -7067,7 +7091,7 @@ define(function (require, exports, module) {
                 y = y + sz.y + 2;
             }
         }
-    }
+    };
 
 
     /**
@@ -7103,14 +7127,14 @@ define(function (require, exports, module) {
                    new Point(r, this.top + NOTE_FOLDING_SIZE),
                    new Point(r, b),
                    new Point(this.left, b),
-                   new Point(this.left, this.top)]
+                   new Point(this.left, this.top)];
         canvas.fillPolygon(pts);
         canvas.polygon(pts);
         canvas.polygon([new Point(r - NOTE_FOLDING_SIZE, this.top),
                         new Point(r - NOTE_FOLDING_SIZE, this.top + NOTE_FOLDING_SIZE),
                         new Point(r, this.top + NOTE_FOLDING_SIZE)]);
         UMLCustomTextView.prototype.drawObject.call(this, canvas);
-    }
+    };
 
 
     /**
@@ -7150,7 +7174,7 @@ define(function (require, exports, module) {
             case "localPostconditions": this.text = "«localPostcondition»\n" + this.text; break;
             }
         }
-    }
+    };
 
 
     /**
@@ -7210,7 +7234,7 @@ define(function (require, exports, module) {
         ShapeView.prototype.drawObject.call(this, canvas);
         canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
         canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
 
     /**
@@ -7230,7 +7254,7 @@ define(function (require, exports, module) {
         var r = Math.max(this.width, this.height);
         canvas.fillRoundRect(this.left, this.top, this.getRight(), this.getBottom(), r / 6);
         canvas.roundRect(this.left, this.top, this.getRight(), this.getBottom(), r / 6);
-    }
+    };
 
 
     /**
@@ -7249,7 +7273,7 @@ define(function (require, exports, module) {
         ShapeView.prototype.drawObject.call(this, canvas);
         canvas.fillEllipse(this.left, this.top, this.getRight(), this.getBottom());
         canvas.ellipse(this.left, this.top, this.getRight(), this.getBottom());
-    }
+    };
 
     /* -------------------------------------------------------------------------------------------- */
 

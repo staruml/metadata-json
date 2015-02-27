@@ -139,7 +139,9 @@ define(function (require, exports, module) {
      * @enum {number}
      */
     var LS_RECTILINEAR = 0,
-        LS_OBLIQUE     = 1;
+        LS_OBLIQUE     = 1,
+        LS_ROUNDRECT   = 2,
+        LS_CURVE       = 3;
 
     /**
      * Line End Style
@@ -156,7 +158,11 @@ define(function (require, exports, module) {
         ES_ARROW_FILLED_DIAMOND = 8,
         ES_PLUS                 = 9,
         ES_CIRCLE               = 10,
-        ES_CIRCLE_PLUS          = 11;
+        ES_CIRCLE_PLUS          = 11,
+        ES_CROWFOOT_ONE         = 12,
+        ES_CROWFOOT_MANY        = 13,
+        ES_CROWFOOT_ZERO_ONE    = 14,
+        ES_CROWFOOT_ZERO_MANY   = 15;
 
     /**
      * Edge Position
@@ -2054,6 +2060,8 @@ define(function (require, exports, module) {
                 th2 = th + Math.PI / 8,
                 th3 = th - Math.PI / 2,
                 th4 = th + Math.PI / 2,
+                th5 = th - Math.PI / 2,
+                th6 = th + Math.PI / 2,
                 c1 = 11.0,
                 c2 = c1 * 2.0,
                 c3 = 7,
@@ -2068,7 +2076,9 @@ define(function (require, exports, module) {
                 p8 = new Point((c3 * Math.cos(th)) + rt.x1, (c3 * Math.sin(th)) + rt.y1),
                 p9 = new Point((c3 * Math.cos(th3)) + p8.x, (c3 * Math.sin(th3)) + p8.y),
                 p10 = new Point((c3 * Math.cos(th4)) + p8.x, (c3 * Math.sin(th4)) + p8.y),
-                p11 = new Point(((c3*2) * Math.cos(th)) + rt.x1, ((c3*2) * Math.sin(th)) + rt.y1);
+                p11 = new Point(((c3*2) * Math.cos(th)) + rt.x1, ((c3*2) * Math.sin(th)) + rt.y1),
+                p12 = new Point(c3 * Math.cos(th5) + p0.x, c3 * Math.sin(th5) + p0.y),
+                p13 = new Point(c3 * Math.cos(th6) + p0.x, c3 * Math.sin(th6) + p0.y);
             canvas.color = this.lineColor;
             canvas.fillColor = Color.WHITE;
             switch (edgeEndStyle) {
@@ -2121,6 +2131,53 @@ define(function (require, exports, module) {
                 canvas.line(p11.x, p11.y, p0.x, p0.y);
                 canvas.line(p9.x, p9.y, p10.x, p10.y);
                 break;
+            case ES_CROWFOOT_ONE:
+                /*
+                canvas.putPixel(p0.x, p0.y, Color.BLACK);
+
+                canvas.putPixel(p1.x, p1.y, Color.RED);
+                canvas.putPixel(p2.x, p2.y, Color.RED);
+                canvas.putPixel(p3.x, p3.y, Color.GREEN);
+                canvas.putPixel(p4.x, p4.y, Color.GREEN);
+                canvas.putPixel(p5.x, p5.y, Color.GREEN);
+                canvas.putPixel(p6.x, p6.y, Color.MAGENTA);
+                canvas.putPixel(p7.x, p7.y, Color.MAGENTA);
+                canvas.putPixel(p8.x, p8.y, Color.MAGENTA);
+
+                canvas.putPixel(p9.x, p9.y, Color.ORANGE);
+                canvas.putPixel(p10.x, p10.y, Color.ORANGE);
+                canvas.putPixel(p11.x, p11.y, Color.ORANGE);
+
+                canvas.putPixel(p12.x, p12.y, Color.CYAN);
+                canvas.putPixel(p13.x, p13.y, Color.CYAN);
+                */
+
+
+                // canvas.line(p11.x, p11.y, p12.x, p12.y);
+                // canvas.line(p11.x, p11.y, p13.x, p13.y);
+                // canvas.fillEllipse(p3.x - c3, p3.y - c3, p3.x + c3, p3.y + c3);
+                // canvas.ellipse(p3.x - c3, p3.y - c3, p3.x + c3, p3.y + c3);
+
+                canvas.line(p9.x, p9.y, p10.x, p10.y);
+
+
+                break;
+            case ES_CROWFOOT_MANY:
+                canvas.line(p11.x, p11.y, p12.x, p12.y);
+                canvas.line(p11.x, p11.y, p13.x, p13.y);
+                break;
+            case ES_CROWFOOT_ZERO_ONE:
+                canvas.fillEllipse(p3.x - c3, p3.y - c3, p3.x + c3, p3.y + c3);
+                canvas.ellipse(p3.x - c3, p3.y - c3, p3.x + c3, p3.y + c3);
+                canvas.line(p9.x, p9.y, p10.x, p10.y);
+                break;
+            case ES_CROWFOOT_ZERO_MANY:
+                canvas.line(p11.x, p11.y, p12.x, p12.y);
+                canvas.line(p11.x, p11.y, p13.x, p13.y);
+                canvas.fillEllipse(p3.x - c3, p3.y - c3, p3.x + c3, p3.y + c3);
+                canvas.ellipse(p3.x - c3, p3.y - c3, p3.x + c3, p3.y + c3);
+                break;
+
             }
         }
     };
@@ -2132,7 +2189,7 @@ define(function (require, exports, module) {
         this.points.clear();
         this.points.add(Coord.junction(this.tail.getBoundingBox(canvas), Coord.getCenter(this.head.getBoundingBox(canvas))));
         this.points.add(Coord.junction(this.head.getBoundingBox(canvas), Coord.getCenter(this.tail.getBoundingBox(canvas))));
-        if (this.lineStyle === LS_RECTILINEAR) {
+        if (this.lineStyle === LS_RECTILINEAR || this.lineStyle === LS_ROUNDRECT) {
             this.points.convObliqueToRectilinear();
         }
     };
@@ -2152,14 +2209,32 @@ define(function (require, exports, module) {
      *
      */
     EdgeView.prototype.recalcPoints = function (canvas) {
-        if (this.lineStyle === LS_OBLIQUE) {
+        switch (this.lineStyle) {
+        case LS_RECTILINEAR:
+            if (!this.points.isRectilinear()) {
+                this.points.convObliqueToRectilinear();
+            }
+            this.recalcRectilinear(canvas);
+            break;
+        case LS_OBLIQUE:
             this.recalcOblique(canvas);
-        } else {
+            break;
+        case LS_ROUNDRECT:
+            if (!this.points.isRectilinear()) {
+                this.points.convObliqueToRectilinear();
+            }
+            this.recalcRectilinear(canvas);
+            break;
+        case LS_CURVE:
+            this.recalcOblique(canvas);
+            break;
+        default:
             if (!this.points.isRectilinear()) {
                 this.points.convObliqueToRectilinear();
             }
             this.recalcRectilinear(canvas);
         }
+        this.points.quantize();
     };
 
     /**
@@ -2178,10 +2253,22 @@ define(function (require, exports, module) {
     EdgeView.prototype.drawObject = function (canvas) {
         this.assignStyleToCanvas(canvas);
         canvas.fillColor = this.BACKGROUND_COLOR;
-        if (this.lineMode === LM_SOLID) {
-            canvas.polyline(this.points.points);
-        } else {
-            canvas.polyline(this.points.points, [3]);
+        var pattern = (this.lineMode === LM_SOLID) ? null : [3];
+        switch (this.lineStyle) {
+        case LS_RECTILINEAR:
+            canvas.polyline(this.points.points, pattern);
+            break;
+        case LS_OBLIQUE:
+            canvas.polyline(this.points.points, pattern);
+            break;
+        case LS_ROUNDRECT:
+            canvas.roundRectLine(this.points.points, pattern);
+            break;
+        case LS_CURVE:
+            canvas.curveLine(this.points.points, pattern);
+            break;
+        default:
+            canvas.polyline(this.points.points, pattern);
         }
         this.drawLineEnd(canvas, this.headEndStyle, true);
         this.drawLineEnd(canvas, this.tailEndStyle, false);
@@ -2191,6 +2278,7 @@ define(function (require, exports, module) {
      *
      */
     EdgeView.prototype.drawSelection = function (canvas) {
+        Toolkit.drawDottedLine(canvas, this.points);
         for (var i = 0, len = this.points.points.length; i < len; i++) {
             var p = this.points.points[i];
             Toolkit.drawHighlighter(canvas, p.x, p.y, Toolkit.DEFAULT_HALF_HIGHLIGHTER_SIZE, true, Toolkit.HIGHLIGHTER_COLOR);
@@ -2273,7 +2361,7 @@ define(function (require, exports, module) {
         result = -1;
         pt = new Point(0, 0);
         ph = new Point(0, 0);
-        if (this.lineStyle === LS_RECTILINEAR) {
+        if (this.lineStyle === LS_RECTILINEAR || this.lineStyle === LS_ROUNDRECT) {
             RECOG_MIN_DIS = 5;
             minDis = RECOG_MIN_DIS;
             minDisIndex = -1;
@@ -2841,17 +2929,24 @@ define(function (require, exports, module) {
      * @param {Canvas} canvas
      * @param {number} x
      * @param {number} y
-     * @param {boolean} shallow Find only in first level
+     * @param {boolean} shallow Find only in first level (don't find in subviews)
+     * @param {?constructor} viewType
      * @return {View}
      */
-    Diagram.prototype.getViewAt = function (canvas, x, y, shallow) {
+    Diagram.prototype.getViewAt = function (canvas, x, y, shallow, viewType) {
         // Sort views by zIndex
         var sortedViews = _.sortBy(this.ownedViews, function (v) { return v.zIndex; });
         for (var i = sortedViews.length - 1; i >= 0; i--) {
             var v = sortedViews[i];
             if (shallow === true) {
                 if (v.visible && (v.selectable === SK_YES) && v.containsPoint(canvas, x, y)) {
-                    return v;
+                    if (viewType) {
+                        if (v instanceof viewType) {
+                            return v;
+                        }
+                    } else {
+                        return v;
+                    }
                 }
             } else {
                 if (v.visible && (v.selectable !== SK_NO)) {
@@ -3684,6 +3779,8 @@ define(function (require, exports, module) {
 
     exports.LS_RECTILINEAR          = LS_RECTILINEAR;
     exports.LS_OBLIQUE              = LS_OBLIQUE;
+    exports.LS_ROUNDRECT            = LS_ROUNDRECT;
+    exports.LS_CURVE                = LS_CURVE;
 
     exports.ES_FLAT                 = ES_FLAT;
     exports.ES_STICK_ARROW          = ES_STICK_ARROW;
@@ -3697,6 +3794,11 @@ define(function (require, exports, module) {
     exports.ES_PLUS                 = ES_PLUS;
     exports.ES_CIRCLE               = ES_CIRCLE;
     exports.ES_CIRCLE_PLUS          = ES_CIRCLE_PLUS;
+    exports.ES_CROWFOOT_ONE         = ES_CROWFOOT_ONE;
+    exports.ES_CROWFOOT_MANY        = ES_CROWFOOT_MANY;
+    exports.ES_CROWFOOT_ZERO_ONE    = ES_CROWFOOT_ZERO_ONE;
+    exports.ES_CROWFOOT_ZERO_MANY   = ES_CROWFOOT_ZERO_MANY;
+
 
     exports.EP_HEAD                 = EP_HEAD;
     exports.EP_MIDDLE               = EP_MIDDLE;

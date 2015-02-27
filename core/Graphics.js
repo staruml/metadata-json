@@ -605,6 +605,18 @@ define(function (require, exports, module) {
     };
 
     /**
+     * Quantize
+     * @return {Rect}
+     */
+    Points.prototype.quantize = function () {
+        for (var i = 0, len = this.points.length; i < len; i++) {
+            var p = this.points[i];
+            p.x = Math.round(p.x);
+            p.y = Math.round(p.y);
+        }
+    };
+
+    /**
      * Define custom write method
      * - Refer to Core.Writer.prototype.writeCustom
      */
@@ -1313,6 +1325,128 @@ define(function (require, exports, module) {
             } else {
                 this.context.lineTo(p.x, p.y);
             }
+        }
+        this.context.stroke();
+        this.restoreTransform();
+    };
+
+    /**
+     * Draw roundRectLine
+     * @param {Array.<Point>} points
+     * @param {Array.<number>} dashPattern
+     */
+    Canvas.prototype.roundRectLine = function (points, dashPattern) {
+        var ROUND_RADIUS = 8;
+        var i, len;
+        this.transform();
+        this.context.beginPath();
+        this.context.strokeStyle = this.color;
+        this.context.lineWidth = this.lineWidth;
+        this.context.globalAlpha = this.alpha;
+        if (dashPattern) {
+            this.context.setLineDash(dashPattern);
+        }
+        if (points.length > 0) {
+            var p, prev, next, pdir, ndir;
+            this.context.moveTo(points[0].x, points[0].y);
+            for (i = 1, len = points.length - 1; i < len; i++) {
+                p = points[i];
+                prev = points[i - 1];
+                next = points[i + 1];
+                // direction of previous line
+                if (prev.x === p.x) { // vertical
+                    pdir = (prev.y < p.y) ? 'VD' : 'VU'; // down or up
+                } else { // horizontal
+                    pdir = (prev.x < p.x) ? 'HR' : 'HL'; // right or left
+                }
+                // direction of next line
+                if (next.x === p.x) {
+                    ndir = (next.y < p.y) ? 'VU' : 'VD'; // vertical down or up
+                } else {
+                    ndir = (next.x < p.x) ? 'HL' : 'HR'; // horizontal right or left
+                }
+                // draw line
+                switch (pdir) {
+                case 'VD':
+                    // this.context.moveTo(prev.x, prev.y + ROUND_RADIUS);
+                    this.context.lineTo(p.x, p.y - ROUND_RADIUS);
+                    break;
+                case 'VU':
+                    // this.context.moveTo(prev.x, prev.y - ROUND_RADIUS);
+                    this.context.lineTo(p.x, p.y + ROUND_RADIUS);
+                    break;
+                case 'HR':
+                    // this.context.moveTo(prev.x + ROUND_RADIUS, prev.y);
+                    this.context.lineTo(p.x - ROUND_RADIUS, p.y);
+                    break;
+                case 'HL':
+                    // this.context.moveTo(prev.x - ROUND_RADIUS, prev.y);
+                    this.context.lineTo(p.x + ROUND_RADIUS, p.y);
+                    break;
+                }
+                // draw corner
+                switch (pdir) {
+                case 'VD':
+                    if (ndir === 'HL') {
+                        this.context.arc(p.x - ROUND_RADIUS, p.y - ROUND_RADIUS, ROUND_RADIUS, 0, 0.5 * Math.PI, false);
+                    } else { // HR
+                        this.context.arc(p.x + ROUND_RADIUS, p.y - ROUND_RADIUS, ROUND_RADIUS, Math.PI, 0.5 * Math.PI, true);
+                    }
+                    break;
+                case 'VU':
+                    if (ndir === 'HL') {
+                        this.context.arc(p.x - ROUND_RADIUS, p.y + ROUND_RADIUS, ROUND_RADIUS, 0, 1.5 * Math.PI, true);
+                    } else { // HR
+                        this.context.arc(p.x + ROUND_RADIUS, p.y + ROUND_RADIUS, ROUND_RADIUS, Math.PI, 1.5 * Math.PI, false);
+                    }
+                    break;
+                case 'HR':
+                    if (ndir === 'VD') {
+                        this.context.arc(p.x - ROUND_RADIUS, p.y + ROUND_RADIUS, ROUND_RADIUS, 1.5 * Math.PI, 0, false);
+                    } else { // VU
+                        this.context.arc(p.x - ROUND_RADIUS, p.y - ROUND_RADIUS, ROUND_RADIUS, 0.5 * Math.PI, 0, true);
+                    }
+                    break;
+                case 'HL':
+                    if (ndir === 'VD') {
+                        this.context.arc(p.x + ROUND_RADIUS, p.y + ROUND_RADIUS, ROUND_RADIUS, 1.5 * Math.PI, Math.PI, true);
+                    } else { // VU
+                        this.context.arc(p.x + ROUND_RADIUS, p.y - ROUND_RADIUS, ROUND_RADIUS, 0.5 * Math.PI, Math.PI, false);
+                    }
+                    break;
+                }
+            }
+            this.context.lineTo(points[points.length-1].x, points[points.length-1].y);
+        }
+        this.context.stroke();
+        this.restoreTransform();
+    };
+
+    /**
+     * Draw curveLine
+     * @param {Array.<Point>} points
+     * @param {Array.<number>} dashPattern
+     */
+    Canvas.prototype.curveLine = function (points, dashPattern) {
+        var i, len;
+        this.transform();
+        this.context.beginPath();
+        this.context.strokeStyle = this.color;
+        this.context.lineWidth = this.lineWidth;
+        this.context.globalAlpha = this.alpha;
+        if (dashPattern) {
+            this.context.setLineDash(dashPattern);
+        }
+        this.context.moveTo(points[0].x, points[0].y);
+        if (points.length > 2) {
+            for (i = 1, len = points.length - 2; i < len; i++) {
+                var xc = (points[i].x + points[i + 1].x) / 2;
+                var yc = (points[i].y + points[i + 1].y) / 2;
+                this.context.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+            }
+            this.context.quadraticCurveTo(points[i].x, points[i].y, points[i+1].x,points[i+1].y);
+        } else {
+            this.context.lineTo(points[points.length-1].x, points[points.length-1].y);
         }
         this.context.stroke();
         this.restoreTransform();

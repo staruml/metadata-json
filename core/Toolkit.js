@@ -125,7 +125,7 @@ define(function (require, exports, module) {
         canvas.storeState();
         canvas.context.translate(0.5, 0.5);
         canvas.color = SELECTION_COLOR;
-        canvas.polyline(points.points);
+        canvas.polyline(points.points, [3]);
         canvas.context.translate(-0.5, -0.5);
         canvas.restoreState();
     }
@@ -282,6 +282,31 @@ define(function (require, exports, module) {
         canvas.restoreState();
     }
 
+    function drawLineGuide(canvas, points) {
+        var o, p;
+        canvas.storeState();
+        canvas.color = SELECTION_BORDER_COLOR;
+        canvas.fillColor = Color.WHITE;
+        canvas.lineWidth = 1.0;
+
+        o = canvas.origin.copy();
+        canvas.coordTransformApplied = false;
+        canvas.context.translate(0.5, 0.5);
+        for (var i = 0, len = points.length; i < len; i++) {
+            p = new Point(points[i].x, points[i].y);
+            Coord.coordTransform(canvas.zoomFactor, GridFactor.NO_GRID, p);
+            if (i === 0) {
+
+            } else {
+
+            }
+        }
+        canvas.context.translate(-0.5, -0.5);
+        canvas.coordTransformApplied = true;
+        canvas.restoreState();
+    }
+
+
     // Constants
     exports.NWSE_N = NWSE_N;
     exports.NWSE_S = NWSE_S;
@@ -315,6 +340,7 @@ define(function (require, exports, module) {
     exports.drawSelectionLine = drawSelectionLine;
     exports.drawHighlighter   = drawHighlighter;
     exports.drawHighlighter2  = drawHighlighter2;
+    exports.drawLineGuide     = drawLineGuide;
 
 });
 

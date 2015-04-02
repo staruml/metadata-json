@@ -1299,6 +1299,7 @@ define(function (require, exports, module) {
      */
     function UMLClassifierView() {
         UMLGeneralNodeView.apply(this, arguments);
+        this.containerChangeable = true;
 
         /** @member {boolean} */
         this.suppressAttributes = false;
@@ -2277,11 +2278,21 @@ define(function (require, exports, module) {
      */
     function UMLPackageView() {
         UMLGeneralNodeView.apply(this, arguments);
+        this.containerChangeable = true;
         this.fillColor = PreferenceManager.get("uml.package.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
     UMLPackageView.prototype = Object.create(UMLGeneralNodeView.prototype);
     UMLPackageView.prototype.constructor = UMLPackageView;
+
+    UMLPackageView.prototype.canContainViewKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLClassifierView") ||
+               MetaModelManager.isKindOf(kind, "UMLPackageView") ||
+               MetaModelManager.isKindOf(kind, "UMLObjectView") ||
+               MetaModelManager.isKindOf(kind, "UMLArtifactInstanceView") ||
+               MetaModelManager.isKindOf(kind, "UMLComponentInstanceView") ||
+               MetaModelManager.isKindOf(kind, "UMLNodeInstanceView");
+    };
 
     UMLPackageView.prototype.update = function (canvas) {
         UMLGeneralNodeView.prototype.update.call(this, canvas);
@@ -2807,6 +2818,7 @@ define(function (require, exports, module) {
      */
     function UMLObjectView() {
         UMLGeneralNodeView.apply(this, arguments);
+        this.containerChangeable = true;
 
         /** @member {UMLSlotCompartmentView} */
         this.slotCompartment = new UMLSlotCompartmentView();
@@ -2981,6 +2993,7 @@ define(function (require, exports, module) {
     function UMLArtifactInstanceView() {
         UMLGeneralNodeView.apply(this, arguments);
         this.iconRatio = ARTIFACT_RATIO_PERCENT;
+        this.containerChangeable = true;
         // mixin UMLArtifactViewMixin
         _.extend(UMLArtifactInstanceView.prototype, UMLArtifactViewMixin);
 
@@ -3109,6 +3122,7 @@ define(function (require, exports, module) {
      */
     function UMLComponentInstanceView() {
         UMLGeneralNodeView.apply(this, arguments);
+        this.containerChangeable = true;
         // mixin UMLComponentViewMixin
         _.extend(UMLComponentInstanceView.prototype, UMLComponentViewMixin);
 
@@ -3319,6 +3333,7 @@ define(function (require, exports, module) {
     function UMLNodeInstanceView() {
         UMLGeneralNodeView.apply(this, arguments);
         this.iconRatio = NODE_RATIO_PERCENT;
+        this.containerChangeable = true;
         // mixin UMLNodeViewMixin
         _.extend(UMLNodeInstanceView.prototype, UMLNodeViewMixin);
 

@@ -192,7 +192,7 @@ define(function (require, exports, module) {
                 var refs = elem[attr.name];
                 if (refs && refs.length > 0) {
                     for (i = 0; i < refs.length; i++) {
-                        if (refs[i]._id && _idMap[refs[i]._id]) {
+                        if (refs[i] && refs[i]._id && _idMap[refs[i]._id]) {
                             _addRef(elem, refs[i]);
                         }
                     }
@@ -741,26 +741,26 @@ define(function (require, exports, module) {
                     _addRefsOf(obj);
                 }
             }
-            
+
             // Fix problems in the file
-            // TODO: Remove this enough time after 
+            // TODO: Remove this enough time after
             for (id in reader.idMap) {
                 if (reader.idMap.hasOwnProperty(id)) {
                     obj = _idMap[id];
-                    
+
                     // Fix _parent of Image owned by Stereotype
                     if (obj instanceof type.UMLStereotype && obj.icon instanceof type.UMLImage) {
                         obj.icon._parent = obj;
                     }
-                    
+
                     // Fix: remove disconnected UndirectedRelationships
                     if (obj instanceof type.UndirectedRelationship) {
                         if (!(obj.end1 instanceof type.RelationshipEnd &&
                               obj.end1.reference instanceof type.Model &&
                               obj.end2 instanceof type.RelationshipEnd &&
                               obj.end2.reference instanceof type.Model)) {
-                            if (obj._parent && obj._parent.ownedElements) {
-                                obj._parent.ownedElements.remove(obj);
+                            if (obj._parent && obj.getParentField()) {
+                                obj._parent[obj.getParentField()].remove(obj);
                                 obj._parent = null;
                                 obj.end1.reference = null;
                                 obj.end2.reference = null;
@@ -773,8 +773,8 @@ define(function (require, exports, module) {
                     if (obj instanceof type.DirectedRelationship) {
                         if (!(obj.source instanceof type.Model &&
                               obj.target instanceof type.Model)) {
-                            if (obj._parent && obj._parent.ownedElements) {
-                                obj._parent.ownedElements.remove(obj);
+                            if (obj._parent && obj.getParentField()) {
+                                obj._parent[obj.getParentField()].remove(obj);
                                 obj._parent = null;
                                 obj.source = null;
                                 obj.target = null;
@@ -782,12 +782,128 @@ define(function (require, exports, module) {
                             }
                         }
                     }
-                    
+
+                    // Fix: problems in diagram
+                    if (obj instanceof type.Diagram) {
+                        var diagram = obj;
+
+                        // 1) Communication Diagram에서 hostEdge가 null인 UMLCommMessageView를 모두 지움.
+                        if (diagram instanceof type.UMLCommunicationDiagram) {
+                            _.each(diagram.ownedViews, function (v) {
+                                if (v instanceof type.UMLCommMessageView && v.hostEdge === null) {
+                                    diagram.removeOwnedView(v);
+                                    delete reader.idMap[v._id];
+                                }
+                            });
+                        }
+
+                        _.each(diagram.ownedViews, function (v) {
+
+                            // 1) model이 없는 UMLGeneralNodeView, UMLGeneralEdgeView를 모두 삭제.
+                            if (!v.model && v instanceof type.UMLGeneralNodeView) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (!v.model && v instanceof type.UMLGeneralEdgeView) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+
+                            // 2) _parent가 없는 View들 모두 삭제
+                            if (!v._parent) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+
+                            // 3) head or tail이 없는 EdgeView는 삭제
+                            if (v instanceof type.EdgeView) {
+                                if (!v.head || !v.tail) {
+                                    diagram.removeOwnedView(v);
+                                    delete reader.idMap[v._id];
+                                }
+                            }
+
+                            // 4) end1.reference or end2.reference가 없는 UndirectedRelationship을 모두 삭제.
+                            if (v.model instanceof type.UndirectedRelationship) {
+                                if (!v.model.end1.reference || !v.model.end2.reference) {
+                                    var pf1 = v.model.getParentField();
+                                    if (v.model._parent && pf1) {
+                                        v.model._parent[pf1].remove(v.model);
+                                    }
+                                    diagram.removeOwnedView(v);
+                                    delete reader.idMap[v._id];
+                                }
+                            }
+
+                            // 5) source or target이 없는 DirectedRelationship을 모두 삭제.
+                            if (v.model instanceof type.DirectedRelationship) {
+                                if (!v.model.source || !v.model.target) {
+                                    var pf2 = v.model.getParentField();
+                                    if (v.model._parent && pf2) {
+                                        v.model._parent[pf2].remove(v.model);
+                                    }
+                                    diagram.removeOwnedView(v);
+                                    delete reader.idMap[v._id];
+                                }
+                            }
+
+                            // 5) nameLabel, stereotypeLabel, propertyLabel, RoleNameLabel, MultiplicityLabel, PropertyLabel, QualifiersCompartment
+                            if (v.nameLabel && !reader.idMap[v.nameLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.stereotypeLabel && !reader.idMap[v.stereotypeLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.propertyLabel && !reader.idMap[v.propertyLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.tailRoleNameLabel && !reader.idMap[v.tailRoleNameLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.tailPropertyLabel && !reader.idMap[v.tailPropertyLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.tailMultiplicityLabel && !reader.idMap[v.tailMultiplicityLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.tailQualifiersCompartment && !reader.idMap[v.tailQualifiersCompartment._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.headRoleNameLabel && !reader.idMap[v.headRoleNameLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.headPropertyLabel && !reader.idMap[v.headPropertyLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.headMultiplicityLabel && !reader.idMap[v.headMultiplicityLabel._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+                            if (v.headQualifiersCompartment && !reader.idMap[v.headQualifiersCompartment._id]) {
+                                diagram.removeOwnedView(v);
+                                delete reader.idMap[v._id];
+                            }
+
+                        });
+
+
+                    }
+
                 }
             }
         }
         return element;
     }
+
 
     /**
      * Do an Operation
@@ -889,7 +1005,7 @@ define(function (require, exports, module) {
     function isElement(elem) {
         return (elem && elem._id && get(elem._id));
     }
-    
+
     /**
      * Return an array of elements selected by selector expression.
      * This is a quite heavy operation, so you need to concern about performance.
@@ -905,37 +1021,37 @@ define(function (require, exports, module) {
      *       ex) Class1.attributes, Package1.owendElements
      *
      *     - Value selector: "[field=value]"
-     *       ex) Class1.operations[isAbstract=false]     
+     *       ex) Class1.operations[isAbstract=false]
      *
      *     - Name selector: "<name>" (equivalent to "[name=<name>]")
      *       ex) Class1, Class1::Attribute1
-     *     
+     *
      * Selector examples:
      *     @UMLClass
      *     Package1::Class1.attributes[type=String]
      *     Package1::Model1::@UMLInterface.operations[isAbstract=false]
-     * 
+     *
      * @param {string} selector
      * @return {Array.<Element>}
      */
     function select(selector) {
         selector = selector || "";
-        
+
         // Parse selector into an array of terms
         var interm = selector
             .replace(/::/g, "\n::\n")
             .replace(/@/g, "\n@")
             .replace(/\./g, "\n.")
             .replace(/\[/g, "\n[");
-        
-        var i, len, 
+
+        var i, len,
             sliced = interm.split("\n"),
             terms = [];
-        
+
         for (i = 0, len = sliced.length; i < len; i++) {
             var item = sliced[i].trim(), arg;
             // children selector
-            if (item === "::") { 
+            if (item === "::") {
                 terms.push({ op: "::" });
             // type selector
             } else if (item.charAt(0) === "@") {
@@ -964,7 +1080,7 @@ define(function (require, exports, module) {
                 terms.push({ op: "name", name: item });
             }
         }
-        
+
         // Process terms sequentially
         var current = _.values(_idMap),
             term,
@@ -1026,10 +1142,10 @@ define(function (require, exports, module) {
                 break;
             }
         }
-        
+
         return current;
     }
-    
+
     /**
      * Return element by id.
      * @param {string} id Identifier of element.

@@ -1249,6 +1249,12 @@ define(function (require, exports, module) {
                (kind === "UMLUseCaseDiagram");
     };
 
+    UMLPackage.prototype.canContainKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLClassifier") ||
+               MetaModelManager.isKindOf(kind, "UMLPackage") ||
+               MetaModelManager.isKindOf(kind, "UMLInstance");
+    };
+
     /**
      * UMLModel
      * @constructor

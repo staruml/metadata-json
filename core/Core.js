@@ -1245,7 +1245,7 @@ define(function (require, exports, module) {
         this.containerChangeable = false;
 
         /** @member {boolean} */
-        this.containerExtending = true;
+        this.containerExtending = false;
 
         /** @member {number} */
         this.zIndex = 0;
@@ -3132,7 +3132,7 @@ define(function (require, exports, module) {
             }
             for (i = 0, len = this.ownedViews.length; i < len; i++) {
                 v = this.ownedViews[i];
-                if (v instanceof _global.type.EdgeView) {
+                if (v instanceof _global.type.EdgeView && v.head instanceof type.NodeView && v.tail instanceof type.NodeView) {
                     g.addEdge(v._id, v.head._id, v.tail._id);
                 }
             }
@@ -3172,7 +3172,7 @@ define(function (require, exports, module) {
                 var edgeView = this.getOwnedViewById(edge.id);
                 var headView = this.getOwnedViewById(edge.u);
                 var tailView = this.getOwnedViewById(edge.v);
-                edgeView.lineStyle = LS_OBLIQUE;
+                edgeView.lineStyle = LS_CURVE;
                 edgeView.points.clear();
                 edgeView.points.add(tailView.getCenter());
                 for (var j = edge.value.points.length - 1; j >= 0; j--) {

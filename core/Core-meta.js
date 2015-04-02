@@ -103,8 +103,8 @@ define(function (require, exports, module) {
                 { "name": "font",                "kind": "custom", "type": "Font" },
                 { "name": "parentStyle",         "kind": "prim",   "type": "Boolean", "default": false, "transient": true },
                 { "name": "showShadow",          "kind": "prim",   "type": "Boolean", "default": true },
-                { "name": "containerChangeable", "kind": "prim",   "type": "Boolean", "default": false, "transient": true },
-                { "name": "containerExtending",  "kind": "prim",   "type": "Boolean", "default": true, "transient": true }
+                { "name": "containerChangeable", "kind": "prim",   "type": "Boolean", "default": false, "transient": false },
+                { "name": "containerExtending",  "kind": "prim",   "type": "Boolean", "default": true, "transient": false }
             ]
         },
         "NodeView": {

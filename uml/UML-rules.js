@@ -25,7 +25,7 @@ define(function (require, exports, module) {
             id: "UML001",
             message: "Name expected.",
             appliesTo: [ "UMLModelElement" ],
-            exceptions: [ "UMLDirectedRelationship", "UMLRelationshipEnd", "UMLUndirectedRelationship", "UMLAssociationClassLink", "UMLRegion", "UMLPseudostate", "UMLFinalState", "UMLControlNode", "UMLEndpoint", "UMLGate", "UMLImage" ],
+            exceptions: [ "UMLDirectedRelationship", "UMLRelationshipEnd", "UMLUndirectedRelationship", "UMLAssociationClassLink", "UMLRegion", "UMLPseudostate", "UMLFinalState", "UMLControlNode", "UMLEndpoint", "UMLGate", "UMLImage", "UMLLifeline" ],
             constraint: function (elem) {
                 if (elem instanceof type.UMLParameter) {
                     return (elem.direction === "return" ? true : elem.name.length > 0);

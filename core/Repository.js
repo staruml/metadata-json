@@ -783,6 +783,13 @@ define(function (require, exports, module) {
                         }
                     }
 
+                    // Fix: Clear too large distance values
+                    if (obj instanceof type.ParasiticView) {
+                        if (obj.distance > 5000) {
+                            obj.distance = 10;
+                        }
+                    }
+
                     // Fix: problems in diagram
                     if (obj instanceof type.Diagram) {
                         var diagram = obj;
@@ -797,7 +804,10 @@ define(function (require, exports, module) {
                             });
                         }
 
-                        _.each(diagram.ownedViews, function (v) {
+                        for (var vi = 0, vlen = diagram.ownedViews.length; vi < vlen; vi++) {
+                            var v = diagram.ownedViews[vi];
+
+                            if (!v) { continue; }
 
                             // 1) model이 없는 UMLGeneralNodeView, UMLGeneralEdgeView를 모두 삭제.
                             if (!v.model && v instanceof type.UMLGeneralNodeView) {
@@ -893,8 +903,7 @@ define(function (require, exports, module) {
                                 delete reader.idMap[v._id];
                             }
 
-                        });
-
+                        }
 
                     }
 
@@ -1226,6 +1235,23 @@ define(function (require, exports, module) {
         return result;
     }
 
+
+    /**
+     * Search elements by keyword and type
+     * @param {string} keyword
+     * @param {constructor} typeFilter
+     * @return {Array.<Element>} elements
+     */
+    function search(keyword, typeFilter) {
+        keyword = keyword.toLowerCase();
+        typeFilter = typeFilter || type.Element;
+        var results = findAll(function (elem) {
+            var name = elem.name ? elem.name.toLowerCase() : "";
+            return (name.indexOf(keyword) > -1 && elem instanceof typeFilter);
+        });
+        return results;
+    }
+
     /**
      * Lookup an element and then find. (See `Element.prototype.lookup` and `find`).
      * @param {!Element} namespace Element to start to lookup.
@@ -1385,6 +1411,7 @@ define(function (require, exports, module) {
     exports.getInstancesOf      = getInstancesOf;
     exports.find                = find;
     exports.findAll             = findAll;
+    exports.search              = search;
     exports.lookupAndFind       = lookupAndFind;
     exports.getRefsTo           = getRefsTo;
     exports.getRelationshipsOf  = getRelationshipsOf;

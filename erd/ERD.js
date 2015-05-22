@@ -76,6 +76,12 @@ define(function (require, exports, module) {
     ERDDiagram.prototype = Object.create(type.Diagram.prototype);
     ERDDiagram.prototype.constructor = ERDDiagram;
 
+    ERDDiagram.prototype.canAcceptModel = function (model) {
+        return (model instanceof type.ERDEntity) ||
+               (model instanceof type.ERDRelationship);
+    };
+
+
     /**
      * ERDColumn
      * @constructor
@@ -248,9 +254,6 @@ define(function (require, exports, module) {
     ERDColumnView.prototype.constructor = ERDColumnView;
 
     ERDColumnView.prototype.update = function (canvas) {
-        if (this.model) {
-            this.text = this.model.getString();
-        }
         type.LabelView.prototype.update.call(this, canvas);
     };
 
@@ -319,12 +322,13 @@ define(function (require, exports, module) {
             _typeWidth = 0;
 
         // Compute min-width of key, name, and type column
+        var _key, _name, _type;
         for (i = 0, len = this.subViews.length; i < len; i++) {
             item = this.subViews[i];
             if (item.visible && item.model) {
-                var _key  = canvas.textExtent(item.model.getKeyString()).x,
-                    _name = canvas.textExtent(item.model.getNameString()).x,
-                    _type = canvas.textExtent(item.model.getTypeString()).x;
+                _key  = canvas.textExtent(item.model.getKeyString()).x;
+                _name = canvas.textExtent(item.model.getNameString()).x;
+                _type = canvas.textExtent(item.model.getTypeString()).x;
                 _keyWidth  = Math.max(_keyWidth, _key);
                 _nameWidth = Math.max(_nameWidth, _name);
                 _typeWidth = Math.max(_typeWidth, _type);
@@ -369,12 +373,13 @@ define(function (require, exports, module) {
             _typeWidth = 0;
 
         // Compute min-width of key, name, and type column
+        var _key, _name, _type;
         for (i = 0, len = this.subViews.length; i < len; i++) {
             item = this.subViews[i];
             if (item.visible && item.model) {
-                var _key  = canvas.textExtent(item.model.getKeyString()).x,
-                    _name = canvas.textExtent(item.model.getNameString()).x,
-                    _type = canvas.textExtent(item.model.getTypeString()).x;
+                _key  = canvas.textExtent(item.model.getKeyString()).x;
+                _name = canvas.textExtent(item.model.getNameString()).x;
+                _type = canvas.textExtent(item.model.getTypeString()).x;
                 _keyWidth  = Math.max(_keyWidth, _key);
                 _nameWidth = Math.max(_nameWidth, _name);
                 _typeWidth = Math.max(_typeWidth, _type);

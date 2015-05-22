@@ -106,7 +106,7 @@ define(function (require, exports, module) {
                             showType: true,
                             showOperationSignature: true
                         },
-                        inherited  = elem._parent.getInheritedOperations(),
+                        inherited  = elem._parent.getInheritedOperations(true),
                         signatures = _.map(inherited, function (e) { return e.getString(options); });
                     return !_.contains(signatures, elem.getString(options));
                 }

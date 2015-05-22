@@ -960,9 +960,10 @@ define(function (require, exports, module) {
     /**
      * Get all inherited operations
      *
+     * @param {boolean} includeInterfaces
      * @return {Array.<UMLOperation>}
      */
-    UMLClassifier.prototype.getInheritedOperations = function () {
+    UMLClassifier.prototype.getInheritedOperations = function (excludeInterfaces) {
         var ancestors  = this.getAncestors(),
             interfaces = this.getInterfaces(),
             inherited  = [];
@@ -971,12 +972,14 @@ define(function (require, exports, module) {
                 Array.prototype.push.apply(inherited, e.operations);
             }
         });
-        _.each(interfaces, function (e) {
-            if (Array.isArray(e.operations)) {
-                Array.prototype.push.apply(inherited, e.getInheritedOperations());
-                Array.prototype.push.apply(inherited, e.operations);
-            }
-        });
+        if (excludeInterfaces !== true) {
+            _.each(interfaces, function (e) {
+                if (Array.isArray(e.operations)) {
+                    Array.prototype.push.apply(inherited, e.getInheritedOperations());
+                    Array.prototype.push.apply(inherited, e.operations);
+                }
+            });
+        }
         return inherited;
     };
 

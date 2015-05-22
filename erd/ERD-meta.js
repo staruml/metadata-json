@@ -31,7 +31,11 @@ define(function (require, exports, module) {
         },
         "ERDDiagram": {
             "kind": "class",
-            "super": "Diagram"
+            "super": "Diagram",
+            "views": [
+                "ERDEntityView",
+                "ERDRelationshipView",
+            ]
         },
         "ERDColumn": {
             "kind": "class",
@@ -52,14 +56,16 @@ define(function (require, exports, module) {
             "view": "ERDEntityView",
             "attributes": [
                 { "name": "columns", "kind": "objs", "type": "ERDColumn" }
-            ]
+            ],
+            "ordering": 1200
         },
         "ERDRelationshipEnd": {
             "kind": "class",
             "super": "RelationshipEnd",
             "attributes": [
                 { "name": "cardinality", "kind": "prim", "type": "String", "visible": true, "default": "1", "options": [ "0..1", "1", "0..*", "1..*" ] }
-            ]
+            ],
+            "ordering": 1800
         },
         "ERDRelationship": {
             "kind": "class",
@@ -67,7 +73,8 @@ define(function (require, exports, module) {
             "view": "ERDRelationshipView",
             "attributes": [
                 { "name": "identifying", "kind": "prim", "type": "Boolean", "visible": true, "default": true }
-            ]
+            ],
+            "ordering": 1801
         },
         "ERDColumnView": {
             "kind": "class",

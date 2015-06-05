@@ -84,7 +84,6 @@ function getRoot() {
     return _root;
 }
 
-
 // Skip all of jQuery event triggers
 _global.$ = function () {
     return { triggerHandler: function () {} };
@@ -111,3 +110,4 @@ exports.render           = render.render;
 exports.renderBulk       = render.renderBulk;
 exports.exportToPDF      = pdf.exportToPDF;
 exports.exportToHTML     = html.exportToHTML;
+exports.registerFontSet  = pdf.registerFontSet;

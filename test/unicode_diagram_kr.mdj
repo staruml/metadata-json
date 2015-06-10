@@ -1,0 +1,76 @@
+{
+	"_type": "Project",
+	"_id": "AAAAAAFF+h6SjaM2Hec=",
+	"name": "Untitled",
+	"ownedElements": [
+		{
+			"_type": "UMLModel",
+			"_id": "AAAAAAFF+qBWK6M3Z8Y=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "Model",
+			"ownedElements": [
+				{
+					"_type": "UMLClassDiagram",
+					"_id": "AAAAAAFF+qBtyKM79qY=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Main",
+					"visible": true,
+					"defaultDiagram": true,
+					"ownedViews": [
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFN19PUAmM+Hb4=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Nanum;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 28,
+							"top": 24,
+							"width": 272,
+							"height": 144,
+							"autoResize": false,
+							"text": "한국어(韓國語)는 주로 제주특별자치도를 제외한 한반도 및 그 부속 도서와 한민족 거주 지역에서 쓰이는 언어로, 대한민국에서는 한국어, 한국말이라고 부르고, 조선민주주의인민공화국과 중화인민공화국에서는 조선어(朝鮮語), 조선말(朝鮮-)이라고 부르며, 우즈베키스탄, 러시아 등 구 소련의 고려인들 사이에서는 고려말(高麗-)이라고 부른다.\nThis is the last English text",
+							"wordWrap": true
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFN23H/E4op4sY=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 24,
+							"top": 176,
+							"width": 272,
+							"height": 149,
+							"autoResize": false,
+							"text": "도를 도라 부르면, 이미 그 도가 아니다.\n이름 부를 수 있으나, 언제나 그 이름은 아니다.\n이름이 없을 때 천지가 있었고,\n이름이 생기자 만물이 태어났다.\n\n그렇기에 언제나 없음으로 그 근원을 보고,\n언제나 있음으로 그 드러남을 보라.\n없음과 있음은 하나에서 나온 두가지 이름이라, 이를 현묘하다 한다.\n현묘하고 현묘하니, 모든 오묘함의 문이 된다.",
+							"wordWrap": true
+						}
+					]
+				}
+			],
+			"visibility": "public"
+		}
+	]
+}

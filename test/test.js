@@ -3,7 +3,7 @@
 
 var mdjson = require("../metadata-json");
 
-mdjson.loadFromFile("diagram_pdf_test.mdj");
+mdjson.loadFromFile("unicode_diagram.mdj");
 
 // Retrive all diagrams
 var diagrams = mdjson.Repository.getInstancesOf("Diagram");
@@ -15,12 +15,9 @@ var options = {
     showName: true
 };
 
-mdjson.registerFontSet(
-    "Noto Sans",
-    __dirname + "/../../pdfkit-test/NotoSansCJKkr-Regular.ttf",
-    __dirname + "/../../pdfkit-test/NotoSansCJKkr-Bold.ttf",
-    __dirname + "/../../pdfkit-test/NotoSansCJKkr-Regular.ttf",
-    __dirname + "/../../pdfkit-test/NotoSansCJKkr-Bold.ttf",
-    true);
+mdjson.registerFont(__dirname + "/../../staruml/src/styles/fonts/Liberation");
+mdjson.registerFont(__dirname + "/../../staruml/src/styles/fonts/NotoSans");
+mdjson.registerFont(__dirname + "/../../staruml/src/styles/fonts/Lato");
+mdjson.registerFont(__dirname + "/../../staruml/src/styles/fonts/Roboto");
 
 mdjson.exportToPDF(diagrams, "out.pdf", options);

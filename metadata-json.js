@@ -32,6 +32,8 @@ requirejs.config({
         "erd/ERD-meta"           : __dirname + "/erd/ERD-meta",
         "erd/ERD-rules"          : __dirname + "/erd/ERD-rules",
         "erd/ERD"                : __dirname + "/erd/ERD",
+        "lib/Unicode"            : __dirname + "/lib/Unicode",
+        "lib/Font"               : __dirname + "/lib/Font",
         "lib/PDFGraphics"        : __dirname + "/lib/PDFGraphics"
     }
 });
@@ -48,6 +50,8 @@ var _global          = requirejs("core/Global").global,
     UML              = requirejs("uml/UML"),
     UMLDiagram       = requirejs("uml/UMLDiagram"),
     ERD              = requirejs("erd/ERD"),
+    Unicode          = requirejs("lib/Unicode"),
+    Font             = requirejs("lib/Font"),
     PDFGraphics      = requirejs("lib/PDFGraphics");
 
 requirejs("core/Core-meta");
@@ -102,6 +106,8 @@ exports.Validator        = Validator;
 exports.UML              = UML;
 exports.UMLDiagram       = UMLDiagram;
 exports.ERD              = ERD;
+exports.Unicode          = Unicode;
+exports.Font             = Font;
 exports.PDFGraphics      = PDFGraphics;
 
 exports.loadFromFile     = loadFromFile;
@@ -110,4 +116,4 @@ exports.render           = render.render;
 exports.renderBulk       = render.renderBulk;
 exports.exportToPDF      = pdf.exportToPDF;
 exports.exportToHTML     = html.exportToHTML;
-exports.registerFontSet  = pdf.registerFontSet;
+exports.registerFont     = pdf.registerFont;

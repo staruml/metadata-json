@@ -42,8 +42,8 @@ define(function (require, exports, module) {
      */
     function assert(condition, message, strings) {
         if (!condition) {
-            var err = _.template(message, strings);
-            throw "[MetaModelManager] " + err;
+            var err = _.template(message);
+            throw "[MetaModelManager] " + err(strings);
         }
     }
 

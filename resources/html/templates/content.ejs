@@ -278,7 +278,7 @@
                         <th>Signal</th>
                         <th>Description</th>
                     </tr>
-                    <% element.operations.forEach(function (recep) { %>
+                    <% element.receptions.forEach(function (recep) { %>
                     <tr>
                         <td><%= recep.visibility %></td>
                         <td><a href="<%=: recep | toUrl %>"><%=: recep.getString({showOperationSignature: true, showType: true}) %></a></td>

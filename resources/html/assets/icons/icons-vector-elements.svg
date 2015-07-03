@@ -214,6 +214,11 @@
 			c-0.865,0-1.57,0.706-1.57,1.57s0.705,1.57,1.57,1.57s1.57-0.706,1.57-1.57S136.576,54.504,135.711,54.504z"/>
 	</g>
 </g>
+<g id="Reception">
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="148,56.5 150.5,56.5 150.5,54.5 152.5,54.5 152.5,58.5 
+		154.5,58.5 154.5,56.5 157,56.5 	"/>
+	<ellipse fill="none" stroke="#AD9400" stroke-miterlimit="10" cx="152.25" cy="56.5" rx="4.75" ry="5"/>
+</g>
 <g id="Enumeration">
 	<rect x="68" y="25" fill="#AD9400" width="1" height="1"/>
 	<rect x="68" y="27" fill="#AD9400" width="1" height="1"/>

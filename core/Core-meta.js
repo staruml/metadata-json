@@ -104,7 +104,7 @@ define(function (require, exports, module) {
                 { "name": "parentStyle",         "kind": "prim",   "type": "Boolean", "default": false, "transient": true },
                 { "name": "showShadow",          "kind": "prim",   "type": "Boolean", "default": true },
                 { "name": "containerChangeable", "kind": "prim",   "type": "Boolean", "default": false, "transient": false },
-                { "name": "containerExtending",  "kind": "prim",   "type": "Boolean", "default": true, "transient": false }
+                { "name": "containerExtending",  "kind": "prim",   "type": "Boolean", "default": false, "transient": false }
             ]
         },
         "NodeView": {

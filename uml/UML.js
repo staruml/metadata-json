@@ -800,6 +800,57 @@ define(function (require, exports, module) {
         return "";
     };
 
+    /**
+     * UMLReception
+     * @constructor
+     * @extends UMLBehavioralFeature
+     */
+    function UMLReception() {
+        UMLBehavioralFeature.apply(this, arguments);
+
+        /** @member {UMLSignal} */
+        this.signal = null;
+    }
+    // inherits from UMLBehavioralFeature
+    UMLReception.prototype = Object.create(UMLBehavioralFeature.prototype);
+    UMLReception.prototype.constructor = UMLReception;
+
+    UMLReception.prototype.getString = function (options) {
+        if (this.signal instanceof UMLSignal) {
+            var text = "";
+            if (options && (options.stereotypeDisplay === SD_LABEL || options.stereotypeDisplay === SD_DECORATION_LABEL || options.stereotypeDisplay === SD_ICON_LABEL)) {
+                text += "«signal»";
+            }
+            if (options && options.showVisibility) {
+                text += this.getVisibilityString();
+            }
+            text += this.signal.name;
+            if (options && options.showOperationSignature) {
+                var i, len, attr, term, _type, terms = [];
+                for (i = 0, len = this.signal.attributes.length; i < len; i++) {
+                    attr = this.signal.attributes[i];
+                    term = attr.name;
+                    if (options.showType) {
+                        _type = attr.getTypeString();
+                        if (_type) {
+                            term += ": " + attr.getTypeString();
+                        }
+                    }
+                    terms.push(term);
+                }
+                text += "(" + terms.join(", ") + ")";
+            } else {
+                text += "()";
+            }
+            if (options && options.showProperty) {
+                var prop = this.getPropertyString();
+                text += (prop.length > 0 ? " " + prop : "");
+            }
+            return text;
+        } else {
+            return UMLBehavioralFeature.prototype.getString.call(this, options);
+        }
+    };
 
     /**
      * UMLClassifier
@@ -814,6 +865,9 @@ define(function (require, exports, module) {
 
         /** @member {Array.<UMLOperation>} */
         this.operations = [];
+
+        /** @member {Array.<UMLReception>} */
+        this.receptions = [];
 
         /** @member {Array.<UMLBehavior>} */
         this.behaviors = [];
@@ -3034,6 +3088,15 @@ define(function (require, exports, module) {
 
         /** @member {string} */
         this.assignmentTarget = '';
+
+        /** @member {string} */
+        this.guard = '';
+
+        /** @member {string} */
+        this.iteration = '';
+
+        /** @member {boolean} */
+        this.isConcurrentIteration = false;
     }
     // inherits from UMLDirectedRelationship
     UMLMessage.prototype = Object.create(UMLDirectedRelationship.prototype);
@@ -3044,7 +3107,18 @@ define(function (require, exports, module) {
         // Sequence Number
         if (options && options.showSequenceNumber && this._parent && this._parent.messages) {
             s += _.indexOf(this._parent.messages, this) + 1;
-            s += " : ";
+            s += ' ';
+        }
+        // Guard
+        if (this.guard.length > 0) {
+            s += '[' + this.guard + '] ';
+        }
+        // Iteration
+        if (this.iteration.length > 0) {
+            s += (this.isConcurrentIteration ? '*||[' : '*[') + this.iteration + '] ';
+        }
+        if (s.length > 0) {
+            s += ": ";
         }
         // Assignament Target
         if (this.assignmentTarget.length > 0) {
@@ -3177,6 +3251,7 @@ define(function (require, exports, module) {
     type.UMLBehavioralFeature        = UMLBehavioralFeature;
     type.UMLAttribute                = UMLAttribute;
     type.UMLOperation                = UMLOperation;
+    type.UMLReception                = UMLReception;
     type.UMLClassifier               = UMLClassifier;
     type.UMLDirectedRelationship     = UMLDirectedRelationship;
     type.UMLRelationshipEnd          = UMLRelationshipEnd;

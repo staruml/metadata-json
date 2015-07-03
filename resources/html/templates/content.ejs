@@ -266,6 +266,30 @@
             </section>
             <% } %>
 
+            <!-- Receptions -->
+
+            <% if (element instanceof type.UMLClassifier && element.receptions && element.receptions.length > 0) { %>
+            <section>
+                <h3>Receptions</h3>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Visibility</th>
+                        <th>Name</th>
+                        <th>Signal</th>
+                        <th>Description</th>
+                    </tr>
+                    <% element.operations.forEach(function (recep) { %>
+                    <tr>
+                        <td><%= recep.visibility %></td>
+                        <td><a href="<%=: recep | toUrl %>"><%=: recep.getString({showOperationSignature: true, showType: true}) %></a></td>
+                        <td><%-: recep.signal | toType %></td>
+                        <td><%-: recep.documentation | markdown %></td>
+                    </tr>
+                    <% }); %>
+                </table>
+            </section>
+            <% } %>
+
             <!-- Extension Points -->
 
             <% if (element instanceof type.UMLUseCase && element.extensionPoints && element.extensionPoints.length > 0) { %>

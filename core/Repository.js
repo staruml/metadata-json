@@ -1390,10 +1390,25 @@ define(function (require, exports, module) {
      * @param {Core.Element} val Value to be assigned to.
      */
     function bypassFieldAssign(elem, field, val) {
+        if (!get(elem._id)) {
+            _idMap[elem._id] = elem;
+        }
         OperationBuilder.begin("bypassFieldAssign", true);
         OperationBuilder.fieldAssign(elem, field, val);
         OperationBuilder.end();
         doOperation(OperationBuilder.getOperation(), true);
+    }
+
+    function ensureContains(elem, field, val) {
+        if (!get(val._id)) {
+            _idMap[val._id] = val;
+        }
+        if (!_.contains(elem[field], val)) {
+            OperationBuilder.begin("bypassFieldInsert", true);
+            OperationBuilder.fieldInsert(elem, field, val);
+            OperationBuilder.end();
+            doOperation(OperationBuilder.getOperation());
+        }
     }
 
     // Define public API
@@ -1420,6 +1435,7 @@ define(function (require, exports, module) {
 
     exports.bypassInsert        = bypassInsert;
     exports.bypassFieldAssign   = bypassFieldAssign;
+    exports.ensureContains      = ensureContains;
 
     exports.getIdMap  = function () { return _idMap; };  // for test
     exports.getRefMap = function () { return _refMap; }; // for test

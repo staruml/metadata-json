@@ -89,7 +89,9 @@ define(function (require, exports, module) {
         y2 = Math.round(y2);
 
         canvas.storeState();
-        canvas.context.translate(0.5, 0.5);
+        if (canvas.ratio === 1) { // Non-retina
+            canvas.context.translate(0.5, 0.5);
+        }
         canvas.color = SELECTION_COLOR;
         switch (kind) {
         case "rect":
@@ -110,7 +112,9 @@ define(function (require, exports, module) {
             drawEndPoint(canvas, x2, y2);
             break;
         }
-        canvas.context.translate(-0.5, -0.5);
+        if (canvas.ratio === 1) { // Non-retina
+            canvas.context.translate(-0.5, -0.5);
+        }
         canvas.restoreState();
     }
 
@@ -123,37 +127,51 @@ define(function (require, exports, module) {
 
     function drawDottedLine(canvas, points) {
         canvas.storeState();
-        canvas.context.translate(0.5, 0.5);
+        if (canvas.ratio === 1) { // Non-retina
+            canvas.context.translate(0.5, 0.5);
+        }
         canvas.color = SELECTION_COLOR;
         canvas.polyline(points.points, [3]);
-        canvas.context.translate(-0.5, -0.5);
+        if (canvas.ratio === 1) { // Non-retina
+            canvas.context.translate(-0.5, -0.5);
+        }
         canvas.restoreState();
     }
 
     function drawSelection(canvas, x1, y1, x2, y2) {
         canvas.storeState();
-        canvas.context.translate(0.5, 0.5);
+        if (canvas.ratio === 1) {
+            canvas.context.translate(0.5, 0.5);
+        }
         canvas.fillColor = SELECTION_COLOR;
+        // canvas.lineWidth = 1.0 * canvas.ratio;
         canvas.alpha = 0.1;
         canvas.fillRoundRect(x1, y1, x2, y2, 2);
         canvas.color = SELECTION_BORDER_COLOR;
         canvas.alpha = 1;
         canvas.roundRect(x1, y1, x2, y2, 2);
-        canvas.context.translate(-0.5, -0.5);
+        if (canvas.ratio === 1) {
+            canvas.context.translate(-0.5, -0.5);
+        }
         canvas.restoreState();
     }
 
     function drawSelectionBox(canvas, x1, y1, x2, y2) {
         canvas.storeState();
-        canvas.context.translate(0.5, 0.5);
+        if (canvas.ratio === 1) {
+            canvas.context.translate(0.5, 0.5);
+        }
         canvas.color = SELECTION_BORDER_COLOR;
         canvas.alpha = 1;
+        // canvas.lineWidth = 1.0 * canvas.ratio;
         canvas.rect(x1, y1, x2, y2);
-        canvas.context.translate(-0.5, -0.5);
+        if (canvas.ratio === 1) {
+            canvas.context.translate(-0.5, -0.5);
+        }
         canvas.restoreState();
     }
 
-    function drawSelectionLine(canvas, x1, y1, x2, y2, len, nwse, retouch) {
+    function drawSelectionLine(canvas, x1, y1, x2, y2, width, nwse, retouch) {
         var ox, oy, r, r1, r2, rx1, rx2, ry1, ry2;
         canvas.storeState();
         ox = canvas.origin.x;
@@ -162,11 +180,16 @@ define(function (require, exports, module) {
         r2 = new Point(x2, y2);
         Coord.coordTransform(canvas.zoomFactor, GridFactor.NO_GRID, r1);
         Coord.coordTransform(canvas.zoomFactor, GridFactor.NO_GRID, r2);
-        rx1 = r1.x;
-        ry1 = r1.y;
-        rx2 = r2.x;
-        ry2 = r2.y;
-        if (retouch && (((rx1 + ox - len) % 2) === 1)) {
+
+        // for Retina
+        canvas.lineWidth = 1.0 * canvas.ratio;
+        rx1 = r1.x * canvas.ratio;
+        ry1 = r1.y * canvas.ratio;
+        rx2 = r2.x * canvas.ratio;
+        ry2 = r2.y * canvas.ratio;
+        width = width * canvas.ratio;
+
+        if (retouch && (((rx1 + ox - width) % 2) === 1)) {
             rx1 = rx1 + 1;
         }
         if (retouch && (((rx2 + ox) % 2) === 1)) {
@@ -175,16 +198,16 @@ define(function (require, exports, module) {
         r = new Rect(0, 0, 0, 0);
         switch (nwse) {
         case NWSE_N:
-            r.setRect(rx1 + ox, ry1 + oy - len, rx2 + ox, ry1 + oy);
+            r.setRect(rx1 + ox, ry1 + oy - width, rx2 + ox, ry1 + oy);
             break;
         case NWSE_W:
-            r.setRect(rx1 + ox - len, ry1 + oy - len, rx1 + ox, ry2 + oy + len);
+            r.setRect(rx1 + ox - width, ry1 + oy - width, rx1 + ox, ry2 + oy + width);
             break;
         case NWSE_S:
-            r.setRect(rx1 + ox, ry2 + oy, rx2 + ox, ry2 + oy + len);
+            r.setRect(rx1 + ox, ry2 + oy, rx2 + ox, ry2 + oy + width);
             break;
         case NWSE_E:
-            r.setRect(rx2 + ox, ry1 + oy - len, rx2 + ox + len, ry2 + oy + len);
+            r.setRect(rx2 + ox, ry1 + oy - width, rx2 + ox + width, ry2 + oy + width);
         }
         r.quantize();
 
@@ -192,9 +215,15 @@ define(function (require, exports, module) {
         canvas.alpha = 0.1;
         canvas.coordTransformApplied = false;
 
-        canvas.context.translate(0.5, 0.5);
+        if (canvas.ratio === 1) {
+            canvas.context.translate(0.5, 0.5);
+        }
+
         canvas.fillRect(r.x1, r.y1, r.x2, r.y2);
-        canvas.context.translate(-0.5, -0.5);
+
+        if (canvas.ratio === 1) {
+            canvas.context.translate(-0.5, -0.5);
+        }
 
         canvas.coordTransformApplied = true;
         canvas.restoreState();
@@ -205,16 +234,28 @@ define(function (require, exports, module) {
         canvas.storeState();
         canvas.color = SELECTION_BORDER_COLOR;
         canvas.fillColor = Color.WHITE;
-        canvas.lineWidth = 1.0;
+        canvas.lineWidth = 1.0 * canvas.ratio;
         p = new Point(x, y);
+
+        // for Retina
+        p.x = p.x * canvas.ratio;
+        p.y = p.y * canvas.ratio;
+        size = size * canvas.ratio;
         p.quantize();
+
         o = canvas.origin.copy();
         Coord.coordTransform(canvas.zoomFactor, GridFactor.NO_GRID, p);
         canvas.coordTransformApplied = false;
-        canvas.context.translate(0.5, 0.5);
+
+        if (canvas.ratio === 1) {
+            canvas.context.translate(0.5, 0.5);
+        }
         canvas.fillRect(p.x + o.x - size, p.y + o.y - size, p.x + o.x + size, p.y + o.y + size);
         canvas.rect(p.x + o.x - size, p.y + o.y - size, p.x + o.x + size, p.y + o.y + size);
-        canvas.context.translate(-0.5, -0.5);
+
+        if (canvas.ratio === 1) {
+            canvas.context.translate(-0.5, -0.5);
+        }
         canvas.coordTransformApplied = true;
         canvas.restoreState();
     }
@@ -229,10 +270,14 @@ define(function (require, exports, module) {
         p2 = new Point(x2, y2);
         Coord.coordTransform(canvas.zoomFactor, GridFactor.NO_GRID, p1);
         Coord.coordTransform(canvas.zoomFactor, GridFactor.NO_GRID, p2);
-        x1 = p1.x;
-        y1 = p1.y;
-        x2 = p2.x;
-        y2 = p2.y;
+
+        // for Retina
+        x1 = p1.x * canvas.ratio;
+        y1 = p1.y * canvas.ratio;
+        x2 = p2.x * canvas.ratio;
+        y2 = p2.y * canvas.ratio;
+        width = width * canvas.ratio;
+
         p = new Point(-100, -100);
         cx = (x1 + x2) / 2;
         cy = (y1 + y2) / 2;
@@ -267,16 +312,23 @@ define(function (require, exports, module) {
         } else {
             canvas.fillColor = "#D0D0D0";
         }
+        canvas.lineWidth = 1.0 * canvas.ratio;
 
         p.quantize();
 
         canvas.color = "#4f99ff"; // Color.BLACK;
         canvas.coordTransformApplied = false;
 
-        canvas.context.translate(0.5, 0.5);
+        if (canvas.ratio === 1) {
+            canvas.context.translate(0.5, 0.5);
+        }
+
         canvas.fillRect(p.x + ox, p.y + oy, p.x + ox + width, p.y + oy + width);
         canvas.rect(p.x + ox, p.y + oy, p.x + ox + width, p.y + oy + width);
-        canvas.context.translate(-0.5, -0.5);
+
+        if (canvas.ratio === 1) {
+            canvas.context.translate(-0.5, -0.5);
+        }
 
         canvas.coordTransformApplied = true;
         canvas.restoreState();

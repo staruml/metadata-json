@@ -620,6 +620,89 @@ define(function (require, exports, module) {
 
 
     /**
+     * UMLReceptionView
+     * @constructor
+     * @extends LabelView
+     */
+    function UMLReceptionView() {
+        LabelView.apply(this, arguments);
+        this.selectable = Core.SK_YES;
+        this.sizable = Core.SZ_NONE;
+        this.movable = Core.MM_NONE;
+        this.parentStyle = true;
+        this.horizontalAlignment = Graphics.AL_LEFT;
+    }
+    // inherits from LabelView
+    UMLReceptionView.prototype = Object.create(LabelView.prototype);
+    UMLReceptionView.prototype.constructor = UMLReceptionView;
+
+    UMLReceptionView.prototype.update = function (canvas) {
+        var options = {
+            showVisibility         : true,
+            stereotypeDisplay      : UML.SD_LABEL,
+            showProperty           : true,
+            showType               : true,
+            showOperationSignature : true
+        };
+        if (this._parent && (this._parent._parent instanceof type.UMLClassifierView)) {
+            options.showVisibility         = this._parent._parent.showVisibility;
+            options.stereotypeDisplay      = this._parent._parent.stereotypeDisplay;
+            options.showProperty           = this._parent._parent.showProperty;
+            options.showType               = this._parent._parent.showType;
+            options.showOperationSignature = this._parent._parent.showOperationSignature;
+        }
+        if (this._parent) {
+            this.visible = this._parent.visible;
+        }
+        if (this.model) {
+            this.text = this.model.getString(options);
+            this.underline = (this.model.isStatic === true);
+        }
+        LabelView.prototype.update.call(this, canvas);
+    };
+
+    UMLReceptionView.prototype.size = function (canvas) {
+        LabelView.prototype.size.call(this, canvas);
+        this.height = this.minHeight;
+    };
+
+
+    /**
+     * UMLReceptionCompartmentView
+     * @constructor
+     * @extends UMLCompartmentView
+     */
+    function UMLReceptionCompartmentView() {
+        UMLCompartmentView.apply(this, arguments);
+    }
+    // inherits from UMLCompartmentView
+    UMLReceptionCompartmentView.prototype = Object.create(UMLCompartmentView.prototype);
+    UMLReceptionCompartmentView.prototype.constructor = UMLReceptionCompartmentView;
+
+    UMLReceptionCompartmentView.prototype.update = function (canvas) {
+        if (this.model.receptions) {
+            var i, len, tempViews = this.subViews;
+            this.subViews = [];
+            for (i = 0, len = this.model.receptions.length; i < len; i++) {
+                var rcp = this.model.receptions[i];
+                var rcpView = _.find(tempViews, function (v) { return v.model === rcp; });
+                if (!rcpView) {
+                    rcpView = new UMLReceptionView();
+                    rcpView.model = rcp;
+                    rcpView._parent = this;
+                    // opView가 Repository에 정상적으로 등록될 수 있도록 Bypass Command에 의해서 생성한다.
+                    Repository.bypassInsert(this, 'subViews', rcpView);
+                } else {
+                    this.addSubView(rcpView);
+                }
+                rcpView.setup(canvas);
+            }
+        }
+        UMLCompartmentView.prototype.update.call(this, canvas);
+    };
+
+
+    /**
      * UMLTemplateParameterView
      * @constructor
      * @extends LabelView
@@ -1308,6 +1391,9 @@ define(function (require, exports, module) {
         this.suppressOperations = false;
 
         /** @member {boolean} */
+        this.suppressReceptions = true;
+
+        /** @member {boolean} */
         this.showMultiplicity = true;
 
         /** @member {boolean} */
@@ -1323,6 +1409,11 @@ define(function (require, exports, module) {
         this.operationCompartment.parentStyle = true;
         this.addSubView(this.operationCompartment);
 
+        /** @member {UMLReceptionCompartmentView} */
+        this.receptionCompartment = new UMLReceptionCompartmentView();
+        this.receptionCompartment.parentStyle = true;
+        this.addSubView(this.receptionCompartment);
+
         /** @member {UMLTemplateParameterCompartmentView} */
         this.templateParameterCompartment = new UMLTemplateParameterCompartmentView();
         this.templateParameterCompartment.parentStyle = true;
@@ -1336,7 +1427,8 @@ define(function (require, exports, module) {
         return [
             this.nameCompartment,
             this.attributeCompartment,
-            this.operationCompartment
+            this.operationCompartment,
+            this.receptionCompartment
         ];
     };
 
@@ -1348,6 +1440,11 @@ define(function (require, exports, module) {
         // operationCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
         if (this.operationCompartment.model !== this.model) {
             Repository.bypassFieldAssign(this.operationCompartment, 'model', this.model);
+        }
+        // receptionCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
+        Repository.ensureContains(this, 'subViews', this.receptionCompartment);
+        if (this.receptionCompartment.model !== this.model) {
+            Repository.bypassFieldAssign(this.receptionCompartment, 'model', this.model);
         }
         // templateParameterCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
         if (this.templateParameterCompartment.model !== this.model) {
@@ -1365,6 +1462,7 @@ define(function (require, exports, module) {
         }
         this.attributeCompartment.visible = !this.suppressAttributes;
         this.operationCompartment.visible = !this.suppressOperations;
+        this.receptionCompartment.visible = !this.suppressReceptions;
         UMLGeneralNodeView.prototype.update.call(this, canvas);
     };
 
@@ -1409,6 +1507,13 @@ define(function (require, exports, module) {
                 this.operationCompartment.top,
                 this.operationCompartment.getRight(),
                 this.operationCompartment.top);
+        }
+        if (this.receptionCompartment.visible) {
+            canvas.line(
+                this.receptionCompartment.left,
+                this.receptionCompartment.top,
+                this.receptionCompartment.getRight(),
+                this.receptionCompartment.top);
         }
     };
 
@@ -2027,6 +2132,21 @@ define(function (require, exports, module) {
     UMLDependencyView.prototype.canConnectTo = function (view, isTail) {
         return (view.model instanceof type.UMLModelElement);
     };
+
+    /**
+     * UMLRealizationView
+     * @constructor
+     * @extends UMLGeneralEdgeView
+     */
+    function UMLRealizationView() {
+        UMLGeneralEdgeView.apply(this, arguments);
+        this.tailEndStyle = Core.ES_FLAT;
+        this.headEndStyle = Core.ES_TRIANGLE;
+        this.lineMode = Core.LM_DOT;
+    }
+    // inherits from UMLGeneralEdgeView
+    UMLRealizationView.prototype = Object.create(UMLGeneralEdgeView.prototype);
+    UMLRealizationView.prototype.constructor = UMLRealizationView;
 
     /**
      * UMLInterfaceRealizationView
@@ -5367,7 +5487,9 @@ define(function (require, exports, module) {
                     this.arrangeObject(canvas);
                     UMLNodeViewMixin.drawIcon.call(this, canvas, this.iconRect);
                 } else if (this.model.represent.type.stereotype && this.model.represent.type.stereotype.icon) {
-                    drawImage(canvas, rect, this.model.represent.type.stereotype.icon);
+                    var _icon = this.model.represent.type.stereotype.icon;
+                    var _rect = this.computeIconRect(rect, (_icon.width / _icon.height) * 100);
+                    drawImage(canvas, _rect, _icon);
                 } else {
                     UMLGeneralNodeView.prototype.drawIcon.call(this, canvas, rect);
                 }
@@ -6572,9 +6694,12 @@ define(function (require, exports, module) {
     UMLCommunicationDiagram.prototype.constructor = UMLCommunicationDiagram;
 
     UMLCommunicationDiagram.prototype.canAcceptModel = function (model) {
-        if (model instanceof type.UMLLifeline ||
-            model instanceof type.UMLMessage) {
+        if (model instanceof type.UMLLifeline) {
             return _.every(this.ownedViews, function (v) { return v.model !== model; });
+        } else if (model instanceof type.UMLMessage) {
+            return _.some(this.ownedViews, function (v) { return v.model === model.source; }) &&
+                   _.some(this.ownedViews, function (v) { return v.model === model.target; }) &&
+                   _.every(this.ownedViews, function (v) { return v.model !== model; });
         } else {
             return (model instanceof type.UMLConstraint) ||
                    (model instanceof type.UMLClassifier);
@@ -7302,6 +7427,8 @@ define(function (require, exports, module) {
     type.UMLAttributeCompartmentView          = UMLAttributeCompartmentView;
     type.UMLOperationView                     = UMLOperationView;
     type.UMLOperationCompartmentView          = UMLOperationCompartmentView;
+    type.UMLReceptionView                     = UMLReceptionView;
+    type.UMLReceptionCompartmentView          = UMLReceptionCompartmentView;
     type.UMLTemplateParameterView             = UMLTemplateParameterView;
     type.UMLTemplateParameterCompartmentView  = UMLTemplateParameterCompartmentView;
     type.UMLGeneralNodeView                   = UMLGeneralNodeView;
@@ -7321,6 +7448,7 @@ define(function (require, exports, module) {
     type.UMLEnumerationView                   = UMLEnumerationView;
     type.UMLGeneralizationView                = UMLGeneralizationView;
     type.UMLDependencyView                    = UMLDependencyView;
+    type.UMLRealizationView                   = UMLRealizationView;
     type.UMLInterfaceRealizationView          = UMLInterfaceRealizationView;
     type.UMLQualifierCompartmentView          = UMLQualifierCompartmentView;
     type.UMLAssociationView                   = UMLAssociationView;

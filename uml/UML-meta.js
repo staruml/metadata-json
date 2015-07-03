@@ -158,12 +158,21 @@ define(function (require, exports, module) {
             ],
             "ordering": 1106
         },
+        "UMLReception": {
+            "kind": "class",
+            "super": "UMLBehavioralFeature",
+            "attributes": [
+                { "name": "signal", "kind": "ref", "type": "UMLSignal", "visible": true }
+            ],
+            "ordering": 1107
+        },
         "UMLClassifier": {
             "kind": "class",
             "super": "UMLModelElement",
             "attributes": [
                 { "name": "attributes",            "kind": "objs", "type": "UMLAttribute" },
                 { "name": "operations",            "kind": "objs", "type": "UMLOperation" },
+                { "name": "receptions",            "kind": "objs", "type": "UMLReception" },
                 { "name": "behaviors",             "kind": "objs", "type": "UMLBehavior" },
                 { "name": "isAbstract",            "kind": "prim", "type": "Boolean", "visible": true, "default": false },
                 { "name": "isFinalSpecialization", "kind": "prim", "type": "Boolean", "visible": true, "default": false },
@@ -310,7 +319,8 @@ define(function (require, exports, module) {
         "UMLRealization": {
             "kind": "class",
             "super": "UMLAbstraction",
-            "ordering": 1808
+            "ordering": 1808,
+            "view": "UMLRealizationView"
         },
         "UMLGeneralization": {
             "kind": "class",
@@ -367,7 +377,7 @@ define(function (require, exports, module) {
                 { "name": "definingFeature", "kind": "ref",  "type": "UMLStructuralFeature", "visible": true },
                 { "name": "value",           "kind": "prim", "type": "String", "visible": true }
             ],
-            "ordering": 1108
+            "ordering": 1109
         },
         "UMLInstance": {
             "kind": "class",
@@ -513,7 +523,7 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "location", "kind": "prim", "type": "String", "visible": true }
             ],
-            "ordering": 1107
+            "ordering": 1108
         },
         "UMLUseCase": {
             "kind": "class",
@@ -873,11 +883,14 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLDirectedRelationship",
             "attributes": [
-                { "name": "messageSort",      "kind": "enum", "type": "UMLMessageSort",  "visible": true },
-                { "name": "signature",        "kind": "ref",  "type": "UMLModelElement", "visible": true },
-                { "name": "connector",        "kind": "ref",  "type": "UMLConnector",    "visible": true },
-                { "name": "arguments",        "kind": "prim", "type": "String",          "visible": true },
-                { "name": "assignmentTarget", "kind": "prim", "type": "String",          "visible": true }
+                { "name": "messageSort",           "kind": "enum", "type": "UMLMessageSort",  "visible": true },
+                { "name": "signature",             "kind": "ref",  "type": "UMLModelElement", "visible": true },
+                { "name": "connector",             "kind": "ref",  "type": "UMLConnector",    "visible": true },
+                { "name": "arguments",             "kind": "prim", "type": "String",          "visible": true },
+                { "name": "assignmentTarget",      "kind": "prim", "type": "String",          "visible": true },
+                { "name": "guard",                 "kind": "prim", "type": "String",          "visible": true },
+                { "name": "iteration",             "kind": "prim", "type": "String",          "visible": true },
+                { "name": "isConcurrentIteration", "kind": "prim", "type": "Boolean",         "visible": true }
             ],
             "ordering": 1822
         },
@@ -960,6 +973,14 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLCompartmentView"
         },
+        "UMLReceptionView": {
+            "kind": "class",
+            "super": "LabelView"
+        },
+        "UMLReceptionCompartmentView": {
+            "kind": "class",
+            "super": "UMLCompartmentView"
+        },
         "UMLTemplateParameterView": {
             "kind": "class",
             "super": "LabelView"
@@ -1009,10 +1030,12 @@ define(function (require, exports, module) {
             "attributes": [
                 { "name": "suppressAttributes",           "kind": "prim", "type": "Boolean", "default": false },
                 { "name": "suppressOperations",           "kind": "prim", "type": "Boolean", "default": false },
+                { "name": "suppressReceptions",           "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "showMultiplicity",             "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "showOperationSignature",       "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "attributeCompartment",         "kind": "ref",  "type": "UMLAttributeCompartmentView" },
                 { "name": "operationCompartment",         "kind": "ref",  "type": "UMLOperationCompartmentView" },
+                { "name": "receptionCompartment",         "kind": "ref",  "type": "UMLReceptionCompartmentView" },
                 { "name": "templateParameterCompartment", "kind": "ref",  "type": "UMLTemplateParameterCompartmentView" }
             ]
         },
@@ -1045,6 +1068,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",
@@ -1121,6 +1145,10 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralEdgeView"
         },
+        "UMLRealizationView": {
+            "kind": "class",
+            "super": "UMLGeneralEdgeView"
+        },
         "UMLInterfaceRealizationView": {
             "kind": "class",
             "super": "UMLGeneralEdgeView"
@@ -1158,6 +1186,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",
@@ -1221,6 +1250,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",
@@ -1298,6 +1328,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",
@@ -1364,6 +1395,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",
@@ -1431,6 +1463,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",
@@ -1494,6 +1527,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",
@@ -1784,6 +1818,7 @@ define(function (require, exports, module) {
                 "UMLEnumerationView",
                 "UMLDependencyView",
                 "UMLGeneralizationView",
+                "UMLRealizationView",
                 "UMLInterfaceRealizationView",
                 "UMLAssociationView",
                 "UMLAssociationClassLinkView",

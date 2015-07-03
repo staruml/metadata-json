@@ -1006,6 +1006,7 @@ define(function (require, exports, module) {
         this.zoomFactor = new ZoomFactor(1, 1);
         this.gridFactor = new GridFactor(1, 1);
         this.coordTransformApplied = true;
+        this.ratio = 1;
     }
 
     Canvas.toHTML5Font = function (f) {
@@ -1062,7 +1063,7 @@ define(function (require, exports, module) {
         if (this.coordTransformApplied === true) {
             this.context.translate(this.origin.x, this.origin.y);
             var scale = this.zoomFactor.getScale();
-            this.context.scale(scale, scale);
+            this.context.scale(scale * this.ratio, scale * this.ratio);
         }
     };
 

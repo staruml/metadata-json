@@ -1442,7 +1442,6 @@ define(function (require, exports, module) {
             Repository.bypassFieldAssign(this.operationCompartment, 'model', this.model);
         }
         // receptionCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
-        Repository.ensureContains(this, 'subViews', this.receptionCompartment);
         if (this.receptionCompartment.model !== this.model) {
             Repository.bypassFieldAssign(this.receptionCompartment, 'model', this.model);
         }

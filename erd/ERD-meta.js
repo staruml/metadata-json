@@ -88,17 +88,17 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "nameLabel", "kind": "ref", "type": "LabelView" },
-                { "name": "columnCompartment", "kind": "ref",  "type": "ERDColumnCompartmentView" }
+                { "name": "nameLabel",         "kind": "ref", "type": "LabelView", "embedded": "subViews" },
+                { "name": "columnCompartment", "kind": "ref", "type": "ERDColumnCompartmentView", "embedded": "subViews" }
             ]
         },
         "ERDRelationshipView": {
             "kind": "class",
             "super": "EdgeView",
             "attributes": [
-                { "name": "nameLabel",     "kind": "ref",  "type": "EdgeLabelView" },
-                { "name": "tailNameLabel", "kind": "ref",  "type": "EdgeLabelView" },
-                { "name": "headNameLabel", "kind": "ref",  "type": "EdgeLabelView" }
+                { "name": "nameLabel",     "kind": "ref",  "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "tailNameLabel", "kind": "ref",  "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "headNameLabel", "kind": "ref",  "type": "EdgeLabelView", "embedded": "subViews" }
             ]
         }
     };

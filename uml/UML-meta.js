@@ -950,10 +950,10 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLCompartmentView",
             "attributes": [
-                { "name": "stereotypeLabel", "kind": "ref", "type": "LabelView" },
-                { "name": "nameLabel",       "kind": "ref", "type": "LabelView" },
-                { "name": "namespaceLabel",  "kind": "ref", "type": "LabelView" },
-                { "name": "propertyLabel",   "kind": "ref", "type": "LabelView" },
+                { "name": "stereotypeLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" },
+                { "name": "nameLabel",       "kind": "ref", "type": "LabelView", "embedded": "subViews" },
+                { "name": "namespaceLabel",  "kind": "ref", "type": "LabelView", "embedded": "subViews" },
+                { "name": "propertyLabel",   "kind": "ref", "type": "LabelView", "embedded": "subViews" },
                 { "name": "wordWrap",        "kind": "prim", "type": "Boolean", "default": false, "transient": true }
             ]
         },
@@ -998,7 +998,7 @@ define(function (require, exports, module) {
                 { "name": "showNamespace",     "kind": "prim", "type": "Boolean", "default": false },
                 { "name": "showProperty",      "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "showType",          "kind": "prim", "type": "Boolean", "default": true },
-                { "name": "nameCompartment",   "kind": "ref",  "type": "UMLNameCompartmentView" },
+                { "name": "nameCompartment",   "kind": "ref",  "type": "UMLNameCompartmentView", "embedded": "subViews" },
                 { "name": "wordWrap",          "kind": "prim", "type": "Boolean", "default": false }
             ]
         },
@@ -1006,9 +1006,9 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "nameLabel",       "kind": "ref", "type": "NodeLabelView" },
-                { "name": "stereotypeLabel", "kind": "ref", "type": "NodeLabelView" },
-                { "name": "propertyLabel",   "kind": "ref", "type": "NodeLabelView" },
+                { "name": "nameLabel",       "kind": "ref", "type": "NodeLabelView", "embedded": "subViews" },
+                { "name": "stereotypeLabel", "kind": "ref", "type": "NodeLabelView", "embedded": "subViews" },
+                { "name": "propertyLabel",   "kind": "ref", "type": "NodeLabelView", "embedded": "subViews" },
                 { "name": "showProperty",    "kind": "prim", "type": "Boolean", "default": true }
             ]
         },
@@ -1019,9 +1019,9 @@ define(function (require, exports, module) {
                 { "name": "stereotypeDisplay", "kind": "enum", "type": "UMLStereotypeDisplayKind", "default": "label" },
                 { "name": "showVisibility",    "kind": "prim", "type": "Boolean", "default": false },
                 { "name": "showProperty",      "kind": "prim", "type": "Boolean", "default": true },
-                { "name": "nameLabel",         "kind": "ref",  "type": "EdgeLabelView" },
-                { "name": "stereotypeLabel",   "kind": "ref",  "type": "EdgeLabelView" },
-                { "name": "propertyLabel",     "kind": "ref",  "type": "EdgeLabelView" }
+                { "name": "nameLabel",         "kind": "ref",  "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "stereotypeLabel",   "kind": "ref",  "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "propertyLabel",     "kind": "ref",  "type": "EdgeLabelView", "embedded": "subViews" }
             ]
         },
         "UMLClassifierView": {
@@ -1033,10 +1033,10 @@ define(function (require, exports, module) {
                 { "name": "suppressReceptions",           "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "showMultiplicity",             "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "showOperationSignature",       "kind": "prim", "type": "Boolean", "default": true },
-                { "name": "attributeCompartment",         "kind": "ref",  "type": "UMLAttributeCompartmentView" },
-                { "name": "operationCompartment",         "kind": "ref",  "type": "UMLOperationCompartmentView" },
-                { "name": "receptionCompartment",         "kind": "ref",  "type": "UMLReceptionCompartmentView" },
-                { "name": "templateParameterCompartment", "kind": "ref",  "type": "UMLTemplateParameterCompartmentView" }
+                { "name": "attributeCompartment",         "kind": "ref",  "type": "UMLAttributeCompartmentView", "embedded": "subViews" },
+                { "name": "operationCompartment",         "kind": "ref",  "type": "UMLOperationCompartmentView", "embedded": "subViews" },
+                { "name": "receptionCompartment",         "kind": "ref",  "type": "UMLReceptionCompartmentView", "embedded": "subViews" },
+                { "name": "templateParameterCompartment", "kind": "ref",  "type": "UMLTemplateParameterCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLUndirectedRelationshipView": {
@@ -1044,12 +1044,12 @@ define(function (require, exports, module) {
             "super": "UMLGeneralEdgeView",
             "attributes": [
                 { "name": "showMultiplicity",          "kind": "prim", "type": "Boolean", "default": true },
-                { "name": "tailRoleNameLabel",         "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "tailPropertyLabel",         "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "tailMultiplicityLabel",     "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "headRoleNameLabel",         "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "headPropertyLabel",         "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "headMultiplicityLabel",     "kind": "ref", "type": "EdgeLabelView" }
+                { "name": "tailRoleNameLabel",         "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "tailPropertyLabel",         "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "tailMultiplicityLabel",     "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "headRoleNameLabel",         "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "headPropertyLabel",         "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "headMultiplicityLabel",     "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" }
             ]
         },
         "UMLClassDiagram": {
@@ -1134,7 +1134,7 @@ define(function (require, exports, module) {
             "super": "UMLClassifierView",
             "attributes": [
                 { "name": "suppressLiterals",              "kind": "prim", "type": "Boolean", "default": false },
-                { "name": "enumerationLiteralCompartment", "kind": "ref",  "type": "UMLEnumerationLiteralCompartmentView" }
+                { "name": "enumerationLiteralCompartment", "kind": "ref",  "type": "UMLEnumerationLiteralCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLGeneralizationView": {
@@ -1162,8 +1162,8 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLUndirectedRelationshipView",
             "attributes": [
-                { "name": "tailQualifiersCompartment", "kind": "ref", "type": "UMLQualifierCompartmentView" },
-                { "name": "headQualifiersCompartment", "kind": "ref", "type": "UMLQualifierCompartmentView" }
+                { "name": "tailQualifiersCompartment", "kind": "ref", "type": "UMLQualifierCompartmentView", "embedded": "subViews" },
+                { "name": "headQualifiersCompartment", "kind": "ref", "type": "UMLQualifierCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLAssociationClassLinkView": {
@@ -1298,7 +1298,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralNodeView",
             "attributes": [
-                { "name": "templateParameterCompartment", "kind": "ref", "type": "UMLTemplateParameterCompartmentView" }
+                { "name": "templateParameterCompartment", "kind": "ref", "type": "UMLTemplateParameterCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLCollaborationUseView": {
@@ -1309,7 +1309,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralEdgeView",
             "attributes": [
-                { "name": "roleNameLabel", "kind": "ref", "type": "EdgeLabelView" }
+                { "name": "roleNameLabel", "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" }
             ]
         },
         "UMLObjectDiagram": {
@@ -1372,7 +1372,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralNodeView",
             "attributes": [
-                { "name": "slotCompartment", "kind": "ref", "type": "UMLSlotCompartmentView" }
+                { "name": "slotCompartment", "kind": "ref", "type": "UMLSlotCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLLinkView": {
@@ -1572,7 +1572,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLClassifierView",
             "attributes": [
-                { "name": "extensionPointCompartment", "kind": "ref",  "type": "UMLExtensionPointCompartmentView" }
+                { "name": "extensionPointCompartment", "kind": "ref",  "type": "UMLExtensionPointCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLActorView": {
@@ -1627,8 +1627,8 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralNodeView",
             "attributes": [
-                { "name": "internalActivityCompartment", "kind": "ref",  "type": "UMLInternalActivityCompartmentView" },
-                { "name": "decompositionCompartment",    "kind": "ref",  "type": "UMLDecompositionCompartmentView" }
+                { "name": "internalActivityCompartment", "kind": "ref",  "type": "UMLInternalActivityCompartmentView", "embedded": "subViews" },
+                { "name": "decompositionCompartment",    "kind": "ref",  "type": "UMLDecompositionCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLTransitionView": {
@@ -1675,7 +1675,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "nameLabel",  "kind": "ref",  "type": "LabelView" },
+                { "name": "nameLabel",  "kind": "ref",  "type": "LabelView", "embedded": "subViews" },
                 { "name": "isVertical", "kind": "prim", "type": "Boolean", "default": true }
             ]
         },
@@ -1696,7 +1696,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralNodeView",
             "attributes": [
-                { "name": "linePart", "kind": "ref", "type": "UMLLinePartView" }
+                { "name": "linePart", "kind": "ref", "type": "UMLLinePartView", "embedded": "subViews" }
             ]
         },
         "UMLMessageEndpointView": {
@@ -1719,10 +1719,10 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "EdgeView",
             "attributes": [
-                { "name": "nameLabel",       "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "stereotypeLabel", "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "propertyLabel",   "kind": "ref", "type": "EdgeLabelView" },
-                { "name": "activation",      "kind": "ref", "type": "UMLActivationView" },
+                { "name": "nameLabel",       "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "stereotypeLabel", "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "propertyLabel",   "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
+                { "name": "activation",      "kind": "ref", "type": "UMLActivationView", "embedded": "subViews" },
                 { "name": "showProperty",    "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "showType",        "kind": "prim", "type": "Boolean", "default": true }
             ]
@@ -1731,22 +1731,22 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "invariantLabel", "kind": "ref", "type": "LabelView" }
+                { "name": "invariantLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" }
             ]
         },
         "UMLContinuationView": {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "nameLabel", "kind": "ref", "type": "LabelView" }
+                { "name": "nameLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" }
             ]
         },
         "UMLCustomFrameView": {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "nameLabel",      "kind": "ref", "type": "LabelView" },
-                { "name": "frameTypeLabel", "kind": "ref", "type": "LabelView" }
+                { "name": "nameLabel",      "kind": "ref", "type": "LabelView", "embedded": "subViews" },
+                { "name": "frameTypeLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" }
             ]
         },
         "UMLFrameView": {
@@ -1757,7 +1757,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "guardLabel", "kind": "ref", "type": "LabelView" }
+                { "name": "guardLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" }
             ]
         },
         "UMLInteractionOperandCompartmentView": {
@@ -1768,15 +1768,15 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLCustomFrameView",
             "attributes": [
-                { "name": "operandCompartment", "kind": "ref", "type": "UMLInteractionOperandCompartmentView" }
+                { "name": "operandCompartment", "kind": "ref", "type": "UMLInteractionOperandCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLInteractionUseView": {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "nameLabel",      "kind": "ref", "type": "LabelView" },
-                { "name": "frameTypeLabel", "kind": "ref", "type": "LabelView" }
+                { "name": "nameLabel",      "kind": "ref", "type": "LabelView", "embedded": "subViews" },
+                { "name": "frameTypeLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" }
             ]
         },
         "UMLCommunicationDiagram": {
@@ -1795,9 +1795,9 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "EdgeNodeView",
             "attributes": [
-                { "name": "nameLabel",       "kind": "ref", "type": "NodeLabelView" },
-                { "name": "stereotypeLabel", "kind": "ref", "type": "NodeLabelView" },
-                { "name": "propertyLabel",   "kind": "ref", "type": "NodeLabelView" },
+                { "name": "nameLabel",       "kind": "ref", "type": "NodeLabelView", "embedded": "subViews" },
+                { "name": "stereotypeLabel", "kind": "ref", "type": "NodeLabelView", "embedded": "subViews" },
+                { "name": "propertyLabel",   "kind": "ref", "type": "NodeLabelView", "embedded": "subViews" },
                 { "name": "showProperty",    "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "showType",        "kind": "prim", "type": "Boolean", "default": true }
             ]
@@ -1870,7 +1870,7 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "NodeView",
             "attributes": [
-                { "name": "text", "kind": "prim", "type": "String" },
+                { "name": "text",     "kind": "prim", "type": "String" },
                 { "name": "wordWrap", "kind": "prim", "type": "Boolean", "default": true }
             ]
         },

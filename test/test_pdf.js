@@ -30,7 +30,12 @@ data = JSON.parse(fs.readFileSync(path + "/font.json", {encoding: "utf8"}));
 _.map(data, function (d) { d.path = path; });
 fonts = fonts.concat(data);
 
-path = __dirname + "/../../staruml/src/styles/fonts/Nanum";
+path = __dirname + "/../../staruml/src/styles/fonts/SourceSansPro";
+data = JSON.parse(fs.readFileSync(path + "/font.json", {encoding: "utf8"}));
+_.map(data, function (d) { d.path = path; });
+fonts = fonts.concat(data);
+
+path = __dirname + "/../../staruml/src/styles/fonts/SourceCodePro";
 data = JSON.parse(fs.readFileSync(path + "/font.json", {encoding: "utf8"}));
 _.map(data, function (d) { d.path = path; });
 fonts = fonts.concat(data);
@@ -41,7 +46,8 @@ _.each(fonts, function (font) {
 
 // Retrive all diagrams
 // mdjson.loadFromFile("diagram_pdf_test.mdj");
-mdjson.loadFromFile("unicode_diagram_kr.mdj");
+// mdjson.loadFromFile("unicode_diagram_kr.mdj");
+mdjson.loadFromFile(__dirname + "/../../staruml/samples/StarUML2.mdj");
 var diagrams = mdjson.Repository.getInstancesOf("Diagram");
 
 // Options for PDF export

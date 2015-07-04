@@ -521,8 +521,21 @@ define(function (require, exports, module) {
                 break;
             case ATTR_KIND_REF:
                 val = reader.readRef(attr.name);
+                var prevRef = this[attr.name];
                 if (typeof val !== "undefined") {
+                    // Remove previous embedded reference
+                    if (prevRef && attr.embedded) {
+                        if (Array.isArray(this[attr.embedded])) {
+                            this[attr.embedded].remove(prevRef);
+                        }
+                    }
+                    // Assign new reference
                     this[attr.name] = val;
+                } else {
+                    // Register previous embedded reference
+                    if (prevRef && attr.embedded) {
+                        reader.idMap[prevRef._id] = prevRef;
+                    }
                 }
                 break;
             case ATTR_KIND_REFS:
@@ -539,8 +552,14 @@ define(function (require, exports, module) {
                 break;
             case ATTR_KIND_OBJS:
                 val = reader.readObjArray(attr.name);
-                if (typeof val !== "undefined") {
-                    this[attr.name] = val;
+                if (!Array.isArray(this[attr.name])) {
+                    this[attr.name] = [];
+                }
+                // Append loaded objects to the existing array
+                if (Array.isArray(val)) {
+                    for (var j = 0; j < val.length; j++) {
+                        this[attr.name].push(val[j]);
+                    }
                 }
                 break;
             case ATTR_KIND_VAR:

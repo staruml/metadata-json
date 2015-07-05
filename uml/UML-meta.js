@@ -1615,6 +1615,14 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLCompartmentView"
         },
+        "UMLInternalTransitionView": {
+            "kind": "class",
+            "super": "LabelView"
+        },
+        "UMLInternalTransitionCompartmentView": {
+            "kind": "class",
+            "super": "UMLCompartmentView"
+        },
         "UMLRegionView": {
             "kind": "class",
             "super": "NodeView"
@@ -1627,8 +1635,9 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralNodeView",
             "attributes": [
-                { "name": "internalActivityCompartment", "kind": "ref",  "type": "UMLInternalActivityCompartmentView", "embedded": "subViews" },
-                { "name": "decompositionCompartment",    "kind": "ref",  "type": "UMLDecompositionCompartmentView", "embedded": "subViews" }
+                { "name": "internalActivityCompartment",   "kind": "ref",  "type": "UMLInternalActivityCompartmentView", "embedded": "subViews" },
+                { "name": "internalTransitionCompartment", "kind": "ref",  "type": "UMLInternalTransitionCompartmentView", "embedded": "subViews" },
+                { "name": "decompositionCompartment",      "kind": "ref",  "type": "UMLDecompositionCompartmentView", "embedded": "subViews" }
             ]
         },
         "UMLTransitionView": {

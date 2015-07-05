@@ -4421,6 +4421,73 @@ define(function (require, exports, module) {
 
 
     /**
+     * UMLInternalTransitionView
+     * @constructor
+     * @extends LabelView
+     */
+    function UMLInternalTransitionView() {
+        LabelView.apply(this, arguments);
+        this.selectable = Core.SK_YES;
+        this.sizable = Core.SZ_NONE;
+        this.movable = Core.MM_NONE;
+        this.parentStyle = true;
+        this.horizontalAlignment = Graphics.AL_LEFT;
+    }
+    // inherits from LabelView
+    UMLInternalTransitionView.prototype = Object.create(LabelView.prototype);
+    UMLInternalTransitionView.prototype.constructor = UMLInternalTransitionView;
+
+    UMLInternalTransitionView.prototype.update = function (canvas) {
+        LabelView.prototype.update.call(this, canvas);
+        if (this._parent) {
+            this.visible = this._parent.visible;
+        }
+        if (this.model) {
+            this.text = this.model.getString();
+        }
+    };
+
+    UMLInternalTransitionView.prototype.size = function (canvas) {
+        LabelView.prototype.size.call(this, canvas);
+        this.height = this.minHeight;
+    };
+
+
+    /**
+     * UMLInternalTransitionCompartmentView
+     * @constructor
+     * @extends UMLCompartmentView
+     */
+    function UMLInternalTransitionCompartmentView() {
+        UMLCompartmentView.apply(this, arguments);
+    }
+    // inherits from UMLCompartmentView
+    UMLInternalTransitionCompartmentView.prototype = Object.create(UMLCompartmentView.prototype);
+    UMLInternalTransitionCompartmentView.prototype.constructor = UMLInternalTransitionCompartmentView;
+
+    UMLInternalTransitionCompartmentView.prototype.update = function (canvas) {
+        var tempViews = this.subViews;
+        this.subViews = [];
+        var internals = this.model.getInternalTransitions();
+        for (var i = 0, len = internals.length; i < len; i++) {
+            var trans = internals[i];
+            var transView = _.find(tempViews, function (v) { return v.model === trans; });
+            if (!transView) {
+                transView = new UMLInternalTransitionView();
+                transView.model = trans;
+                transView._parent = this;
+                // actionView가 Repository에 정상적으로 등록될 수 있도록 Bypass Command에 의해서 생성한다.
+                Repository.bypassInsert(this, 'subViews', transView);
+            } else {
+                this.addSubView(transView);
+            }
+            transView.setup(canvas);
+        }
+        UMLCompartmentView.prototype.update.call(this, canvas);
+    };
+
+
+    /**
      * UMLRegionView
      * @constructor
      * @extends NodeView
@@ -4547,6 +4614,11 @@ define(function (require, exports, module) {
         this.internalActivityCompartment.parentStyle = true;
         this.addSubView(this.internalActivityCompartment);
 
+        /** @member {UMLInternalTransitionCompartmentView} */
+        this.internalTransitionCompartment = new UMLInternalTransitionCompartmentView();
+        this.internalTransitionCompartment.parentStyle = true;
+        this.addSubView(this.internalTransitionCompartment);
+
         /** @member {UMLDecompositionCompartmentView} */
         this.decompositionCompartment = new UMLDecompositionCompartmentView();
         this.decompositionCompartment.parentStyle = true;
@@ -4562,6 +4634,7 @@ define(function (require, exports, module) {
         return [
             this.nameCompartment,
             this.internalActivityCompartment,
+            this.internalTransitionCompartment,
             this.decompositionCompartment
         ];
     };
@@ -4570,6 +4643,10 @@ define(function (require, exports, module) {
         // internalActivityCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
         if (this.internalActivityCompartment.model !== this.model) {
             Repository.bypassFieldAssign(this.internalActivityCompartment, 'model', this.model);
+        }
+        // internalTransitionCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
+        if (this.internalTransitionCompartment.model !== this.model) {
+            Repository.bypassFieldAssign(this.internalTransitionCompartment, 'model', this.model);
         }
         // decompositionCompartment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
         if (this.decompositionCompartment.model !== this.model) {
@@ -4583,6 +4660,12 @@ define(function (require, exports, module) {
             } else {
                 this.internalActivityCompartment.visible = false;
             }
+            if (this.model.getInternalTransitions().length > 0) {
+                this.internalTransitionCompartment.visible = true;
+            } else {
+                this.internalTransitionCompartment.visible = false;
+            }
+
             if (this.model.submachine !== null) {
                 this.nameCompartment.nameLabel.text = this.model.name + ": " + this.model.submachine.name;
             }
@@ -4628,6 +4711,13 @@ define(function (require, exports, module) {
                 this.internalActivityCompartment.top,
                 this.internalActivityCompartment.getRight(),
                 this.internalActivityCompartment.top);
+        }
+        if (this.internalTransitionCompartment.visible) {
+            canvas.line(
+                this.internalTransitionCompartment.left,
+                this.internalTransitionCompartment.top,
+                this.internalTransitionCompartment.getRight(),
+                this.internalTransitionCompartment.top);
         }
         if (this.decompositionCompartment.visible && this.decompositionCompartment.subViews.length > 0) {
             canvas.line(
@@ -7501,6 +7591,8 @@ define(function (require, exports, module) {
     type.UMLConnectionPointReferenceView      = UMLConnectionPointReferenceView;
     type.UMLInternalActivityView              = UMLInternalActivityView;
     type.UMLInternalActivityCompartmentView   = UMLInternalActivityCompartmentView;
+    type.UMLInternalTransitionView            = UMLInternalTransitionView;
+    type.UMLInternalTransitionCompartmentView = UMLInternalTransitionCompartmentView;
     type.UMLRegionView                        = UMLRegionView;
     type.UMLDecompositionCompartmentView      = UMLDecompositionCompartmentView;
     type.UMLStateView                         = UMLStateView;

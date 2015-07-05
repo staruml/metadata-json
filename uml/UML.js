@@ -2335,6 +2335,17 @@ define(function (require, exports, module) {
     UMLState.prototype = Object.create(UMLVertex.prototype);
     UMLState.prototype.constructor = UMLState;
 
+    UMLState.prototype.getInternalTransitions = function () {
+        var self = this, internalTransitions = [];
+        _.each(this.regions, function (region) {
+            _.each(region.transitions, function (t) {
+                if (t.source === self && t.target === self && t.kind === TK_INTERNAL) {
+                    internalTransitions.push(t);
+                }
+            });
+        });
+        return internalTransitions;
+    };
 
     /**
      * UMLFinalState
@@ -2396,7 +2407,7 @@ define(function (require, exports, module) {
             text += " / " + effects.join(", ");
         }
         if (text.length > 0) {
-            text = this.name + " : " + text;
+            text = (this.name.length > 0 ? this.name + " : " + text : text);
         } else {
             text = this.name;
         }

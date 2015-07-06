@@ -915,6 +915,33 @@ define(function (require, exports, module) {
 
 
     /**
+     * Extract changed elements from a given Operation
+     * @param {Operation} operation
+     * @return {Array.<Element>}
+     */
+    function extractChanged(operation) {
+        var i, len, op, elem, changed = [];
+        if (operation.ops.length > 0) {
+            for (i = 0, len = operation.ops.length; i < len; i++) {
+                op = operation.ops[i];
+                if (op._elem && op._elem._id) {
+                    elem = get(op._elem._id);
+                    if (elem && !_.contains(changed, elem)) {
+                        changed.push(elem);
+                    }
+                }
+                if (op.arg && op.arg._id) {
+                    elem = get(op.arg._id);
+                    if (elem && !_.contains(changed, elem)) {
+                        changed.push(elem);
+                    }
+                }
+            }
+        }
+        return changed;
+    }
+
+    /**
      * Do an Operation
      * If operation.bypass == true, the operation will not be pushed to UndoStack.
      * @param {Operation} operation
@@ -927,8 +954,8 @@ define(function (require, exports, module) {
                 if (operation.bypass !== true) {
                     _undoStack.push(operation);
                     _redoStack.clear();
+                    $(exports).triggerHandler('operationExecuted', [operation]);
                 }
-                $(exports).triggerHandler('operationExecuted', [operation]);
             } catch (err) {
                 console.error(err);
             }
@@ -1399,6 +1426,7 @@ define(function (require, exports, module) {
     // Define public API
     exports.writeObject         = writeObject;
     exports.readObject          = readObject;
+    exports.extractChanged      = extractChanged;
     exports.doOperation         = doOperation;
     exports.undo                = undo;
     exports.redo                = redo;

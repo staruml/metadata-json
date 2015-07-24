@@ -777,6 +777,9 @@
 	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="82.5,179.5 84.5,183.5 82.5,187.5 94.5,187.5 94.5,179.5 	
 		"/>
 </g>
+<g id="WaitTime">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="52,179.5 60,179.5 52,188.5 60,188.5 	"/>
+</g>
 <g id="ObjectNode">
 	<rect x="53.5" y="195.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="9" height="7"/>
 	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="55" y1="200.5" x2="61" y2="200.5"/>

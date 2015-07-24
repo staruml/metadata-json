@@ -25,7 +25,7 @@ define(function (require, exports, module) {
             id: "UML001",
             message: "Name expected.",
             appliesTo: [ "UMLModelElement" ],
-            exceptions: [ "UMLDirectedRelationship", "UMLRelationshipEnd", "UMLUndirectedRelationship", "UMLAssociationClassLink", "UMLRegion", "UMLPseudostate", "UMLFinalState", "UMLControlNode", "UMLEndpoint", "UMLGate", "UMLImage", "UMLLifeline" ],
+            exceptions: [ "UMLDirectedRelationship", "UMLRelationshipEnd", "UMLUndirectedRelationship", "UMLAssociationClassLink", "UMLRegion", "UMLPseudostate", "UMLFinalState", "UMLControlNode", "UMLEndpoint", "UMLGate", "UMLImage", "UMLLifeline", "UMLInstance" ],
             constraint: function (elem) {
                 if (elem instanceof type.UMLParameter) {
                     return (elem.direction === "return" ? true : elem.name.length > 0);
@@ -89,26 +89,6 @@ define(function (require, exports, module) {
                             return false;
                         }
                     }
-                }
-                return true;
-            }
-        },
-        {
-            id: "UML005",
-            message: "Conflict with inherited operations.",
-            appliesTo: [ "UMLOperation" ],
-            constraint: function (elem) {
-                if (elem._parent instanceof type.UMLClassifier) {
-                    var options = {
-                            stereotypeDisplay: "none",
-                            showVisibility: false,
-                            showProperty: false,
-                            showType: true,
-                            showOperationSignature: true
-                        },
-                        inherited  = elem._parent.getInheritedOperations(true),
-                        signatures = _.map(inherited, function (e) { return e.getString(options); });
-                    return !_.contains(signatures, elem.getString(options));
                 }
                 return true;
             }

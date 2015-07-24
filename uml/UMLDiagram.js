@@ -1531,6 +1531,9 @@ define(function (require, exports, module) {
         /** @member {boolean} */
         this.showMultiplicity = true;
 
+        /** @member {boolean} */
+        this.showType = true;
+
         /** @member {EdgeLabelView} */
         this.tailRoleNameLabel = new EdgeLabelView();
         this.tailRoleNameLabel.hostEdge = this;
@@ -2557,10 +2560,31 @@ define(function (require, exports, module) {
         UMLFloatingNodeView.apply(this, arguments);
         this.sizable = Core.SZ_NONE;
         this.fillColor = PreferenceManager.get("uml.port.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
+
+        /** @member {boolean} */
+        this.showVisibility = false;
+
+        /** @member {boolean} */
+        this.showType = true;
+
+        /** @member {boolean} */
+        this.showMultiplicity = true;
     }
     // inherits from LabelView
     UMLPortView.prototype = Object.create(UMLFloatingNodeView.prototype);
     UMLPortView.prototype.constructor = UMLPortView;
+
+    UMLPortView.prototype.update = function (canvas) {
+        UMLFloatingNodeView.prototype.update.call(this, canvas);
+        var options = {
+            showVisibility   : this.showVisibility,
+            showType         : this.showType,
+            showMultiplicity : this.showMultiplicity,
+            showProperty     : false
+        };
+        this.nameLabel.text = this.model.getString(options);
+        this.nameLabel.underline = (this.model.isStatic === true);
+    };
 
     UMLPortView.prototype.sizeObject = function (canvas) {
         UMLFloatingNodeView.prototype.sizeObject.call(this, canvas);
@@ -2596,6 +2620,11 @@ define(function (require, exports, module) {
     function UMLPartView() {
         UMLGeneralNodeView.apply(this, arguments);
         this.containerChangeable = false;
+        this.showVisibility = false;
+
+        /** @member {boolean} */
+        this.showMultiplicity = true;
+
         this.fillColor = PreferenceManager.get("uml.part.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
     }
     // inherits from UMLGeneralNodeView
@@ -2605,6 +2634,7 @@ define(function (require, exports, module) {
     UMLPartView.prototype.update = function (canvas) {
         UMLGeneralNodeView.prototype.update.call(this, canvas);
         if (this.model && (this.model instanceof type.UMLAttribute)) {
+            this.nameCompartment.nameLabel.text = this.model.getString(this);
             this.nameCompartment.nameLabel.underline = (this.model.isStatic === true);
         }
     };
@@ -2632,6 +2662,21 @@ define(function (require, exports, module) {
         return (view.model instanceof type.UMLModelElement);
     };
 
+    UMLConnectorView.prototype.update = function (canvas) {
+        UMLUndirectedRelationshipView.prototype.update.call(this, canvas);
+        if (this.model) {
+            // nameLabel
+            var text = "";
+            if (this.model.name) {
+                text += this.model.getString(this.showVisibility);
+            }
+            if (this.model.type && this.showType) {
+                text += ": " + this.model.type.name;
+            }
+            this.nameLabel.text = text;
+            this.nameLabel.visible = (text.length > 0);
+        }
+    };
 
     /**
      * UMLCollaborationView
@@ -2872,22 +2917,27 @@ define(function (require, exports, module) {
     UMLSlotView.prototype.constructor = UMLSlotView;
 
     UMLSlotView.prototype.update = function (canvas) {
+        var options = {
+            showVisibility    : true,
+            stereotypeDisplay : UML.SD_LABEL,
+            showProperty      : true,
+            showType          : true
+        };
+        if (this._parent && this._parent._parent) {
+            options.showVisibility    = this._parent._parent.showVisibility;
+            options.stereotypeDisplay = this._parent._parent.stereotypeDisplay;
+            options.showProperty      = this._parent._parent.showProperty;
+            options.showType          = this._parent._parent.showType;
+        }
         if (this._parent) {
             this.visible = this._parent.visible;
         }
         if (this.model) {
-            var text = "";
-            if (this.model.definingFeature !== null) {
-                text += this.model.definingFeature.name;
-            } else {
-                text += this.model.name;
-            }
-            getValue();
-            text += getValue(" = ", this.model.value, "");
-            this.text = text;
+            this.text = this.model.getString(options);
         }
         LabelView.prototype.update.call(this, canvas);
     };
+
 
     UMLSlotView.prototype.size = function (canvas) {
         LabelView.prototype.size.call(this, canvas);
@@ -2963,6 +3013,10 @@ define(function (require, exports, module) {
                 this.slotCompartment.visible = true;
             } else {
                 this.slotCompartment.visible = false;
+            }
+            if (this.model.value !== null && this.model.value.length > 0) {
+                this.nameCompartment.namespaceLabel.text = this.model.value;
+                this.nameCompartment.namespaceLabel.visible = true;
             }
         }
     };
@@ -4982,13 +5036,29 @@ define(function (require, exports, module) {
     UMLActionView.prototype.sizeObject = function (canvas) {
         UMLGeneralNodeView.prototype.sizeObject.call(this, canvas);
         var sz = this.getSizeOfAllCompartments(canvas);
-        this.minWidth = Math.max(sz.x, ACTION_MINWIDTH);
-        if (this.model.submachine !== null) {
-            this.minHeight = Math.max(sz.y + 16, ACTION_MINHEIGHT);
+        if (this.model.kind === UML.ACK_TIMEEVENT) {
+            this.minWidth = Math.max(sz.x, ICONICVIEW_ICONMINWIDTH);
+            this.minHeight = ICONICVIEW_ICONMINHEIGHT + sz.y;
         } else {
-            this.minHeight = Math.max(sz.y, ACTION_MINHEIGHT);
+            this.minWidth = Math.max(sz.x, ACTION_MINWIDTH);
+            if (this.model.submachine !== null) {
+                this.minHeight = Math.max(sz.y + 16, ACTION_MINHEIGHT);
+            } else {
+                this.minHeight = Math.max(sz.y, ACTION_MINHEIGHT);
+            }
         }
         this.sizeConstraints();
+    };
+
+    UMLActionView.prototype.arrangeObject = function (canvas) {
+        UMLGeneralNodeView.prototype.arrangeObject.call(this, canvas);
+        if (this.model.kind === UML.ACK_TIMEEVENT) {
+            var sz = this.getSizeOfAllCompartments(canvas);
+            var r  = new Rect(this.mainRect.x1, this.mainRect.y1, this.mainRect.x2, this.mainRect.y2 - sz.y);
+            this.iconRect = this.computeIconRect(r, this.iconRatio);
+            var r2 = new Rect(this.mainRect.x1, this.mainRect.y1 + this.iconRect.getHeight(), this.mainRect.x2, this.mainRect.y2);
+            this.arrangeAllCompartments(r2, canvas);
+        }
     };
 
     UMLActionView.prototype.drawShadowAsCanonicalForm = function (canvas, showLabel) {
@@ -5031,6 +5101,8 @@ define(function (require, exports, module) {
                 new Point(this.left + this.height / 4 + SHADOW_OFFSET, this.top + this.height / 2 + SHADOW_OFFSET)
                 ];
             canvas.fillPolygon(p);
+            break;
+        case UML.ACK_TIMEEVENT:
             break;
         }
 
@@ -5085,6 +5157,21 @@ define(function (require, exports, module) {
                 ];
             canvas.fillPolygon(p);
             canvas.polygon(p);
+            break;
+        case UML.ACK_TIMEEVENT:
+            var _iconWidth  = this.iconRect.getWidth(),
+                _iconHeight = this.iconRect.getHeight(),
+                _x          = (this.left + this.getRight()) / 2,
+                _r          = new Rect(_x - (_iconWidth / 2), this.top, _x + (_iconWidth / 2), this.top + _iconHeight);
+            var p2 = [
+                new Point(_r.x1, _r.y1),
+                new Point(_r.x2, _r.y1),
+                new Point(_r.x1, _r.y2),
+                new Point(_r.x2, _r.y2),
+                new Point(_r.x1, _r.y1)
+            ];
+            canvas.fillPolygon(p2);
+            canvas.polygon(p2);
             break;
         }
     };
@@ -6413,6 +6500,7 @@ define(function (require, exports, module) {
      */
     function UMLFrameView() {
         UMLCustomFrameView.apply(this, arguments);
+        this.zIndex = -1;
     }
     // inherits from UMLCustomFrameView
     UMLFrameView.prototype = Object.create(UMLCustomFrameView.prototype);
@@ -6587,7 +6675,6 @@ define(function (require, exports, module) {
      */
     function UMLCombinedFragmentView() {
         UMLCustomFrameView.apply(this, arguments);
-        this.zIndex = 1;
 
         /** @member {UMLInteractionOperandCompartmentView} */
         this.operandCompartment = new UMLInteractionOperandCompartmentView();

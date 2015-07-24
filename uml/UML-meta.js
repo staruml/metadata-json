@@ -38,6 +38,10 @@ define(function (require, exports, module) {
             "kind": "enum",
             "literals": [ "sequential", "guarded", "concurrent" ]
         },
+        "UMLConnectorKind": {
+            "kind": "enum",
+            "literals": [ "assembly", "delegation" ]
+        },
         "UMLMessageSort": {
             "kind": "enum",
             "literals": [ "synchCall", "asynchCall", "asynchSignal", "createMessage", "deleteMessage", "reply" ]
@@ -60,7 +64,7 @@ define(function (require, exports, module) {
         },
         "UMLActionKind": {
             "kind": "enum",
-            "literals": [ "opaque", "create", "destroy", "read", "write", "insert", "delete", "sendSignal", "acceptSignal", "triggerEvent", "acceptEvent", "structured" ]
+            "literals": [ "opaque", "create", "destroy", "read", "write", "insert", "delete", "sendSignal", "acceptSignal", "triggerEvent", "acceptEvent", "structured", "timeEvent" ]
         },
         "UMLObjectNodeOrderingKind": {
             "kind": "enum",
@@ -375,6 +379,7 @@ define(function (require, exports, module) {
             "super": "UMLModelElement",
             "attributes": [
                 { "name": "definingFeature", "kind": "ref",  "type": "UMLStructuralFeature", "visible": true },
+                { "name": "type",            "kind": "var",  "type": "UMLClassifier", "visible": true },
                 { "name": "value",           "kind": "prim", "type": "String", "visible": true }
             ],
             "ordering": 1109
@@ -384,7 +389,8 @@ define(function (require, exports, module) {
             "super": "UMLModelElement",
             "attributes": [
                 { "name": "classifier", "kind": "var",  "type": "UMLClassifier", "visible": true },
-                { "name": "slots",      "kind": "objs", "type": "UMLSlot" }
+                { "name": "slots",      "kind": "objs", "type": "UMLSlot" },
+                { "name": "value",      "kind": "prim", "type": "String", "visible": true }
             ],
             "ordering": 1301
         },
@@ -446,7 +452,8 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLUndirectedRelationship",
             "attributes": [
-                { "name": "type", "kind": "ref",  "type": "UMLAssociation", "visible": true }
+                { "name": "type", "kind": "ref",  "type": "UMLAssociation",   "visible": true },
+                { "name": "kind", "kind": "enum", "type": "UMLConnectorKind", "visible": true, "default": "assembly" },
             ],
             "view": "UMLConnectorView",
             "ordering": 1813
@@ -1044,6 +1051,7 @@ define(function (require, exports, module) {
             "super": "UMLGeneralEdgeView",
             "attributes": [
                 { "name": "showMultiplicity",          "kind": "prim", "type": "Boolean", "default": true },
+                { "name": "showType",                  "kind": "prim", "type": "Boolean", "default": true },
                 { "name": "tailRoleNameLabel",         "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
                 { "name": "tailPropertyLabel",         "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
                 { "name": "tailMultiplicityLabel",     "kind": "ref", "type": "EdgeLabelView", "embedded": "subViews" },
@@ -1284,11 +1292,19 @@ define(function (require, exports, module) {
         },
         "UMLPortView": {
             "kind": "class",
-            "super": "UMLFloatingNodeView"
+            "super": "UMLFloatingNodeView",
+            "attributes": [
+                { "name": "showVisibility",   "kind": "prim", "type": "Boolean", "default": false },
+                { "name": "showType",         "kind": "prim", "type": "Boolean", "default": true },
+                { "name": "showMultiplicity", "kind": "prim", "type": "Boolean", "default": true }
+            ]
         },
         "UMLPartView": {
             "kind": "class",
-            "super": "UMLGeneralNodeView"
+            "super": "UMLGeneralNodeView",
+            "attributes": [
+                { "name": "showMultiplicity", "kind": "prim", "type": "Boolean", "default": true }
+            ]
         },
         "UMLConnectorView": {
             "kind": "class",

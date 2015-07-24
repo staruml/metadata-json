@@ -63,6 +63,13 @@ define(function (require, exports, module) {
         CCK_CONCURRENT = 'concurrent';
 
     /**
+     * UMLConnectorKind
+     * @enum
+     */
+    var CK_ASSEMBLY   = 'assembly',
+        CK_DELEGATION = 'delegation';
+
+    /**
      * UMLMessageSort
      * @enum
      */
@@ -138,7 +145,8 @@ define(function (require, exports, module) {
         ACK_ACCEPTSIGNAL = "acceptSignal",
         ACK_TRIGGEREVENT = "triggerEvent",
         ACK_ACCEPTEVENT  = "acceptEvent",
-        ACK_STRUCTURED   = "structured";
+        ACK_STRUCTURED   = "structured",
+        ACK_TIMEEVENT    = "timeEvent";
 
     /**
      * UMLObjectNodeOrderingKind
@@ -815,6 +823,14 @@ define(function (require, exports, module) {
     UMLReception.prototype = Object.create(UMLBehavioralFeature.prototype);
     UMLReception.prototype.constructor = UMLReception;
 
+    UMLReception.prototype.getNodeText = function () {
+        var text = "";
+        if (this.signal instanceof type.UMLSignal) {
+            return "(«signal» " + this.signal.name + ")";
+        }
+        return UMLModelElement.prototype.getNodeText.call(this);
+    };
+
     UMLReception.prototype.getString = function (options) {
         if (this.signal instanceof UMLSignal) {
             var text = "";
@@ -1201,6 +1217,20 @@ define(function (require, exports, module) {
     // inherits from UndirectedRelationship
     UMLUndirectedRelationship.prototype = Object.create(type.UndirectedRelationship.prototype);
     UMLUndirectedRelationship.prototype.constructor = UMLUndirectedRelationship;
+
+    UMLUndirectedRelationship.prototype.getNodeText = function () {
+        var text = "";
+        // stereotype
+        text += this.getStereotypeString();
+        // name and type
+        if (this.name && this.name.length > 0) {
+            text += this.name + " ";
+        }
+        // end1 and end2
+        text += "(" + this.end1.reference.name + "—" + this.end2.reference.name + ")";
+        return text.trim();
+    };
+
 
     /**************************************************************************
      *                                                                        *
@@ -1621,6 +1651,9 @@ define(function (require, exports, module) {
         /** @member {UMLStructuralFeature} */
         this.definingFeature = null;
 
+        /** @member {string|UMLClassifier} */
+        this.type = '';
+
         /** @member {string} */
         this.value = '';
     }
@@ -1628,6 +1661,45 @@ define(function (require, exports, module) {
     UMLSlot.prototype = Object.create(UMLModelElement.prototype);
     UMLSlot.prototype.constructor = UMLSlot;
 
+    /**
+     * Get type string
+     * @return {string}
+     */
+    UMLSlot.prototype.getTypeString = function () {
+        if (this.type) {
+            if (_.isString(this.type) && (this.type.length > 0)) {
+                return this.type;
+            } else if ((this.type !== null) && (this.type.name)) {
+                return this.type.name;
+            }
+        }
+        return null;
+    };
+
+    UMLSlot.prototype.getString = function (options) {
+        var text = "";
+        if (options && (options.stereotypeDisplay === SD_LABEL || options.stereotypeDisplay === SD_DECORATION_LABEL || options.stereotypeDisplay === SD_ICON_LABEL)) {
+            text += this.getStereotypeString();
+        }
+        if (options && options.showVisibility) {
+            text += this.getVisibilityString();
+        }
+        var hasFeature = (this.definingFeature instanceof type.UMLStructuralFeature);
+        text += hasFeature ? this.definingFeature.name : this.name;
+        if (options && options.showType) {
+            var _type = (hasFeature ? this.definingFeature.getTypeString() : this.getTypeString()) || "";
+            text += (_type.length > 0 ? ": " + _type : "");
+            if (hasFeature) {
+                text += (this.definingFeature.multiplicity.length > 0 ? "[" + this.definingFeature.multiplicity + "]" : "");
+            }
+        }
+        text += (this.value.length > 0 ? " = " + this.value : "");
+        if (options && options.showProperty) {
+            var prop = (hasFeature ? this.definingFeature.getPropertyString() : this.getPropertyString());
+            text += (prop.length > 0 ? " " + prop : "");
+        }
+        return text;
+    };
 
     /**
      * UMLInstance
@@ -1642,6 +1714,9 @@ define(function (require, exports, module) {
 
         /** @member {Array.<UMLSlot>} */
         this.slots = [];
+
+        /** @member {string} */
+        this.value = null;
     }
     // inherits from UMLModelElement
     UMLInstance.prototype = Object.create(UMLModelElement.prototype);
@@ -1734,6 +1809,19 @@ define(function (require, exports, module) {
     UMLLinkEnd.prototype = Object.create(UMLRelationshipEnd.prototype);
     UMLLinkEnd.prototype.constructor = UMLLinkEnd;
 
+    UMLLinkEnd.prototype.getPropertyString = function () {
+        var props = [];
+        if (this.isID === true) { props.push("id"); }
+        if (this.isReadOnly === true) { props.push("readOnly"); }
+        if (this.isOrdered === true) { props.push("ordered"); }
+        if (this.isUnique === true) { props.push("unique"); }
+        props = _.union(props, this.getTagStringArray());
+        if (props.length > 0) {
+            return "{" + props.join(", ") + "}";
+        }
+        return "";
+    };
+
 
     /**
      * UMLLink
@@ -1818,6 +1906,9 @@ define(function (require, exports, module) {
 
         /** @member {UMLAssociation} */
         this.type = null;
+
+        /** @member {UMLConnectorKind} */
+        this.kind = CK_ASSEMBLY;
     }
     // inherits from UMLUndirectedRelationship
     UMLConnector.prototype = Object.create(UMLUndirectedRelationship.prototype);
@@ -2601,6 +2692,8 @@ define(function (require, exports, module) {
             return "icon-UMLSendSignal";
         case ACK_ACCEPTEVENT:
             return "icon-UMLAcceptSignal";
+        case ACK_TIMEEVENT:
+            return "icon-UMLAcceptTimeEvent";
         }
     };
 
@@ -3391,6 +3484,9 @@ define(function (require, exports, module) {
     exports.CCK_GUARDED        = CCK_GUARDED;
     exports.CCK_CONCURRENT     = CCK_CONCURRENT;
 
+    exports.CK_ASSEMBLY        = CK_ASSEMBLY;
+    exports.CK_DELEGATION      = CK_DELEGATION;
+
     exports.MS_SYNCHCALL       = MS_SYNCHCALL;
     exports.MS_ASYNCHCALL      = MS_ASYNCHCALL;
     exports.MS_ASYNCHSIGNAL    = MS_ASYNCHSIGNAL;
@@ -3443,6 +3539,7 @@ define(function (require, exports, module) {
     exports.ACK_TRIGGEREVENT = ACK_TRIGGEREVENT;
     exports.ACK_ACCEPTEVENT  = ACK_ACCEPTEVENT;
     exports.ACK_STRUCTURED   = ACK_STRUCTURED;
+    exports.ACK_TIMEEVENT    = ACK_TIMEEVENT;
 
     exports.ONOK_UNORDERED = ONOK_UNORDERED;
     exports.ONOK_ORDERED   = ONOK_ORDERED;

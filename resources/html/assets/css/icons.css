@@ -339,6 +339,14 @@
   height: 16px;
   background-clip: content-box;
 }
+._icon-UMLRealization {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -96px -96px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
 ._icon-UMLInterfaceRealization {
   background-image: url('../icons/icons-vector-elements.svg') !important;
   background-repeat: no-repeat;
@@ -979,6 +987,14 @@
   height: 16px;
   background-clip: content-box;
 }
+._icon-UMLAcceptTimeEvent {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -48px -176px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
 ._icon-UMLLifeline {
   background-image: url('../icons/icons-vector-elements.svg') !important;
   background-repeat: no-repeat;
@@ -1075,7 +1091,7 @@
   height: 16px;
   background-clip: content-box;
 }
-._icon-UMLLostMessage {
+._icon-UMLFoundMessage {
   background-image: url('../icons/icons-vector-elements.svg') !important;
   background-repeat: no-repeat;
   background-position: -48px -208px;
@@ -1083,7 +1099,7 @@
   height: 16px;
   background-clip: content-box;
 }
-._icon-UMLFoundMessage {
+._icon-UMLLostMessage {
   background-image: url('../icons/icons-vector-elements.svg') !important;
   background-repeat: no-repeat;
   background-position: -64px -208px;

@@ -222,6 +222,9 @@ define(function (require, exports, module) {
         INTERACTIONOPERAND_GUARD_HORZ_MARGIN = 20,
         INTERACTIONOPERAND_GUARD_VERT_MARGIN = 15,
 
+        HYPERLINK_MINWIDTH = 100,
+        HYPERLINK_MINHEIGHT = 20,
+
         CUSTOM_TEXT_MINWIDTH = 10,
         CUSTOM_TEXT_MINHEIGHT = 10,
 
@@ -1728,7 +1731,9 @@ define(function (require, exports, module) {
     UMLClassDiagram.prototype.constructor = UMLClassDiagram;
 
     UMLClassDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLClassifier) ||
                (model instanceof type.UMLInstance) ||
@@ -2387,7 +2392,9 @@ define(function (require, exports, module) {
     UMLPackageDiagram.prototype.constructor = UMLPackageDiagram;
 
     UMLPackageDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLDependency);
     };
@@ -2535,7 +2542,9 @@ define(function (require, exports, module) {
     UMLCompositeStructureDiagram.prototype.constructor = UMLCompositeStructureDiagram;
 
     UMLCompositeStructureDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLClassifier) ||
                (model instanceof type.UMLPort) ||
@@ -2892,7 +2901,9 @@ define(function (require, exports, module) {
     UMLObjectDiagram.prototype.constructor = UMLObjectDiagram;
 
     UMLObjectDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLClassifier) ||
                (model instanceof type.UMLDependency) ||
                (model instanceof type.UMLLink);
@@ -3078,7 +3089,9 @@ define(function (require, exports, module) {
     UMLComponentDiagram.prototype.constructor = UMLComponentDiagram;
 
     UMLComponentDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLClassifier) ||
                (model instanceof type.UMLInstance) ||
@@ -3353,7 +3366,9 @@ define(function (require, exports, module) {
     UMLDeploymentDiagram.prototype.constructor = UMLDeploymentDiagram;
 
     UMLDeploymentDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLClassifier) ||
                (model instanceof type.UMLInstance) ||
@@ -3587,7 +3602,9 @@ define(function (require, exports, module) {
     UMLUseCaseDiagram.prototype.constructor = UMLUseCaseDiagram;
 
     UMLUseCaseDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
                (model instanceof type.UMLClassifier) ||
                (model instanceof type.UMLUseCaseSubject) ||
@@ -4073,10 +4090,13 @@ define(function (require, exports, module) {
     UMLStatechartDiagram.prototype.constructor = UMLStatechartDiagram;
 
     UMLStatechartDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLState) ||
                (model instanceof type.UMLPseudostate) ||
-               (model instanceof type.UMLConnectionPointReference);
+               (model instanceof type.UMLConnectionPointReference) ||
+               (model instanceof type.UMLStateMachine);
     };
 
     UMLStatechartDiagram.prototype.layout = function (direction, separations) {
@@ -4720,7 +4740,7 @@ define(function (require, exports, module) {
                 this.internalTransitionCompartment.visible = false;
             }
 
-            if (this.model.submachine !== null) {
+            if (this.model.submachine !== null && this.showType) {
                 this.nameCompartment.nameLabel.text = this.model.name + ": " + this.model.submachine.name;
             }
         }
@@ -4834,7 +4854,9 @@ define(function (require, exports, module) {
     UMLActivityDiagram.prototype.constructor = UMLActivityDiagram;
 
     UMLActivityDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLActivity) ||
                (model instanceof type.UMLAction) ||
                (model instanceof type.UMLActivityNode) ||
@@ -4883,16 +4905,17 @@ define(function (require, exports, module) {
     };
 
     UMLPinView.prototype.getPosition = function (canvas) {
+        var RANGE = Math.round(PIN_MINWIDTH / 2);
         if (this.containerView) {
             var r = this.containerView.getBoundingBox(canvas);
             var b = this.getBoundingBox(canvas);
-            if (r.y1-1 <= b.y2 && b.y2 <= r.y1+1) {
+            if (r.y1-RANGE <= b.y2 && b.y2 <= r.y1+RANGE) {
                 return "top";
-            } else if (r.y2-1 <= b.y1 && b.y1 <= r.y2+1) {
+            } else if (r.y2-RANGE <= b.y1 && b.y1 <= r.y2+RANGE) {
                 return "bottom";
-            } else if (r.x1-1 <= b.x2 && b.x2 <= r.x1+1) {
+            } else if (r.x1-RANGE <= b.x2 && b.x2 <= r.x1+RANGE) {
                 return "left";
-            } else if (r.x2-1 <= b.x1 && b.x1 <= r.x2+1) {
+            } else if (r.x2-RANGE <= b.x1 && b.x1 <= r.x2+RANGE) {
                 return "right";
             }
         }
@@ -5502,9 +5525,12 @@ define(function (require, exports, module) {
     UMLSequenceDiagram.prototype.constructor = UMLSequenceDiagram;
 
     UMLSequenceDiagram.prototype.canAcceptModel = function (model) {
-        if (model instanceof type.UMLMessageEndpoint ||
+        if (model instanceof type.Hyperlink || model instanceof type.Diagram) {
+            return true;
+        } else if (model instanceof type.UMLMessageEndpoint ||
             model instanceof type.UMLCombinedFragment ||
             model instanceof type.UMLStateInvariant ||
+            model instanceof type.UMLInteraction ||
             model instanceof type.UMLInteractionUse ||
             model instanceof type.UMLContinuation ||
             model instanceof type.UMLMessage) {
@@ -6870,7 +6896,9 @@ define(function (require, exports, module) {
     UMLCommunicationDiagram.prototype.constructor = UMLCommunicationDiagram;
 
     UMLCommunicationDiagram.prototype.canAcceptModel = function (model) {
-        if (model instanceof type.UMLLifeline) {
+        if (model instanceof type.Hyperlink || model instanceof type.Diagram) {
+            return true;
+        } else if (model instanceof type.UMLLifeline) {
             return _.every(this.ownedViews, function (v) { return v.model !== model; });
         } else if (model instanceof type.UMLMessage) {
             return _.some(this.ownedViews, function (v) { return v.model === model.source; }) &&
@@ -7252,7 +7280,9 @@ define(function (require, exports, module) {
     UMLProfileDiagram.prototype.constructor = UMLProfileDiagram;
 
     UMLProfileDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.UMLConstraint) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLMetaClass) ||
                (model instanceof type.UMLStereotype) ||
                (model instanceof type.UMLGeneralization) ||
@@ -7341,6 +7371,65 @@ define(function (require, exports, module) {
      *                            ANNOTATION VIEWS                            *
      *                                                                        *
      **************************************************************************/
+
+    /**
+     * HyperlinkView
+     * @constructor
+     * @extends NodeView
+     */
+    function HyperlinkView() {
+        NodeView.apply(this, arguments);
+
+        /** @member {LabelView} */
+        this.nameLabel = new LabelView();
+        this.nameLabel.parentStyle = true;
+        this.addSubView(this.nameLabel);
+
+        /** @member {LabelView} */
+        this.typeLabel = new LabelView();
+        this.typeLabel.parentStyle = true;
+        this.addSubView(this.typeLabel);
+    }
+    // inherits from NodeView
+    HyperlinkView.prototype = Object.create(NodeView.prototype);
+    HyperlinkView.prototype.constructor = HyperlinkView;
+
+    HyperlinkView.prototype.sizeObject = function (canvas) {
+        NodeView.prototype.sizeObject.call(this, canvas);
+        var h = this.typeLabel.minHeight + COMPARTMENT_TOP_PADDING + COMPARTMENT_BOTTOM_PADDING;
+        this.minHeight = Math.max(h, HYPERLINK_MINHEIGHT);
+        var w = this.typeLabel.width + this.nameLabel.width + (COMPARTMENT_LEFT_PADDING + COMPARTMENT_RIGHT_PADDING) * 2;
+        this.minWidth = Math.max(w, HYPERLINK_MINWIDTH);
+        this.sizeConstraints();
+    };
+
+    HyperlinkView.prototype.arrangeObject = function (canvas) {
+        NodeView.prototype.arrangeObject.call(this, canvas);
+        this.typeLabel.left = this.left + COMPARTMENT_LEFT_PADDING;
+        this.typeLabel.top = this.top + COMPARTMENT_TOP_PADDING;
+        this.typeLabel.setRight(this.typeLabel.left + this.typeLabel.minWidth);
+        this.nameLabel.top = this.top + COMPARTMENT_TOP_PADDING;
+        this.nameLabel.left = this.typeLabel.getRight() + COMPARTMENT_RIGHT_PADDING + COMPARTMENT_LEFT_PADDING;
+    };
+
+    HyperlinkView.prototype.drawObject = function (canvas) {
+        NodeView.prototype.drawObject.call(this, canvas);
+        var x = this.typeLabel.getRight() + COMPARTMENT_RIGHT_PADDING;
+        canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
+        canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
+        canvas.line(x, this.top, x, this.getBottom());
+    };
+
+    HyperlinkView.prototype.update = function (canvas) {
+        NodeView.prototype.update.call(this, canvas);
+        this.typeLabel.font.style = Graphics.FS_BOLD;
+        this.typeLabel.text = "link";
+        if (this.model && this.model.reference instanceof type.Model) {
+            this.nameLabel.text = this.model.reference.name;
+        } else {
+            this.nameLabel.text = this.model.url;
+        }
+    };
 
     /**
      * UMLCustomTextView
@@ -7723,6 +7812,7 @@ define(function (require, exports, module) {
     type.UMLStereotypeView                    = UMLStereotypeView;
     type.UMLExtensionView                     = UMLExtensionView;
     // Annotation Views
+    type.HyperlinkView                        = HyperlinkView;
     type.UMLCustomTextView                    = UMLCustomTextView;
     type.UMLTextView                          = UMLTextView;
     type.UMLCustomNoteView                    = UMLCustomNoteView;

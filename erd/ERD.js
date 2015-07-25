@@ -77,7 +77,9 @@ define(function (require, exports, module) {
     ERDDiagram.prototype.constructor = ERDDiagram;
 
     ERDDiagram.prototype.canAcceptModel = function (model) {
-        return (model instanceof type.ERDEntity) ||
+        return (model instanceof type.Hyperlink) ||
+               (model instanceof type.Diagram) ||
+               (model instanceof type.ERDEntity) ||
                (model instanceof type.ERDRelationship);
     };
 

@@ -51,6 +51,15 @@ define(function (require, exports, module) {
                 { "name": "number",    "kind": "prim", "type": "Integer", "visible": true }
             ]
         },
+        "Hyperlink": {
+            "kind": "class",
+            "super": "Model",
+            "attributes": [
+                { "name": "reference", "kind": "ref",  "type": "Model",   "visible": true },
+                { "name": "url",       "kind": "prim", "type": "String",  "visible": true }
+            ],
+            "view": "HyperlinkView"
+        },
         "ExtensibleModel": {
             "kind": "class",
             "super": "Model",

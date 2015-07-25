@@ -1015,7 +1015,7 @@ define(function (require, exports, module) {
      * Tag
      *
      * @constructor
-     * @extends Element
+     * @extends Model
      */
     function Tag() {
         Model.apply(this, arguments);
@@ -1036,9 +1036,38 @@ define(function (require, exports, module) {
         this.number = 0;
 
     }
-    // inherits from Element
+    // inherits from Model
     Tag.prototype = Object.create(Model.prototype);
     Tag.prototype.constructor = Tag;
+
+    /**
+     * Hyperlink
+     *
+     * @constructor
+     * @extends Model
+     */
+    function Hyperlink() {
+        Model.apply(this, arguments);
+
+        /** @member {Model} */
+        this.reference = null;
+
+        /** @member {*} */
+        this.url = '';
+    }
+    // inherits from Model
+    Hyperlink.prototype = Object.create(Model.prototype);
+    Hyperlink.prototype.constructor = Hyperlink;
+
+    Hyperlink.prototype.getNodeText = function () {
+        if (this.reference instanceof type.Model) {
+            return "(link to " + this.reference.name + ")";
+        } else if (this.url && this.url.length > 0) {
+            return "(link to " + this.url + ")";
+        } else {
+            return "(none)";
+        }
+    };
 
 
     /**
@@ -3748,6 +3777,7 @@ define(function (require, exports, module) {
     _global.type.Element                = Element;
     _global.type.Model                  = Model;
     _global.type.Tag                    = Tag;
+    _global.type.Hyperlink              = Hyperlink;
     _global.type.ExtensibleModel        = ExtensibleModel;
     _global.type.Relationship           = Relationship;
     _global.type.DirectedRelationship   = DirectedRelationship;
@@ -3842,6 +3872,7 @@ define(function (require, exports, module) {
     exports.Element                 = Element;
     exports.Model                   = Model;
     exports.Tag                     = Tag;
+    exports.Hyperlink               = Hyperlink;
     exports.ExtensibleModel         = ExtensibleModel;
     exports.Relationship            = Relationship;
     exports.DirectedRelationship    = DirectedRelationship;

@@ -893,6 +893,11 @@
 	<rect x="210.5" y="178.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="11" height="12"/>
 	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="211,182.5 216.5,182.5 218.5,180.5 218.5,179 	"/>
 </g>
+<g id="Hyperlink">
+	<rect x="210.5" y="195.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="11" height="8"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="216.5,201.5 218.5,199.5 216.5,197.5 	"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="212" y1="199.5" x2="218" y2="199.5"/>
+</g>
 <g id="CombinedFragment">
 	<rect x="146.5" y="178.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="11" height="12"/>
 	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="147,182.5 152.5,182.5 154.5,180.5 154.5,179 	"/>

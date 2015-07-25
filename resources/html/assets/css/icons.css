@@ -27,6 +27,14 @@
   height: 16px;
   background-clip: content-box;
 }
+._icon-Hyperlink {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -208px -192px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
 ._icon-Rectangle {
   background-image: url('../icons/icons-vector-elements.svg') !important;
   background-repeat: no-repeat;

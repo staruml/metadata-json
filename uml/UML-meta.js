@@ -1891,6 +1891,14 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralEdgeView"
         },
+        "HyperlinkView": {
+            "kind": "class",
+            "super": "NodeView",
+            "attributes": [
+                { "name": "nameLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" },
+                { "name": "typeLabel", "kind": "ref", "type": "LabelView", "embedded": "subViews" }
+            ]
+        },
         "UMLCustomTextView": {
             "kind": "class",
             "super": "NodeView",

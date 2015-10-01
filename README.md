@@ -9,9 +9,18 @@ Getting Started
 Installation
 ------------
 
+You can simply install via `npm`.
+
 ```shell
 $ npm install metadata-json
 ```
+
+> **IMPORTANT**
+>
+> This `metadata-json` uses [**node-canvas**](https://github.com/Automattic/node-canvas) module in order to generate image files (PNG and SVG).
+> If you need to export images, you have to install **Cairo** first before installing this module (_To installing Cairo on various platforms, please refer to https://github.com/Automattic/node-canvas_).
+> If you don't need to export images, ignore installation errors from `node-canvas`.
+
 
 Load a model file
 -----------------
@@ -110,6 +119,28 @@ EJS provides several [predefined filters](https://github.com/tj/ejs#filter-list)
 * `markdown` : render markdown syntax to HTML.
 
 
+Export Diagrams to Images (PNG, SVG)
+------------------------------------
+
+> This featrure requires `Cairo` installation. Read the above installation section.
+
+You can export diagrams to two image formats: PNG and SVG.
+
+```javascript
+var mdjson = require("metadata-json");
+
+mdjson.loadFromFile("diagram_test.mdj");
+
+// Retrive all diagrams
+var diagrams = mdjson.Repository.getInstancesOf("Diagram");
+
+// Export all diagrams to PNG and SVG
+diagrams.forEach(function (d) {
+    mdjson.exportDiagramAsPNG(d, d.name + ".png");
+    mdjson.exportDiagramAsSVG(d, d.name + ".svg");
+});
+```
+
 Export Diagrams to PDF
 ----------------------
 
@@ -136,4 +167,3 @@ var options = {
 
 mdjson.exportToPDF(diagrams, "out.pdf", options);
 ```
-

@@ -5,4 +5,4 @@ var mdjson = require("../metadata-json");
 
 mdjson.loadFromFile("Examples.mdj");
 
-mdjson.exportToHTML("html-docs");
+mdjson.exportToHTML("html-docs", true);

@@ -6,7 +6,8 @@ var fs          = require('fs-extra'),
     ejs         = require('ejs'),
     render      = require('./lib/render'),
     pdf         = require('./lib/pdf'),
-    html        = require('./lib/html');
+    html        = require('./lib/html'),
+    image       = require('./lib/image');
 
 // load underscore (_) as a global variable
 global._ = require('underscore');
@@ -95,25 +96,27 @@ _global.$ = function () {
 
 // Public APIs
 
-exports.Core             = Core;
-exports.Graphics         = Graphics;
-exports.Toolkit          = Toolkit;
-exports.IdGenerator      = IdGenerator;
-exports.MetaModelManager = MetaModelManager;
-exports.OperationBuilder = OperationBuilder;
-exports.Repository       = Repository;
-exports.Validator        = Validator;
-exports.UML              = UML;
-exports.UMLDiagram       = UMLDiagram;
-exports.ERD              = ERD;
-exports.Unicode          = Unicode;
-exports.Font             = Font;
-exports.PDFGraphics      = PDFGraphics;
+exports.Core               = Core;
+exports.Graphics           = Graphics;
+exports.Toolkit            = Toolkit;
+exports.IdGenerator        = IdGenerator;
+exports.MetaModelManager   = MetaModelManager;
+exports.OperationBuilder   = OperationBuilder;
+exports.Repository         = Repository;
+exports.Validator          = Validator;
+exports.UML                = UML;
+exports.UMLDiagram         = UMLDiagram;
+exports.ERD                = ERD;
+exports.Unicode            = Unicode;
+exports.Font               = Font;
+exports.PDFGraphics        = PDFGraphics;
 
-exports.loadFromFile     = loadFromFile;
-exports.getRoot          = getRoot;
-exports.render           = render.render;
-exports.renderBulk       = render.renderBulk;
-exports.exportToPDF      = pdf.exportToPDF;
-exports.exportToHTML     = html.exportToHTML;
-exports.registerFont     = pdf.registerFont;
+exports.loadFromFile       = loadFromFile;
+exports.getRoot            = getRoot;
+exports.render             = render.render;
+exports.renderBulk         = render.renderBulk;
+exports.exportToPDF        = pdf.exportToPDF;
+exports.exportToHTML       = html.exportToHTML;
+exports.registerFont       = pdf.registerFont;
+exports.exportDiagramAsPNG = image.exportDiagramAsPNG;
+exports.exportDiagramAsSVG = image.exportDiagramAsSVG;

@@ -120,3 +120,4 @@ exports.exportToHTML       = html.exportToHTML;
 exports.registerFont       = pdf.registerFont;
 exports.exportDiagramAsPNG = image.exportDiagramAsPNG;
 exports.exportDiagramAsSVG = image.exportDiagramAsSVG;
+exports.exportDiagramBulk  = image.exportDiagramBulk;

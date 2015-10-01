@@ -13,3 +13,5 @@ diagrams.forEach(function (d) {
     mdjson.exportDiagramAsPNG(d, d.name + ".png");
     mdjson.exportDiagramAsSVG(d, d.name + ".svg");
 });
+
+// mdjson.exportDiagramBulk(diagrams, "images/<%=diagram.name%>.svg", "svg");

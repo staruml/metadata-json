@@ -53,7 +53,7 @@ mdjson.render("template.ejs", "out.html", mdjson.getRoot()); // out.html file ge
 
 Here is the content of `template.ejs` file.
 
-```
+```html
 <html>
   <head>
     <title><%= element.name %></title>
@@ -105,7 +105,7 @@ mdjson.render("template.ejs", "out.html", attr, { filters: myFilters }); // out.
 
 In template, you can use the filters you defined.
 
-```
+```html
 ...
 <%=: element | attributeExpression %>
 ...
@@ -139,6 +139,22 @@ diagrams.forEach(function (d) {
     mdjson.exportDiagramAsPNG(d, d.name + ".png");
     mdjson.exportDiagramAsSVG(d, d.name + ".svg");
 });
+```
+
+If you want to export a set of diagrams at once, you can do by calling `exportDiagramBulk` function.
+You can pass array of diagrams or [selector expression (string)](https://github.com/staruml/metadata-json/wiki/SelectorExpression) to the first parameter of `exportDiagramBulk`.
+To save each diagram image with different file name, you can also use EJS template syntax in the file name.
+
+```javascript
+var mdjson = require("metadata-json");
+
+mdjson.loadFromFile("diagram_test.mdj");
+
+// Retrive all diagrams
+var diagrams = mdjson.Repository.getInstancesOf("Diagram");
+
+// Export all diagrams as PNG
+mdjson.exportDiagramBulk(diagrams, "images/<%=diagram.name%>.png", "png");
 ```
 
 Export Diagrams to PDF

@@ -167,3 +167,16 @@ var options = {
 
 mdjson.exportToPDF(diagrams, "out.pdf", options);
 ```
+
+Export HTML document
+--------------------
+
+> This featrure may requires `Cairo` installation if you want to generate diagram images. Read the above installation section.
+
+You can generate HTML documents by using `exportToHTML`. First parameter is output folder name and second parameter inidcates whether generate diagram images or not.
+
+```javascript
+var mdjson = require('metadata-json');
+mdjson.loadFromFile("diagram_test.mdj");
+mdjson.exportToHTML("html-out", true); // Generate diagram images
+```

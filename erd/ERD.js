@@ -94,8 +94,8 @@ define(function (require, exports, module) {
         /** @member {string} */
         this.type = '';
 
-        /** @member {number} */
-        this.length = 0;
+        /** @member {string} */
+        this.length = '';
 
         /** @member {boolean} */
         this.primaryKey = false;
@@ -129,8 +129,11 @@ define(function (require, exports, module) {
     };
 
     ERDColumn.prototype.getTypeString = function () {
-        var _type = this.type;
-        if (this.type && this.type.length > 0 && this.length > 0) {
+        var _type = '';
+        if (this.type && this.type.length > 0) {
+            _type += this.type;
+        }
+        if (this.length || (_.isString(this.length) && this.length.length > 0)) {
             _type += "(" + this.length + ")";
         }
         return _type;

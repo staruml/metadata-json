@@ -42,7 +42,7 @@ define(function (require, exports, module) {
             "super": "ERDElement",
             "attributes": [
                 { "name": "type",        "kind": "prim", "type": "String",    "visible": true, "options": [ "VARCHAR", "BOOLEAN", "INTEGER", "CHAR", "BINARY", "VARBINARY", "BLOB", "TEXT", "SMALLINT", "BIGINT", "DECIMAL", "NUMERIC", "FLOAT", "DOUBLE", "BIT", "DATE", "TIME", "DATETIME", "TIMESTAMP", "GEOMETRY", "POINT", "LINESTRING", "POLYGON" ] },
-                { "name": "length",      "kind": "prim", "type": "Integer",   "visible": true },
+                { "name": "length",      "kind": "prim", "type": "String",    "visible": true },
                 { "name": "primaryKey",  "kind": "prim", "type": "Boolean",   "visible": true },
                 { "name": "foreignKey",  "kind": "prim", "type": "Boolean",   "visible": true },
                 { "name": "referenceTo", "kind": "ref",  "type": "ERDColumn", "visible": true },

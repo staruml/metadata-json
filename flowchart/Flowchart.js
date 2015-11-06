@@ -33,9 +33,7 @@ define(function (require, exports, module) {
         Core              = require("core/Core"),
         MetaModelManager  = require("core/MetaModelManager"),
         Repository        = require("core/Repository"),
-        PreferenceManager = require("core/PreferenceManager"),
-        ExtensionUtils    = require("utils/ExtensionUtils"),
-        FileUtils         = require("file/FileUtils");
+        PreferenceManager = require("core/PreferenceManager");
 
     require("flowchart/Flowchart-meta");
 

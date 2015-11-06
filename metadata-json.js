@@ -47,7 +47,7 @@ requirejs("uml/UML-meta");
 requirejs("uml/UML-rules");
 requirejs("erd/ERD-meta");
 requirejs("erd/ERD-rules");
-requirejs("erd/Flowchart-meta");
+requirejs("flowchart/Flowchart-meta");
 
 var _global          = requirejs("core/Global").global,
     Graphics         = requirejs("core/Graphics"),

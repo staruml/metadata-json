@@ -1307,3 +1307,243 @@
   height: 16px;
   background-clip: content-box;
 }
+._icon-FCFlowchartDiagram {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -96px -112px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCFlowchart {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: 0px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCProcess {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -16px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCTerminator {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -32px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCDecision {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -48px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCDelay {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -64px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCPredefinedProcess {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -80px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCAlternateProcess {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -96px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCData {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -112px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCDocument {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -128px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCMultiDocument {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -144px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCPreparation {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -160px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCDisplay {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -176px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCManualInput {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -192px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCManualOperation {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -208px -128px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCCard {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -48px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCPunchedTape {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -64px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCConnector {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -80px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCOffPageConnector {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -96px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCOr {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -112px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCSummingJunction {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -128px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCCollate {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -144px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCSort {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -160px -144px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCMerge {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -16px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCExtract {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -32px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCStoredData {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -48px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCDatabase {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -64px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCDirectAccessStorage {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -80px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCInternalStorage {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -96px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-FCFlow {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -112px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}

@@ -3,6 +3,6 @@
 
 var mdjson = require("../metadata-json");
 
-mdjson.loadFromFile("Examples.mdj");
+mdjson.loadFromFile("UMLExamples.mdj");
 
 mdjson.exportToHTML("html-docs", true);

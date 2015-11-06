@@ -13698,6 +13698,88 @@
 							"frameTypeLabel": {
 								"$ref": "AAAAAAFOpUt5IL+f8ZU="
 							}
+						},
+						{
+							"_type": "HyperlinkView",
+							"_id": "AAAAAAFOxSKAX1h0RQ8=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"model": {
+								"$ref": "AAAAAAFOxSKAXlhyDRs="
+							},
+							"subViews": [
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAFOxSKAX1h1eAs=",
+									"_parent": {
+										"$ref": "AAAAAAFOxSKAX1h0RQ8="
+									},
+									"visible": true,
+									"enabled": true,
+									"lineColor": "#000000",
+									"fillColor": "#ffffff",
+									"fontColor": "#000000",
+									"font": "Arial;13;0",
+									"showShadow": true,
+									"containerChangeable": false,
+									"containerExtending": false,
+									"left": 54,
+									"top": 749,
+									"width": 506.04150390625,
+									"height": 13,
+									"autoResize": false,
+									"underline": false,
+									"text": "http://www.uml-diagrams.org/library-domain-uml-class-diagram-example.html",
+									"horizontalAlignment": 2,
+									"verticalAlignment": 5
+								},
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAFOxSKAX1h2nGw=",
+									"_parent": {
+										"$ref": "AAAAAAFOxSKAX1h0RQ8="
+									},
+									"visible": true,
+									"enabled": true,
+									"lineColor": "#000000",
+									"fillColor": "#ffffff",
+									"fontColor": "#000000",
+									"font": "Arial;13;1",
+									"showShadow": true,
+									"containerChangeable": false,
+									"containerExtending": false,
+									"left": 21,
+									"top": 749,
+									"width": 24,
+									"height": 13,
+									"autoResize": false,
+									"underline": false,
+									"text": "link",
+									"horizontalAlignment": 2,
+									"verticalAlignment": 5
+								}
+							],
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 16,
+							"top": 744,
+							"width": 550.04150390625,
+							"height": 23,
+							"autoResize": false,
+							"nameLabel": {
+								"$ref": "AAAAAAFOxSKAX1h1eAs="
+							},
+							"typeLabel": {
+								"$ref": "AAAAAAFOxSKAX1h2nGw="
+							}
 						}
 					]
 				},
@@ -14795,6 +14877,15 @@
 							"visibility": "public"
 						}
 					]
+				},
+				{
+					"_type": "Hyperlink",
+					"_id": "AAAAAAFOxSKAXlhyDRs=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Hyperlink1",
+					"url": "http://www.uml-diagrams.org/library-domain-uml-class-diagram-example.html"
 				}
 			],
 			"visibility": "public"

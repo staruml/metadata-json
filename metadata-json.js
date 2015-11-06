@@ -14,28 +14,30 @@ global._ = require('underscore');
 
 requirejs.config({
     paths: {
-        "core/Core-meta"         : __dirname + "/core/Core-meta",
-        "core/Core-rules"        : __dirname + "/core/Core-rules",
-        "core/Core"              : __dirname + "/core/Core",
-        "core/Global"            : __dirname + "/core/Global",
-        "core/Graphics"          : __dirname + "/core/Graphics",
-        "core/IdGenerator"       : __dirname + "/core/IdGenerator",
-        "core/MetaModelManager"  : __dirname + "/core/MetaModelManager",
-        "core/OperationBuilder"  : __dirname + "/core/OperationBuilder",
-        "core/Repository"        : __dirname + "/core/Repository",
-        "core/Toolkit"           : __dirname + "/core/Toolkit",
-        "core/Validator"         : __dirname + "/core/Validator",
-        "core/PreferenceManager" : __dirname + "/core/PreferenceManager",
-        "uml/UML-meta"           : __dirname + "/uml/UML-meta",
-        "uml/UML-rules"          : __dirname + "/uml/UML-rules",
-        "uml/UML"                : __dirname + "/uml/UML",
-        "uml/UMLDiagram"         : __dirname + "/uml/UMLDiagram",
-        "erd/ERD-meta"           : __dirname + "/erd/ERD-meta",
-        "erd/ERD-rules"          : __dirname + "/erd/ERD-rules",
-        "erd/ERD"                : __dirname + "/erd/ERD",
-        "lib/Unicode"            : __dirname + "/lib/Unicode",
-        "lib/Font"               : __dirname + "/lib/Font",
-        "lib/PDFGraphics"        : __dirname + "/lib/PDFGraphics"
+        "core/Core-meta"           : __dirname + "/core/Core-meta",
+        "core/Core-rules"          : __dirname + "/core/Core-rules",
+        "core/Core"                : __dirname + "/core/Core",
+        "core/Global"              : __dirname + "/core/Global",
+        "core/Graphics"            : __dirname + "/core/Graphics",
+        "core/IdGenerator"         : __dirname + "/core/IdGenerator",
+        "core/MetaModelManager"    : __dirname + "/core/MetaModelManager",
+        "core/OperationBuilder"    : __dirname + "/core/OperationBuilder",
+        "core/Repository"          : __dirname + "/core/Repository",
+        "core/Toolkit"             : __dirname + "/core/Toolkit",
+        "core/Validator"           : __dirname + "/core/Validator",
+        "core/PreferenceManager"   : __dirname + "/core/PreferenceManager",
+        "uml/UML-meta"             : __dirname + "/uml/UML-meta",
+        "uml/UML-rules"            : __dirname + "/uml/UML-rules",
+        "uml/UML"                  : __dirname + "/uml/UML",
+        "uml/UMLDiagram"           : __dirname + "/uml/UMLDiagram",
+        "erd/ERD-meta"             : __dirname + "/erd/ERD-meta",
+        "erd/ERD-rules"            : __dirname + "/erd/ERD-rules",
+        "erd/ERD"                  : __dirname + "/erd/ERD",
+        "flowchart/Flowchart-meta" : __dirname + "/flowchart/Flowchart-meta",
+        "flowchart/Flowchart"      : __dirname + "/flowchart/Flowchart",
+        "lib/Unicode"              : __dirname + "/lib/Unicode",
+        "lib/Font"                 : __dirname + "/lib/Font",
+        "lib/PDFGraphics"          : __dirname + "/lib/PDFGraphics"
     }
 });
 
@@ -45,6 +47,7 @@ requirejs("uml/UML-meta");
 requirejs("uml/UML-rules");
 requirejs("erd/ERD-meta");
 requirejs("erd/ERD-rules");
+requirejs("erd/Flowchart-meta");
 
 var _global          = requirejs("core/Global").global,
     Graphics         = requirejs("core/Graphics"),
@@ -58,6 +61,7 @@ var _global          = requirejs("core/Global").global,
     UML              = requirejs("uml/UML"),
     UMLDiagram       = requirejs("uml/UMLDiagram"),
     ERD              = requirejs("erd/ERD"),
+    Flowchart        = requirejs("flowchart/Flowchart"),
     Unicode          = requirejs("lib/Unicode"),
     Font             = requirejs("lib/Font"),
     PDFGraphics      = requirejs("lib/PDFGraphics");
@@ -107,6 +111,7 @@ exports.Validator          = Validator;
 exports.UML                = UML;
 exports.UMLDiagram         = UMLDiagram;
 exports.ERD                = ERD;
+exports.Flowchart          = Flowchart;
 exports.Unicode            = Unicode;
 exports.Font               = Font;
 exports.PDFGraphics        = PDFGraphics;

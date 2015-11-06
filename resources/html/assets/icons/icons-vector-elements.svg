@@ -1074,4 +1074,177 @@
 	<line fill="none" stroke="#1390D6" stroke-miterlimit="10" x1="212.5" y1="114.5" x2="210" y2="113"/>
 	<line fill="none" stroke="#1390D6" stroke-miterlimit="10" x1="212.5" y1="116.5" x2="210" y2="118"/>
 </g>
+<g id="FCFlowchartDiagram_1_">
+	<polygon fill="none" stroke="#009944" stroke-miterlimit="10" points="96.5,112.5 108.5,112.5 111.5,115.5 111.5,127.5 96.5,127.5 
+			"/>
+	<polyline fill="none" stroke="#009944" stroke-miterlimit="10" points="108.5,112.5 108.5,115.5 111.5,115.5 	"/>
+	<polygon fill="none" stroke="#009944" stroke-miterlimit="10" points="98.5,125.5 99.357,122.5 104.5,122.5 103.643,125.5 	"/>
+	<path fill="none" stroke="#009944" stroke-miterlimit="10" d="M104.5,116.25c0,0.69-0.479,1.25-1.071,1.25h-3.857
+		c-0.592,0-1.071-0.56-1.071-1.25v-0.5c0-0.69,0.479-1.25,1.071-1.25h3.857c0.592,0,1.071,0.56,1.071,1.25V116.25z"/>
+	<line fill="none" stroke="#009944" stroke-miterlimit="10" x1="101.5" y1="118" x2="101.5" y2="122"/>
+	<polygon fill="none" stroke="#009944" stroke-miterlimit="10" points="104.25,119.5 106.5,118 108.75,119.5 106.5,121 	"/>
+	<line fill="none" stroke="#009944" stroke-miterlimit="10" x1="102" y1="119.5" x2="105" y2="119.5"/>
+	<line fill="none" stroke="#009944" stroke-miterlimit="10" x1="106.5" y1="121" x2="106.5" y2="125"/>
+	<line fill="none" stroke="#009944" stroke-miterlimit="10" x1="106" y1="124.5" x2="104" y2="124.5"/>
+</g>
+<g id="FCManualOperation">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="220.5,138.5 211.5,138.5 210.5,132.5 221.5,132.5 	"/>
+</g>
+<g id="FCManualInput">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="204.5,138.5 195.5,138.5 195.5,133.5 204.5,132.5 	"/>
+</g>
+<g id="FCDisplay">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M189.5,135.5c0-1.658-1.118-3-2.5-3"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M189.5,135.5c0,1.658-1.118,3-2.5,3"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="187,132.5 181,132.5 178.5,135.5 181,138.5 187,138.5 	"/>
+</g>
+<g id="FCPreparation">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="165,132.5 162.5,135.5 165,138.5 171,138.5 173.5,135.5 
+		171,132.5 	"/>
+</g>
+<g id="FCMultiDocument">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M146.5,139c0,0.829,1.118,1.5,2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M151.5,139c0,0.829-1.118,1.5-2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M151.5,139c0-0.829,1.118-1.5,2.5-1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M156.5,139c0-0.829-1.118-1.5-2.5-1.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="146.5" y1="139" x2="146.5" y2="133"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="146" y1="132.5" x2="157" y2="132.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="156.5" y1="133" x2="156.5" y2="139"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="147.5" y1="132" x2="147.5" y2="130"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="148" y1="130.5" x2="158" y2="130.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="158.5" y1="130" x2="158.5" y2="138"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="156" y1="137.5" x2="158" y2="137.5"/>
+</g>
+<g id="FCDocument">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M130.5,139c0,0.829,1.118,1.5,2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M135.5,139c0,0.829-1.118,1.5-2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M135.5,139c0-0.829,1.118-1.5,2.5-1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M140.5,139c0-0.829-1.118-1.5-2.5-1.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="130.5" y1="139" x2="130.5" y2="133"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="130" y1="132.5" x2="141" y2="132.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="140.5" y1="133" x2="140.5" y2="139"/>
+</g>
+<g id="FCData">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="123.5,139.5 114.5,139.5 116.5,133.5 125.5,133.5 	"/>
+</g>
+<g id="FCAlternate_Process">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="5" d="M109.5,138c0,0.828-0.672,1.5-1.5,1.5h-8c-0.829,0-1.5-0.672-1.5-1.5
+		v-3c0-0.828,0.671-1.5,1.5-1.5h8c0.828,0,1.5,0.672,1.5,1.5V138z"/>
+</g>
+<g id="FCPredefinedProcess">
+	<rect x="82.5" y="133.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="11" height="6"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="84.5" y1="134" x2="84.5" y2="139"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="91.5" y1="134" x2="91.5" y2="139"/>
+</g>
+<g id="FCDelay">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M77.5,136.5c0-1.658-1.118-3-2.5-3"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M77.5,136.5c0,1.658-1.118,3-2.5,3"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="75" y1="139.5" x2="68" y2="139.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="75" y1="133.5" x2="68" y2="133.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="67.5" y1="133" x2="67.5" y2="140"/>
+</g>
+<g id="FCDecision">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="51.5,136.5 56,133.5 60.5,136.5 56,139.5 	"/>
+</g>
+<g id="FCTerminator">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M45.5,136.5c0,1.656-1.344,3-3,3h-5c-1.657,0-3-1.344-3-3l0,0
+		c0-1.656,1.343-3,3-3h5C44.156,133.5,45.5,134.844,45.5,136.5L45.5,136.5z"/>
+</g>
+<g id="FCProcess">
+	<rect x="18.5" y="133.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="11" height="6"/>
+</g>
+<g id="FCFlowchart">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="3.5,141.5 4.357,138.5 9.5,138.5 8.643,141.5 	"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M9.5,132.25c0,0.69-0.479,1.25-1.071,1.25H4.571
+		c-0.592,0-1.071-0.56-1.071-1.25v-0.5c0-0.69,0.479-1.25,1.071-1.25h3.857c0.592,0,1.071,0.56,1.071,1.25V132.25z"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="6.5" y1="134" x2="6.5" y2="138"/>
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="9.25,135.5 11.5,134 13.75,135.5 11.5,137 	"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="7" y1="135.5" x2="10" y2="135.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="11.5" y1="137" x2="11.5" y2="141"/>
+</g>
+<g id="FCSort">
+	
+		<rect x="165.672" y="149.672" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 179.8137 379.4813)" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="5.657" height="5.657"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="165" y1="152.5" x2="172" y2="152.5"/>
+</g>
+<g id="FCCollate">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="147.5,148.5 156,148.5 147.5,156.5 156,156.5 	"/>
+</g>
+<g id="FCSumming_Junction">
+	<circle fill="none" stroke="#AD9400" stroke-miterlimit="10" cx="135.5" cy="152.5" r="4.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="132" y1="149" x2="139" y2="156"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="139" y1="149" x2="132" y2="156"/>
+</g>
+<g id="FCOr">
+	<circle fill="none" stroke="#AD9400" stroke-miterlimit="10" cx="119.5" cy="152.5" r="4.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="119.5" y1="148" x2="119.5" y2="157"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="115" y1="152.5" x2="124" y2="152.5"/>
+</g>
+<g id="FCOffPageConnector">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="99.5,148.5 99.5,154.5 104.5,156.5 109.5,154.5 109.5,148.5 
+			"/>
+</g>
+<g id="FCConnector">
+	<ellipse fill="none" stroke="#AD9400" stroke-miterlimit="10" cx="87.75" cy="152.5" rx="4.25" ry="4"/>
+</g>
+<g id="FCPunchedTape">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M66.5,155c0,0.829,1.118,1.5,2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M71.5,155c0,0.829-1.118,1.5-2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M71.5,155c0-0.829,1.118-1.5,2.5-1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M76.5,155c0-0.829-1.118-1.5-2.5-1.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="66.5" y1="155" x2="66.5" y2="150"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="76.5" y1="150" x2="76.5" y2="155"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M66.5,150c0,0.829,1.118,1.5,2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M71.5,150c0,0.829-1.118,1.5-2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M71.5,150c0-0.829,1.118-1.5,2.5-1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M76.5,150c0-0.829-1.118-1.5-2.5-1.5"/>
+</g>
+<g id="FCCard">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="50.5,150.688 53.5,148.5 61.5,148.5 61.5,155.5 50.5,155.5 	
+		"/>
+</g>
+<g id="FCFlow">
+	<polygon fill="#1390D6" stroke="#1390D6" stroke-miterlimit="10" points="125.5,170.5 123.5,173.5 121.5,170.5 	"/>
+	<line fill="none" stroke="#1390D6" stroke-miterlimit="10" x1="123.5" y1="170" x2="123.5" y2="163"/>
+	<line fill="none" stroke="#1390D6" stroke-miterlimit="10" x1="124" y1="162.5" x2="115" y2="162.5"/>
+</g>
+<g id="FCInternalStorage">
+	<rect x="98.5" y="164.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="11" height="7"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="99" y1="166.5" x2="110" y2="166.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="100.5" y1="165" x2="100.5" y2="172"/>
+</g>
+<g id="FCDirectAccessStorage">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M88.5,168.5c0,2.211,1.118,4,2.5,4"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M88.5,168.5c0-2.211,1.118-4,2.5-4"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M93.5,168.5c0-2.211-1.118-4-2.5-4"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M93.5,168.5c0,2.211-1.118,4-2.5,4"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M82.5,168.5c0,2.211,1.118,4,2.5,4"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M82.5,168.5c0-2.211,1.118-4,2.5-4"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="91" y1="164.5" x2="85" y2="164.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="91" y1="172.5" x2="85" y2="172.5"/>
+</g>
+<g id="FCDatabase">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M72,167.5c2.487,0,4.5-1.118,4.5-2.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M72,167.5c-2.487,0-4.5-1.118-4.5-2.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M72,162.5c-2.487,0-4.5,1.118-4.5,2.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M72,162.5c2.487,0,4.5,1.118,4.5,2.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M72,173.5c2.487,0,4.5-1.118,4.5-2.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M72,173.5c-2.487,0-4.5-1.118-4.5-2.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="67.5" y1="165" x2="67.5" y2="171"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="76.5" y1="165" x2="76.5" y2="171"/>
+</g>
+<g id="FCStoredData">
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M59.5,168.5c0,1.658,1.118,3,2.5,3"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M59.5,168.5c0-1.658,1.118-3,2.5-3"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M50.5,168.5c0,1.658,1.118,3,2.5,3"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M50.5,168.5c0-1.658,1.118-3,2.5-3"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="53" y1="165.5" x2="62" y2="165.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="53" y1="171.5" x2="62" y2="171.5"/>
+</g>
+<g id="FCExtract">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="45,171.5 36,171.5 40.5,165.5 	"/>
+</g>
+<g id="FCMerge">
+	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="20,165.5 29,165.5 24.5,171.5 	"/>
+</g>
 </svg>

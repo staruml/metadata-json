@@ -42,6 +42,13 @@ define(function (require, exports, module) {
         TOP_PADDING    = 10,
         BOTTOM_PADDING = 10;
 
+    var DECISION_MINWIDTH  = 50,
+        DECISION_MINHEIGHT = 30,
+        MERGE_MINWIDTH  = 30,
+        MERGE_MINHEIGHT = 25,
+        EXTRACT_MINWIDTH  = 30,
+        EXTRACT_MINHEIGHT = 25;    
+    
     /**
      * FCModelElement
      * @constructor
@@ -573,8 +580,8 @@ define(function (require, exports, module) {
 
     FCDecisionView.prototype.sizeObject = function (canvas) {
         FCGeneralNodeView.prototype.sizeObject.call(this, canvas);
-        this.minWidth = this.nameLabel.minWidth * 2;
-        this.minHeight = this.nameLabel.minHeight * 2;
+        this.minWidth = Math.max(this.nameLabel.minWidth * 2, DECISION_MINWIDTH);
+        this.minHeight = Math.max(this.nameLabel.minHeight * 2, DECISION_MINHEIGHT);
     };
 
     FCDecisionView.prototype.arrangeObject = function (canvas) {
@@ -1228,8 +1235,8 @@ define(function (require, exports, module) {
 
     FCMergeView.prototype.sizeObject = function (canvas) {
         FCGeneralNodeView.prototype.sizeObject.call(this, canvas);
-        this.minWidth = this.nameLabel.minWidth * 2;
-        this.minHeight = this.nameLabel.minHeight * 2;
+        this.minWidth = Math.max(this.nameLabel.minWidth * 2, MERGE_MINWIDTH);
+        this.minHeight = Math.max(this.nameLabel.minHeight * 2, MERGE_MINHEIGHT);
     };
 
     FCMergeView.prototype.arrangeObject = function (canvas) {
@@ -1268,8 +1275,8 @@ define(function (require, exports, module) {
 
     FCExtractView.prototype.sizeObject = function (canvas) {
         FCGeneralNodeView.prototype.sizeObject.call(this, canvas);
-        this.minWidth = this.nameLabel.minWidth * 2;
-        this.minHeight = this.nameLabel.minHeight * 2;
+        this.minWidth = Math.max(this.nameLabel.minWidth * 2, EXTRACT_MINWIDTH);
+        this.minHeight = Math.max(this.nameLabel.minHeight * 2, EXTRACT_MINHEIGHT);
     };
 
     FCExtractView.prototype.arrangeObject = function (canvas) {

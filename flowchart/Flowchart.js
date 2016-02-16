@@ -455,6 +455,7 @@ define(function (require, exports, module) {
         if (this.model) {
             this.nameLabel.text = this.model.name;
         }
+        this.nameLabel.wordWrap = this.wordWrap;
     };
 
     FCGeneralNodeView.prototype.sizeObject = function (canvas) {
@@ -465,7 +466,6 @@ define(function (require, exports, module) {
 
     FCGeneralNodeView.prototype.arrangeObject = function (canvas) {
         type.NodeView.prototype.arrangeObject.call(this, canvas);
-        this.nameLabel.wordWrap = this.wordWrap;
         this.nameLabel.left = this.left + LEFT_PADDING;
         this.nameLabel.top = this.top + TOP_PADDING;
         this.nameLabel.width = this.width - LEFT_PADDING - RIGHT_PADDING;

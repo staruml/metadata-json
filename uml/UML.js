@@ -1728,10 +1728,10 @@ define(function (require, exports, module) {
      * @return {string}
      */
     UMLInstance.prototype.getTypeString = function () {
-        if (_.isString(this.classifier) && (this.classifier.length > 0)) {
-            return this.classifier;
-        } else if ((this.classifier !== null) && (this.classifier.name)) {
+        if (this.classifier && this.classifier.name) {
             return this.classifier.name;
+        } else if (_.isString(this.classifier) && (this.classifier.length > 0)) {
+            return this.classifier;
         }
         return null;
     };

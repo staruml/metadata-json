@@ -150,14 +150,14 @@ define(function (require, exports, module) {
         CONNECTIONPOINT_MINWIDTH = 14,
         CONNECTIONPOINT_MINHEIGHT = 14,
 
-        PIN_MINWIDTH = 18,
-        PIN_MINHEIGHT = 18,
-
         // Activities
         ACTION_MINWIDTH = 60,
         ACTION_MINHEIGHT = 40,
         ACTION_ROUND = 10,
 
+        PIN_MINWIDTH = 18,
+        PIN_MINHEIGHT = 18,
+        
         INITIALNODE_MINWIDTH = 20,
         INITIALNODE_MINHEIGHT = 20,
         ACTIVITYFINALNODE_MINWIDTH = 26,
@@ -2396,6 +2396,7 @@ define(function (require, exports, module) {
                (model instanceof type.Diagram) ||
                (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLPackage) ||
+               (model instanceof type.UMLSubsystem) ||
                (model instanceof type.UMLDependency);
     };
 
@@ -2905,6 +2906,7 @@ define(function (require, exports, module) {
                (model instanceof type.Diagram) ||
                (model instanceof type.UMLConstraint) ||
                (model instanceof type.UMLClassifier) ||
+               (model instanceof type.UMLInstance) ||
                (model instanceof type.UMLDependency) ||
                (model instanceof type.UMLLink);
     };
@@ -5032,6 +5034,55 @@ define(function (require, exports, module) {
         }
     };
 
+    
+    /**
+     * UMLExpansionNodeView
+     * @constructor
+     * @extends UMLPinView
+     */
+    function UMLExpansionNodeView() {
+        UMLPinView.apply(this, arguments);
+    }
+    // inherits from UMLPinView
+    UMLExpansionNodeView.prototype = Object.create(UMLPinView.prototype);
+    UMLExpansionNodeView.prototype.constructor = UMLExpansionNodeView;
+
+    UMLExpansionNodeView.prototype.sizeObject = function (canvas) {
+        UMLPinView.prototype.sizeObject.call(this, canvas);
+        switch (this.getPosition(canvas)) {
+        case "top":
+        case "bottom":
+            this.minWidth = PIN_MINHEIGHT * 4;
+            this.minHeight = PIN_MINHEIGHT;
+            break;
+        case "left":
+        case "right":
+            this.minWidth = PIN_MINWIDTH;
+            this.minHeight = PIN_MINWIDTH * 4;
+            break;
+        }
+    };
+
+    UMLExpansionNodeView.prototype.drawObject = function (canvas) {
+        UMLPinView.prototype.drawObject.call(this, canvas);
+        canvas.fillRect(this.left, this.top, this.getRight(), this.getBottom());
+        canvas.rect(this.left, this.top, this.getRight(), this.getBottom());
+        switch (this.getPosition(canvas)) {
+        case "top":
+        case "bottom":
+            canvas.line(this.left + PIN_MINHEIGHT, this.top, this.left + PIN_MINHEIGHT, this.getBottom());
+            canvas.line(this.left + PIN_MINHEIGHT * 2, this.top, this.left + PIN_MINHEIGHT * 2, this.getBottom());
+            canvas.line(this.left + PIN_MINHEIGHT * 3, this.top, this.left + PIN_MINHEIGHT * 3, this.getBottom());            
+            break;
+        case "left":
+        case "right":
+            canvas.line(this.left, this.top + PIN_MINWIDTH, this.getRight(), this.top + PIN_MINWIDTH);
+            canvas.line(this.left, this.top + PIN_MINWIDTH * 2, this.getRight(), this.top + PIN_MINWIDTH * 2);
+            canvas.line(this.left, this.top + PIN_MINWIDTH * 3, this.getRight(), this.top + PIN_MINWIDTH * 3);
+            break;
+        }        
+    };
+    
 
     /**
      * UMLActionView
@@ -5213,7 +5264,7 @@ define(function (require, exports, module) {
     // inherits from UMLGeneralNodeView
     UMLObjectNodeView.prototype = Object.create(UMLGeneralNodeView.prototype);
     UMLObjectNodeView.prototype.constructor = UMLObjectNodeView;
-
+    
     UMLObjectNodeView.prototype.update = function (canvas) {
         UMLGeneralNodeView.prototype.update.call(this, canvas);
         if (this.model) {
@@ -5227,7 +5278,41 @@ define(function (require, exports, module) {
         UMLGeneralNodeView.prototype.drawObject.call(this, canvas);
     };
 
+    
+    /**
+     * UMLCentralBufferNodeView
+     * @constructor
+     * @extends UMLObjectNodeView
+     */
+    function UMLCentralBufferNodeView() {
+        UMLObjectNodeView.apply(this, arguments);
+    }
+    // inherits from UMLObjectNodeView
+    UMLCentralBufferNodeView.prototype = Object.create(UMLObjectNodeView.prototype);
+    UMLCentralBufferNodeView.prototype.constructor = UMLCentralBufferNodeView;
 
+    UMLCentralBufferNodeView.prototype.getStereotypeLabelText = function () {
+        return "«centralBuffer»";
+    };
+
+    
+    /**
+     * UMLDataStoreNodeView
+     * @constructor
+     * @extends UMLObjectNodeView
+     */
+    function UMLDataStoreNodeView() {
+        UMLObjectNodeView.apply(this, arguments);
+    }
+    // inherits from UMLObjectNodeView
+    UMLDataStoreNodeView.prototype = Object.create(UMLObjectNodeView.prototype);
+    UMLDataStoreNodeView.prototype.constructor = UMLDataStoreNodeView;
+
+    UMLDataStoreNodeView.prototype.getStereotypeLabelText = function () {
+        return "«datastore»";
+    };
+
+    
     /**
      * UMLControlNodeView
      * @constructor
@@ -5354,7 +5439,7 @@ define(function (require, exports, module) {
         }
     };
 
-
+        
     /**
      * UMLControlFlowView
      * @constructor
@@ -5406,9 +5491,128 @@ define(function (require, exports, module) {
     };
 
     UMLObjectFlowView.prototype.canConnectTo = function (view, isTail) {
-        return (view.model instanceof type.UMLActivityNode);
+        return (view.model instanceof type.UMLActivityNode || view.model instanceof type.UMLPin);
+    };
+    
+    
+    /**
+     * UMLZigZagAdornmentView
+     * @constructor
+     * @extends EdgeNodeView
+     */
+    function UMLZigZagAdornmentView() {
+        EdgeNodeView.apply(this, arguments);
+        this.edgePosition = Core.EP_MIDDLE;
+        this.sizable = Core.SZ_NONE;
+        this.movable = Core.MM_FREE;
+        this.alpha = Math.PI / 2;
+        this.distance = 20;
+    }
+    // inherits from EdgeNodeView
+    UMLZigZagAdornmentView.prototype = Object.create(EdgeNodeView.prototype);
+    UMLZigZagAdornmentView.prototype.constructor = UMLZigZagAdornmentView;
+
+
+    UMLZigZagAdornmentView.prototype.update = function () {
+        EdgeNodeView.prototype.update.call(this);
     };
 
+    UMLZigZagAdornmentView.prototype.sizeObject = function (canvas) {
+        EdgeNodeView.prototype.sizeObject.call(this, canvas);
+        this.width = 25;
+        this.height = 20;
+    };
+    
+    UMLZigZagAdornmentView.prototype.arrangeObject = function (canvas) {
+        EdgeNodeView.prototype.arrangeObject.call(this, canvas);
+    };
+    
+    UMLZigZagAdornmentView.prototype.drawObject = function (canvas) {
+        EdgeNodeView.prototype.drawObject.call(this, canvas);
+        canvas.line(this.left, this.top, this.getRight(), this.top);
+        canvas.line(this.getRight(), this.top, this.left, this.getBottom() - 5);
+        canvas.line(this.left, this.getBottom() - 5, this.getRight(), this.getBottom() - 5);
+        canvas.line(this.getRight(), this.getBottom() - 5, this.getRight() - 5, this.getBottom());
+        canvas.line(this.getRight(), this.getBottom() - 5, this.getRight() - 5, this.getBottom() - 10);
+    };
+
+    /** Cannot be copied to clipboard. */
+    UMLZigZagAdornmentView.prototype.canCopy = function () {
+        return false;
+    };
+
+    /** Cannnot be deleted view only. */
+    UMLZigZagAdornmentView.prototype.canDelete = function () {
+        return false;
+    };
+    
+    
+    /**
+     * UMLExceptionHandlerView
+     * @constructor
+     * @extends UMLGeneralEdgeView
+     */
+    function UMLExceptionHandlerView() {
+        UMLGeneralEdgeView.apply(this, arguments);
+        this.tailEndStyle = Core.ES_FLAT;
+        this.headEndStyle = Core.ES_STICK_ARROW;
+        this.lineMode = Core.LM_SOLID;
+        
+        /** @member {UMLZigZagAdornmentView} */
+        this.adornment = new UMLZigZagAdornmentView();
+        this.adornment.parentStyle = true;
+        this.addSubView(this.adornment);        
+    }
+    // inherits from UMLGeneralEdgeView
+    UMLExceptionHandlerView.prototype = Object.create(UMLGeneralEdgeView.prototype);
+    UMLExceptionHandlerView.prototype.constructor = UMLExceptionHandlerView;
+
+    UMLExceptionHandlerView.prototype.update = function () {
+        UMLGeneralEdgeView.prototype.update.call(this);
+        // adornment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
+        if (this.adornment.model !== this.model) {
+            Repository.bypassFieldAssign(this.adornment, 'model', this.model);
+        }
+    };
+    
+    UMLExceptionHandlerView.prototype.canConnectTo = function (view, isTail) {
+        return (view.model instanceof type.UMLActivityNode);
+    };
+    
+
+    /**
+     * UMLActivityInterruptView
+     * @constructor
+     * @extends UMLGeneralEdgeView
+     */
+    function UMLActivityInterruptView() {
+        UMLGeneralEdgeView.apply(this, arguments);
+        this.tailEndStyle = Core.ES_FLAT;
+        this.headEndStyle = Core.ES_STICK_ARROW;
+        this.lineMode = Core.LM_SOLID;
+        
+        /** @member {UMLZigZagAdornmentView} */
+        this.adornment = new UMLZigZagAdornmentView();
+        this.adornment.parentStyle = true;
+        this.addSubView(this.adornment);        
+    }
+    // inherits from UMLGeneralEdgeView
+    UMLActivityInterruptView.prototype = Object.create(UMLGeneralEdgeView.prototype);
+    UMLActivityInterruptView.prototype.constructor = UMLActivityInterruptView;
+
+    UMLActivityInterruptView.prototype.update = function () {
+        UMLGeneralEdgeView.prototype.update.call(this);
+        // adornment가 model을 정상적으로 reference 할 수 있도록 Bypass Command에 의해서 설정한다.
+        if (this.adornment.model !== this.model) {
+            Repository.bypassFieldAssign(this.adornment, 'model', this.model);
+        }
+    };
+    
+    UMLActivityInterruptView.prototype.canConnectTo = function (view, isTail) {
+        return (view.model instanceof type.UMLActivityNode);
+    };
+    
+    
     /**
      * UMLSwimlaneView
      * @constructor
@@ -5502,7 +5706,128 @@ define(function (require, exports, module) {
         }
         canvas.lineWidth = 1;
     };
+    
+    
+    /**
+     * UMLInterruptibleActivityRegionView
+     * @constructor
+     * @extends NodeView
+     */
+    function UMLInterruptibleActivityRegionView() {
+        NodeView.apply(this, arguments);
+    }
+    // inherits from NodeView
+    UMLInterruptibleActivityRegionView.prototype = Object.create(NodeView.prototype);
+    UMLInterruptibleActivityRegionView.prototype.constructor = UMLInterruptibleActivityRegionView;
 
+    UMLInterruptibleActivityRegionView.prototype.canContainViewKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLActionView") ||
+               MetaModelManager.isKindOf(kind, "UMLControlNodeView") ||
+               MetaModelManager.isKindOf(kind, "UMLObjectNodeView") ||
+               MetaModelManager.isKindOf(kind, "UMLFinalStateView");
+    };
+
+    UMLInterruptibleActivityRegionView.prototype.sizeObject = function (canvas) {
+        NodeView.prototype.sizeObject.call(this, canvas);
+        this.minWidth = 30;
+        this.minHeight = 30;
+    };
+    
+    UMLInterruptibleActivityRegionView.prototype.drawObject = function (canvas) {
+        canvas.roundRect(this.left, this.top, this.getRight(), this.getBottom(), ACTION_ROUND, [3]);
+    };
+    
+    
+    /**
+     * UMLStructuredActivityNodeView
+     * @constructor
+     * @extends UMLGeneralNodeView
+     */
+    function UMLStructuredActivityNodeView() {
+        UMLGeneralNodeView.apply(this, arguments);
+        this.containerChangeable = true;
+        this.fillColor = PreferenceManager.get("uml.action.fillColor", "#ffffff") || PreferenceManager.get("view.fillColor", "#ffffff");
+    }
+    // inherits from UMLGeneralNodeView
+    UMLStructuredActivityNodeView.prototype = Object.create(UMLGeneralNodeView.prototype);
+    UMLStructuredActivityNodeView.prototype.constructor = UMLStructuredActivityNodeView;
+
+    UMLStructuredActivityNodeView.prototype.getStereotypeLabelText = function () {
+        return "«structured»";
+    };
+    
+    UMLStructuredActivityNodeView.prototype.canContainViewKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLActionView") ||
+               MetaModelManager.isKindOf(kind, "UMLControlNodeView") ||
+               MetaModelManager.isKindOf(kind, "UMLObjectNodeView") ||
+               MetaModelManager.isKindOf(kind, "UMLFinalStateView") ||
+               MetaModelManager.isKindOf(kind, "UMLStructuredActivityNodeView");
+    };
+    
+    UMLStructuredActivityNodeView.prototype.update = function (canvas) {
+        UMLGeneralNodeView.prototype.update.call(this, canvas);
+        this.nameCompartment.stereotypeLabel.horizontalAlignment = Graphics.AL_LEFT;
+        if (this.model) {
+            if (this.model.subactivity instanceof type.UMLActivity) {
+                this.nameCompartment.nameLabel.text = this.model.name + ":" + this.model.subactivity.name;
+            }
+        }
+    };
+        
+    UMLStructuredActivityNodeView.prototype.drawShadowAsCanonicalForm = function (canvas, showLabel) {
+        canvas.fillRoundRect(
+            this.mainRect.x1 + SHADOW_OFFSET,
+            this.mainRect.y1 + SHADOW_OFFSET,
+            this.mainRect.x2 + SHADOW_OFFSET,
+            this.mainRect.y2 + SHADOW_OFFSET,
+            STATE_ROUND
+        );
+    };
+
+    UMLStructuredActivityNodeView.prototype.drawShadowAsDecorationForm = function (canvas) {
+        this.drawShadowAsCanonicalForm(canvas);
+    };
+
+    UMLStructuredActivityNodeView.prototype.drawShadowAsIconicForm = function (canvas) {
+        this.drawShadowAsCanonicalForm(canvas);
+    };
+
+    UMLStructuredActivityNodeView.prototype.drawObject = function (canvas) {
+        canvas.fillRoundRect(this.left, this.top, this.getRight(), this.getBottom(), ACTION_ROUND);
+        canvas.roundRect(this.left, this.top, this.getRight(), this.getBottom(), ACTION_ROUND, [3]);
+        if (this.model.subactivity !== null) {
+            canvas.ellipse(this.getRight()-26, this.getBottom()-16, this.getRight()-20, this.getBottom()-10);
+            canvas.line(this.getRight()-20, this.getBottom()-13, this.getRight()-14, this.getBottom()-13);
+            canvas.ellipse(this.getRight()-14, this.getBottom()-16, this.getRight()-8, this.getBottom()-10);
+        }
+    };
+
+    
+    /**
+     * UMLExpansionRegionView
+     * @constructor
+     * @extends UMLStructuredActivityNodeView
+     */
+    function UMLExpansionRegionView() {
+        UMLStructuredActivityNodeView.apply(this, arguments);
+    }
+    // inherits from UMLStructuredActivityNodeView
+    UMLExpansionRegionView.prototype = Object.create(UMLStructuredActivityNodeView.prototype);
+    UMLExpansionRegionView.prototype.constructor = UMLExpansionRegionView;
+
+    UMLExpansionRegionView.prototype.getStereotypeLabelText = function () {
+        switch (this.model.mode) {
+        case UML.EK_PARALLEL:
+            return "«parallel»";
+        case UML.EK_ITERATIVE:
+            return "«iterative»";
+        case UML.EK_STREAM:
+            return "«stream»";
+        }
+        return this.model.getStereotypeString();
+    };
+    
+    
     /**************************************************************************
      *                                                                        *
      *                         SEQUENCE DIAGRAM VIEWS                         *
@@ -7778,12 +8103,21 @@ define(function (require, exports, module) {
     type.UMLPinView                           = UMLPinView;
     type.UMLInputPinView                      = UMLInputPinView;
     type.UMLOutputPinView                     = UMLOutputPinView;
+    type.UMLExpansionNodeView                 = UMLExpansionNodeView;
     type.UMLActionView                        = UMLActionView;
     type.UMLObjectNodeView                    = UMLObjectNodeView;
+    type.UMLCentralBufferNodeView             = UMLCentralBufferNodeView;
+    type.UMLDataStoreNodeView                 = UMLDataStoreNodeView;
     type.UMLControlNodeView                   = UMLControlNodeView;
     type.UMLControlFlowView                   = UMLControlFlowView;
     type.UMLObjectFlowView                    = UMLObjectFlowView;
+    type.UMLZigZagAdornmentView               = UMLZigZagAdornmentView;
+    type.UMLExceptionHandlerView              = UMLExceptionHandlerView;
+    type.UMLActivityInterruptView             = UMLActivityInterruptView;
     type.UMLSwimlaneView                      = UMLSwimlaneView;
+    type.UMLInterruptibleActivityRegionView   = UMLInterruptibleActivityRegionView;
+    type.UMLStructuredActivityNodeView        = UMLStructuredActivityNodeView;
+    type.UMLExpansionRegionView               = UMLExpansionRegionView;
     // Sequence Diagram Views
     type.UMLSequenceDiagram                   = UMLSequenceDiagram;
     type.UMLLinePartView                      = UMLLinePartView;

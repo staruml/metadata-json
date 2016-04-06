@@ -121,6 +121,12 @@ define(function (require, exports, module) {
         if (this.foreignKey) {
             _key += (_key.length > 0) ? ",FK" : "FK";
         }
+        if (!this.primaryKey && this.nullable) {
+            _key += (_key.length > 0) ? ",N" : "N";
+        }
+        if (!this.primaryKey && this.unique) {
+            _key += (_key.length > 0) ? ",U" : "U";
+        }
         return _key;
     };
 

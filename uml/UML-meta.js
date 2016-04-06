@@ -70,6 +70,10 @@ define(function (require, exports, module) {
             "kind": "enum",
             "literals": [ "unordered", "ordered", "LIFO", "FIFO" ]
         },
+        "UMLExpansionKind": {
+            "kind": "enum",
+            "literals": [ "parallel", "iterative", "stream" ]
+        },
         "UMLStereotypeDisplayKind": {
             "kind": "enum",
             "literals": [ "none", "label", "decoration", "decoration-label", "icon", "icon-label" ]
@@ -670,6 +674,12 @@ define(function (require, exports, module) {
             "super": "UMLPin",
             "view": "UMLOutputPinView"
         },
+        "UMLExpansionNode": {
+            "kind": "class",
+            "super": "UMLPin",
+            "view": "UMLExpansionNodeView",
+            "ordering": 1412
+        },
         "UMLActivityNode": {
             "kind": "class",
             "super": "UMLModelElement"
@@ -694,6 +704,26 @@ define(function (require, exports, module) {
             "view": "UMLActionView",
             "ordering": 1411
         },
+        "UMLStructuredActivityNode": {
+            "kind": "class",
+            "super": "UMLAction",
+            "attributes": [
+                { "name": "mustIsolate",  "kind": "prim", "type": "Boolean", "visible": true, "default": false },
+                { "name": "nodes", "kind": "objs", "type": "UMLActivityNode" },
+                { "name": "edges", "kind": "objs", "type": "UMLActivityEdge" }
+            ],
+            "view": "UMLStructuredActivityNodeView",
+            "ordering": 1412
+        },
+        "UMLExpansionRegion": {
+            "kind": "class",
+            "super": "UMLStructuredActivityNode",
+            "attributes": [
+                { "name": "mode",  "kind": "enum", "type": "UMLExpansionKind", "visible": true, "default": "iterative" }
+            ],
+            "view": "UMLExpansionRegionView",
+            "ordering": 1412
+        },
         "UMLObjectNode": {
             "kind": "class",
             "super": "UMLActivityNode",
@@ -703,6 +733,18 @@ define(function (require, exports, module) {
                 { "name": "ordering",      "kind": "enum", "type": "UMLObjectNodeOrderingKind", "visible": true }
             ],
             "view": "UMLObjectNodeView",
+            "ordering": 1412
+        },
+        "UMLCentralBufferNode": {
+            "kind": "class",
+            "super": "UMLObjectNode",
+            "view": "UMLCentralBufferNodeView",
+            "ordering": 1412
+        },
+        "UMLDataStoreNode": {
+            "kind": "class",
+            "super": "UMLCentralBufferNode",
+            "view": "UMLDataStoreNodeView",
             "ordering": 1412
         },
         "UMLControlNode": {
@@ -762,7 +804,9 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLModelElement",
             "attributes": [
-                { "name": "subgroups", "kind": "objs", "type": "UMLActivityGroup" }
+                { "name": "subgroups", "kind": "objs", "type": "UMLActivityGroup" },
+                { "name": "nodes",     "kind": "objs", "type": "UMLActivityNode" },
+                { "name": "edges",     "kind": "objs", "type": "UMLActivityEdge" }
             ],
             "ordering": 1422
         },
@@ -770,11 +814,23 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLActivityGroup",
             "view": "UMLSwimlaneView",
-            "attributes": [
-                { "name": "nodes", "kind": "objs", "type": "UMLActivityNode" },
-                { "name": "edges", "kind": "objs", "type": "UMLActivityEdge" }
-            ],
             "ordering": 1423
+        },
+        "UMLInterruptibleActivityRegion": {
+            "kind": "class",
+            "super": "UMLActivityGroup",
+            "view": "UMLInterruptibleActivityRegionView",
+            "ordering": 1423
+        },
+        "UMLExceptionHandler": {
+            "kind": "class",
+            "super": "UMLDirectedRelationship",
+            "view": "UMLExceptionHandlerView",
+            "attributes": [
+                { "name": "exceptionTypes", "kind": "refs", "type": "UMLClassifier",   "visible": true },
+                { "name": "handlerBody",    "kind": "ref",  "type": "UMLActivityNode", "visible": true }
+            ],
+            "ordering": 1820
         },
         "UMLActivityEdge": {
             "kind": "class",
@@ -794,6 +850,12 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLActivityEdge",
             "view": "UMLObjectFlowView",
+            "ordering": 1821
+        },
+        "UMLActivityInterrupt": {
+            "kind": "class",
+            "super": "UMLActivityEdge",
+            "view": "UMLActivityInterruptView",
             "ordering": 1821
         },
         "UMLInteractionFragment": {
@@ -1676,13 +1738,33 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLPinView"
         },
+        "UMLExpansionNodeView": {
+            "kind": "class",
+            "super": "UMLPinView"
+        },
         "UMLActionView": {
             "kind": "class",
             "super": "UMLGeneralNodeView"
         },
+        "UMLStructuredActivityNodeView": {
+            "kind": "class",
+            "super": "UMLGeneralNodeView"
+        },
+        "UMLExpansionRegionView": {
+            "kind": "class",
+            "super": "UMLStructuredActivityNodeView"
+        },
         "UMLObjectNodeView": {
             "kind": "class",
             "super": "UMLGeneralNodeView"
+        },
+        "UMLCentralBufferNodeView": {
+            "kind": "class",
+            "super": "UMLObjectNodeView"
+        },
+        "UMLDataStoreNodeView": {
+            "kind": "class",
+            "super": "UMLObjectNodeView"
         },
         "UMLControlNodeView": {
             "kind": "class",
@@ -1696,6 +1778,24 @@ define(function (require, exports, module) {
             "kind": "class",
             "super": "UMLGeneralEdgeView"
         },
+        "UMLZigZagAdornmentView": {
+            "kind": "class",
+            "super": "EdgeNodeView"
+        },
+        "UMLExceptionHandlerView": {
+            "kind": "class",
+            "super": "UMLGeneralEdgeView",
+            "attributes": [
+                { "name": "adornment",  "kind": "ref",  "type": "UMLZigZagAdornmentView", "embedded": "subViews" }
+            ]
+        },
+        "UMLActivityInterruptView": {
+            "kind": "class",
+            "super": "UMLGeneralEdgeView",
+            "attributes": [
+                { "name": "adornment",  "kind": "ref",  "type": "UMLZigZagAdornmentView", "embedded": "subViews" }
+            ]
+        },
         "UMLSwimlaneView": {
             "kind": "class",
             "super": "NodeView",
@@ -1703,6 +1803,10 @@ define(function (require, exports, module) {
                 { "name": "nameLabel",  "kind": "ref",  "type": "LabelView", "embedded": "subViews" },
                 { "name": "isVertical", "kind": "prim", "type": "Boolean", "default": true }
             ]
+        },
+        "UMLInterruptibleActivityRegionView": {
+            "kind": "class",
+            "super": "NodeView"
         },
         "UMLSequenceDiagram": {
             "kind": "class",

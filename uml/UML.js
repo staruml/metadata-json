@@ -158,6 +158,14 @@ define(function (require, exports, module) {
         ONOK_FIFO      = 'FIFO';
 
     /**
+     * UMLExpansionKind
+     * @enum
+     */
+    var EK_PARALLEL  = 'parallel',
+        EK_ITERATIVE = 'iterative',
+        EK_STREAM    = 'stream';
+    
+    /**
      * Stereotype Display
      * @enum
      */
@@ -2577,6 +2585,19 @@ define(function (require, exports, module) {
     UMLOutputPin.prototype = Object.create(UMLPin.prototype);
     UMLOutputPin.prototype.constructor = UMLOutputPin;
 
+    
+    /**
+     * UMLExpansionNode
+     * @constructor
+     * @extends UMLPin
+     */
+    function UMLExpansionNode() {
+        UMLPin.apply(this, arguments);
+    }
+    // inherits from UMLPin
+    UMLExpansionNode.prototype = Object.create(UMLPin.prototype);
+    UMLExpansionNode.prototype.constructor = UMLExpansionNode;
+    
 
     /**
      * UMLActivityNode
@@ -2696,8 +2717,8 @@ define(function (require, exports, module) {
             return "icon-UMLAcceptTimeEvent";
         }
     };
-
-
+    
+    
     /**
      * UMLObjectNode
      * @constructor
@@ -2735,7 +2756,33 @@ define(function (require, exports, module) {
         return text;
     };
 
+    
+    /**
+     * UMLCentralBufferNode
+     * @constructor
+     * @extends UMLObjectNode
+     */
+    function UMLCentralBufferNode() {
+        UMLObjectNode.apply(this, arguments);
+    }
+    // inherits from UMLObjectNode
+    UMLCentralBufferNode.prototype = Object.create(UMLObjectNode.prototype);
+    UMLCentralBufferNode.prototype.constructor = UMLCentralBufferNode;
 
+
+    /**
+     * UMLDataStoreNode
+     * @constructor
+     * @extends UMLCentralBufferNode
+     */
+    function UMLDataStoreNode() {
+        UMLCentralBufferNode.apply(this, arguments);
+    }
+    // inherits from UMLCentralBufferNode
+    UMLDataStoreNode.prototype = Object.create(UMLCentralBufferNode.prototype);
+    UMLDataStoreNode.prototype.constructor = UMLDataStoreNode;
+    
+    
     /**
      * UMLControlNode
      * @constructor
@@ -2861,6 +2908,12 @@ define(function (require, exports, module) {
     function UMLActivityGroup() {
         UMLModelElement.apply(this, arguments);
 
+        /** @member {Array.<UMLActivityNode>} */
+        this.nodes = [];
+
+        /** @member {Array.<UMLActivityEdge>} */
+        this.edges = [];
+
         /** @member {Array.<UMLActivityGroup>} */
         this.subgroups = [];
     }
@@ -2876,12 +2929,6 @@ define(function (require, exports, module) {
      */
     function UMLActivityPartition() {
         UMLActivityGroup.apply(this, arguments);
-
-        /** @member {Array.<UMLActivityNode>} */
-        this.nodes = [];
-
-        /** @member {Array.<UMLActivityEdge>} */
-        this.edges = [];
     }
     // inherits from UMLActivityGroup
     UMLActivityPartition.prototype = Object.create(UMLActivityGroup.prototype);
@@ -2895,6 +2942,93 @@ define(function (require, exports, module) {
         return MetaModelManager.isKindOf(kind, "UMLActivityNode");
     };
 
+    
+    /**
+     * UMLInterruptibleActivityRegion
+     * @constructor
+     * @extends UMLActivityGroup
+     */
+    function UMLInterruptibleActivityRegion() {
+        UMLActivityGroup.apply(this, arguments);
+    }
+    // inherits from UMLActivityGroup
+    UMLInterruptibleActivityRegion.prototype = Object.create(UMLActivityGroup.prototype);
+    UMLInterruptibleActivityRegion.prototype.constructor = UMLInterruptibleActivityRegion;
+
+    UMLInterruptibleActivityRegion.prototype.canContainKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLActivityNode");
+    };
+
+    
+    /**
+     * UMLStructuredActivityNode
+     * @constructor
+     * @extends UMLAction
+     */
+    function UMLStructuredActivityNode() {
+        UMLAction.apply(this, arguments);
+
+        /** @member {boolean} */
+        this.mustIsolate = false;
+        
+        /** @member {Array.<UMLActivityNode>} */
+        this.nodes = [];
+
+        /** @member {Array.<UMLActivityEdge>} */
+        this.edges = [];
+    }
+    // inherits from UMLAction
+    UMLStructuredActivityNode.prototype = Object.create(UMLAction.prototype);
+    UMLStructuredActivityNode.prototype.constructor = UMLStructuredActivityNode;
+
+    UMLStructuredActivityNode.prototype.getNodeIcon = function () {
+        return "icon-UMLStructuredActivityNode";
+    };
+    
+    UMLStructuredActivityNode.prototype.canContainKind = function (kind) {
+        return MetaModelManager.isKindOf(kind, "UMLActivityNode");
+    };
+    
+    
+    /**
+     * UMLExpansionRegion
+     * @constructor
+     * @extends UMLStructuredActivityNode
+     */
+    function UMLExpansionRegion() {
+        UMLStructuredActivityNode.apply(this, arguments);
+
+        /** @member {UMLExpansionKind} */
+        this.mode = EK_ITERATIVE;        
+    }
+    // inherits from UMLStructuredActivityNode
+    UMLExpansionRegion.prototype = Object.create(UMLStructuredActivityNode.prototype);
+    UMLExpansionRegion.prototype.constructor = UMLExpansionRegion;
+
+    UMLExpansionRegion.prototype.getNodeIcon = function () {
+        return "icon-UMLExpansionRegion";
+    };
+    
+    
+    /**
+     * UMLExceptionHandler
+     * @constructor
+     * @extends UMLDirectedRelationship
+     */
+    function UMLExceptionHandler() {
+        UMLDirectedRelationship.apply(this, arguments);
+        
+        /** @member {Array.<UMLClassifier>} */
+        this.exceptionTypes = [];
+
+        /** @member {UMLActivityNode} */
+        this.handlerBody = null;
+    }
+    // inherits from UMLDirectedRelationship
+    UMLExceptionHandler.prototype = Object.create(UMLDirectedRelationship.prototype);
+    UMLExceptionHandler.prototype.constructor = UMLExceptionHandler;
+
+    
     /**
      * UMLActivityEdge
      * @constructor
@@ -2952,6 +3086,20 @@ define(function (require, exports, module) {
     UMLObjectFlow.prototype = Object.create(UMLActivityEdge.prototype);
     UMLObjectFlow.prototype.constructor = UMLObjectFlow;
 
+
+    /**
+     * UMLActivityInterrupt
+     * @constructor
+     * @extends UMLActivityEdge
+     */
+    function UMLActivityInterrupt() {
+        UMLActivityEdge.apply(this, arguments);
+    }
+    // inherits from UMLActivityEdge
+    UMLActivityInterrupt.prototype = Object.create(UMLActivityEdge.prototype);
+    UMLActivityInterrupt.prototype.constructor = UMLActivityInterrupt;
+    
+    
     /**************************************************************************
      *                                                                        *
      *                               INTERACTIONS                             *
@@ -3143,6 +3291,18 @@ define(function (require, exports, module) {
         return text;
     };
 
+    UMLLifeline.prototype.getNodeText = function () {
+        var text = "",
+            typeStr = this.getTypeString();
+        text += this.name;
+        if (typeStr) {
+            text += ": " + typeStr;
+        }
+        if (!text) {
+            text = "(Lifeline)";
+        }
+        return text;
+    };
 
     /**
      * UMLGate
@@ -3428,9 +3588,12 @@ define(function (require, exports, module) {
     type.UMLPin                      = UMLPin;
     type.UMLInputPin                 = UMLInputPin;
     type.UMLOutputPin                = UMLOutputPin;
+    type.UMLExpansionNode            = UMLExpansionNode;
     type.UMLActivityNode             = UMLActivityNode;
     type.UMLAction                   = UMLAction;
     type.UMLObjectNode               = UMLObjectNode;
+    type.UMLCentralBufferNode        = UMLCentralBufferNode;
+    type.UMLDataStoreNode            = UMLDataStoreNode;
     type.UMLControlNode              = UMLControlNode;
     type.UMLInitialNode              = UMLInitialNode;
     type.UMLFinalNode                = UMLFinalNode;
@@ -3442,9 +3605,14 @@ define(function (require, exports, module) {
     type.UMLDecisionNode             = UMLDecisionNode;
     type.UMLActivityGroup            = UMLActivityGroup;
     type.UMLActivityPartition        = UMLActivityPartition;
+    type.UMLInterruptibleActivityRegion = UMLInterruptibleActivityRegion;
+    type.UMLStructuredActivityNode   = UMLStructuredActivityNode;
+    type.UMLExpansionRegion          = UMLExpansionRegion;
+    type.UMLExceptionHandler         = UMLExceptionHandler;
     type.UMLActivityEdge             = UMLActivityEdge;
     type.UMLControlFlow              = UMLControlFlow;
     type.UMLObjectFlow               = UMLObjectFlow;
+    type.UMLActivityInterrupt        = UMLActivityInterrupt;
     // Interactions
     type.UMLInteractionFragment      = UMLInteractionFragment;
     type.UMLInteraction              = UMLInteraction;
@@ -3545,6 +3713,10 @@ define(function (require, exports, module) {
     exports.ONOK_ORDERED   = ONOK_ORDERED;
     exports.ONOK_LIFO      = ONOK_LIFO;
     exports.ONOK_FIFO      = ONOK_FIFO;
+
+    exports.EK_PARALLEL  = EK_PARALLEL;
+    exports.EK_ITERATIVE = EK_ITERATIVE;
+    exports.EK_STREAM    = EK_STREAM;
 
     exports.SD_NONE             = SD_NONE;
     exports.SD_LABEL            = SD_LABEL;

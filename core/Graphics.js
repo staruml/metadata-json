@@ -1,16 +1,26 @@
 /*
- * Copyright (c) 2013-2014 Minkyu Lee. All rights reserved.
+ * Copyright (c) 2014 MKLab. All rights reserved.
  *
- * NOTICE:  All information contained herein is, and remains the
- * property of Minkyu Lee. The intellectual and technical concepts
- * contained herein are proprietary to Minkyu Lee and may be covered
- * by Republic of Korea and Foreign Patents, patents in process,
- * and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Minkyu Lee (niklaus.lee@gmail.com).
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
  *
  */
+
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
 /*global define, _*/
@@ -1173,7 +1183,7 @@ define(function (require, exports, module) {
      * @param {number} y2
      * @param {number} radius
      */
-    Canvas.prototype.roundRect = function (x1, y1, x2, y2, radius) {
+    Canvas.prototype.roundRect = function (x1, y1, x2, y2, radius, dashPattern) {
         this.transform();
         var x = (x1 < x2 ? x1 : x2),
             y = (y1 < y2 ? y1 : y2),
@@ -1183,6 +1193,9 @@ define(function (require, exports, module) {
         this.context.strokeStyle = this.color;
         this.context.lineWidth = this.lineWidth;
         this.context.globalAlpha = this.alpha;
+        if (dashPattern) {
+            this.context.setLineDash(dashPattern);
+        }        
         this.context.moveTo(x + radius, y);
         this.context.lineTo(x + w - radius, y);
         this.context.quadraticCurveTo(x + w, y, x + w, y + radius);

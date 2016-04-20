@@ -891,6 +891,22 @@
   height: 16px;
   background-clip: content-box;
 }
+._icon-UMLCentralBufferNode {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -32px -192px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLDataStoreNode {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -144px -192px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
 ._icon-UMLInitialNode {
   background-image: url('../icons/icons-vector-elements.svg') !important;
   background-repeat: no-repeat;
@@ -975,6 +991,70 @@
   background-image: url('../icons/icons-vector-elements.svg') !important;
   background-repeat: no-repeat;
   background-position: -112px -176px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLInterruptibleActivityRegion {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -160px -192px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLStructuredActivityNode {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -128px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLExpansionRegion {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -144px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLExpansionNode {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: 0px -208px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLInputExpansionNode {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -160px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLOutputExpansionNode {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -176px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLExceptionHandler {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -192px -160px;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+}
+._icon-UMLActivityInterrupt {
+  background-image: url('../icons/icons-vector-elements.svg') !important;
+  background-repeat: no-repeat;
+  background-position: -192px -192px;
   width: 16px;
   height: 16px;
   background-clip: content-box;

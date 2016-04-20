@@ -704,6 +704,19 @@
 	
 		<rect x="131.672" y="4.672" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 224.3026 107.9092)" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="5.657" height="5.657"/>
 </g>
+<g id="ActivityInterrupt">
+	<polyline fill="none" stroke="#1390D6" stroke-miterlimit="10" points="196,199.5 202.25,199.5 198.5,204.5 206,204.5 	"/>
+	<polyline fill="none" stroke="#1390D6" stroke-miterlimit="10" points="203.5,202.5 206.5,204.5 203.5,206.5 	"/>
+	<g>
+		<path fill="none" stroke="#1390D6" stroke-miterlimit="10" stroke-dasharray="2.0945,2.0945" d="M204.5,198.834
+			c0,1.473-1.136,2.666-2.538,2.666h-5.924c-1.402,0-2.538-1.193-2.538-2.666v-2.668c0-1.473,1.136-2.666,2.538-2.666h5.924
+			c1.402,0,2.538,1.193,2.538,2.666V198.834z"/>
+	</g>
+</g>
+<g id="ExceptionHandler">
+	<polyline fill="none" stroke="#1390D6" stroke-miterlimit="10" points="194,164.5 201.5,164.5 197,170.5 206,170.5 	"/>
+	<polyline fill="none" stroke="#1390D6" stroke-miterlimit="10" points="203.5,167.5 206.5,170.5 203.5,173.5 	"/>
+</g>
 <g id="ObjectFlow">
 	<rect x="97.5" y="10.5" fill="none" stroke="#1390D6" stroke-miterlimit="10" width="2" height="4"/>
 	<rect x="106.531" y="0.5" fill="none" stroke="#1390D6" stroke-miterlimit="10" width="3.969" height="2"/>
@@ -781,12 +794,87 @@
 	<polygon fill="none" stroke="#AD9400" stroke-miterlimit="10" points="52,179.5 60,179.5 52,188.5 60,188.5 	"/>
 </g>
 <g id="ObjectNode">
-	<rect x="53.5" y="195.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="9" height="7"/>
+	<rect x="53.5" y="193.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="9" height="9"/>
 	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="55" y1="200.5" x2="61" y2="200.5"/>
 	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="49" y1="198.5" x2="52.5" y2="198.5"/>
 	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="58.5" y1="203" x2="58.5" y2="206.5"/>
 	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="51,197 52.5,198.5 51,200 	"/>
 	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="57,205 58.5,206.5 60,205 	"/>
+</g>
+<g id="CentralBufferNode">
+	<rect x="37.5" y="193.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="9" height="9"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="39" y1="200.5" x2="45" y2="200.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="33" y1="198.5" x2="36.5" y2="198.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="42.5" y1="203" x2="42.5" y2="206.5"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="35,197 36.5,198.5 35,200 	"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="41,205 42.5,206.5 44,205 	"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="39.5" y1="197" x2="39.5" y2="200.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="44.5" y1="197" x2="44.5" y2="200.5"/>
+</g>
+<g id="DataStoreNode">
+	<rect x="149.5" y="193.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="9" height="9"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="145" y1="198.5" x2="148.5" y2="198.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="154.5" y1="203" x2="154.5" y2="206.5"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="147,197 148.5,198.5 147,200 	"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="153,205 154.5,206.5 156,205 	"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M154,198.5c1.382,0,2.5-0.671,2.5-1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M154,198.5c-1.382,0-2.5-0.671-2.5-1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M154,195.5c-1.382,0-2.5,0.671-2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M154,195.5c1.382,0,2.5,0.671,2.5,1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M154,200.5c1.382,0,2.5-0.671,2.5-1.5"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M154,200.5c-1.382,0-2.5-0.671-2.5-1.5"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="151.5" y1="197" x2="151.5" y2="199"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="156.5" y1="197" x2="156.5" y2="199"/>
+</g>
+<g id="InterruptibleActivityRegion">
+	<g>
+		<path fill="none" stroke="#AD9400" stroke-miterlimit="10" stroke-dasharray="1.9227,1.9227" d="M174.5,201.834
+			c0,2.024-1.343,3.666-3,3.666h-7c-1.657,0-3-1.642-3-3.666v-3.668c0-2.024,1.343-3.666,3-3.666h7c1.657,0,3,1.642,3,3.666V201.834
+			z"/>
+	</g>
+</g>
+<g id="StructuredActivity">
+	<g>
+		<path fill="none" stroke="#AD9400" stroke-miterlimit="10" stroke-dasharray="1.9227,1.9227" d="M142.5,169.834
+			c0,2.024-1.343,3.666-3,3.666h-7c-1.657,0-3-1.642-3-3.666v-3.668c0-2.024,1.343-3.666,3-3.666h7c1.657,0,3,1.642,3,3.666V169.834
+			z"/>
+	</g>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M136.5,166c0,0.828-0.688,1.5-1.538,1.5h-1.924
+		c-0.85,0-1.538-0.672-1.538-1.5l0,0c0-0.828,0.688-1.5,1.538-1.5h1.924C135.812,164.5,136.5,165.172,136.5,166L136.5,166z"/>
+	<path fill="none" stroke="#AD9400" stroke-miterlimit="10" d="M140.5,170c0,0.828-0.688,1.5-1.538,1.5h-1.924
+		c-0.85,0-1.538-0.672-1.538-1.5l0,0c0-0.828,0.688-1.5,1.538-1.5h1.924C139.812,168.5,140.5,169.172,140.5,170L140.5,170z"/>
+</g>
+<g id="ExpansionRegion">
+	<g>
+		<path fill="none" stroke="#AD9400" stroke-miterlimit="10" stroke-dasharray="1.9411,1.9411" d="M158.5,169.5c0,1.657-1.343,3-3,3
+			h-7c-1.657,0-3-1.343-3-3v-3c0-1.657,1.343-3,3-3h7c1.657,0,3,1.343,3,3V169.5z"/>
+	</g>
+	<rect x="149.5" y="161.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="2" height="2"/>
+	<rect x="151.5" y="161.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="2" height="2"/>
+	<rect x="152.5" y="172.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="2" height="2"/>
+	<rect x="150.5" y="172.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="2" height="2"/>
+</g>
+<g id="Input_ExpansionNode">
+	<rect x="162.5" y="167.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="165.5" y="167.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="168.5" y="167.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="171.5" y="167.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="168.5" y1="161" x2="168.5" y2="165.5"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="167,164 168.5,165.5 170,164 	"/>
+</g>
+<g id="Output_ExpansionNode">
+	<rect x="178.5" y="165.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="181.5" y="165.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="184.5" y="165.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="187.5" y="165.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<line fill="none" stroke="#AD9400" stroke-miterlimit="10" x1="184.5" y1="170" x2="184.5" y2="174.5"/>
+	<polyline fill="none" stroke="#AD9400" stroke-miterlimit="10" points="183,173 184.5,174.5 186,173 	"/>
+</g>
+<g id="ExpansionNode">
+	<rect x="2.5" y="214.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="5.5" y="214.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="8.5" y="214.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
+	<rect x="11.5" y="214.5" fill="none" stroke="#AD9400" stroke-miterlimit="10" width="3" height="3"/>
 </g>
 <g id="Message">
 	<polygon fill="#1390D6" stroke="#1390D6" stroke-miterlimit="10" points="27.5,100.5 30.5,103.5 27.5,106.5 	"/>

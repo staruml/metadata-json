@@ -1195,7 +1195,7 @@ define(function (require, exports, module) {
         this.context.globalAlpha = this.alpha;
         if (dashPattern) {
             this.context.setLineDash(dashPattern);
-        }        
+        }
         this.context.moveTo(x + radius, y);
         this.context.lineTo(x + w - radius, y);
         this.context.quadraticCurveTo(x + w, y, x + w, y + radius);
@@ -1552,6 +1552,93 @@ define(function (require, exports, module) {
         this.context.globalAlpha = this.alpha;
         this.context.arc(x, y, r, startAngle, endAngle, counterClockwise);
         this.context.fill();
+        this.restoreTransform();
+    };
+
+    /**
+     * Draw a path.
+     * A path command is one of the followings:
+     *   ['M', x, y] - moveTo
+     *   ['L', x, y] - lineTo
+     *   ['C', x1, y1, x2, y2, x, y] - bezierCurveTo
+     *   ['Q', x1, y1, x, 2] - quadraticCurveTo
+     *   ['Z'] - closePath
+     *
+     * @param {Array.<Array>}
+     */
+    Canvas.prototype.path = function (commands) {
+        this.transform();
+        this.context.beginPath();
+        this.context.strokeStyle = this.color;
+        this.context.lineWidth = this.lineWidth;
+        this.context.globalAlpha = this.alpha;
+        for (var i = 0, len = commands.length; i < len; i++) {
+            var comm = commands[i];
+            switch (comm[0]) {
+            case 'M':
+                this.context.moveTo(comm[1], comm[2]);
+                break;
+            case 'L':
+                this.context.lineTo(comm[1], comm[2]);
+                break;
+            case 'C':
+                this.context.bezierCurveTo(comm[1], comm[2], comm[3], comm[4], comm[5], comm[6]);
+                break;
+            case 'Q':
+                this.context.quadraticCurveTo(comm[1], comm[2], comm[3], comm[4]);
+                break;
+            case 'Z':
+                this.context.closePath();
+                break;
+            }
+        }
+        this.context.stroke();
+        this.restoreTransform();
+    };
+
+    /**
+     * Draw a filled path
+     * A path command is one of the followings:
+     *   ['M', x, y] - moveTo
+     *   ['L', x, y] - lineTo
+     *   ['C', x1, y1, x2, y2, x, y] - bezierCurveTo
+     *   ['Q', x1, y1, x, 2] - quadraticCurveTo
+     *   ['Z'] - closePath
+     *
+     * @param {Array.<Array>}
+     * @param {boolean} doStroke
+     */
+    Canvas.prototype.fillPath = function (commands, doStroke) {
+        this.transform();
+        this.context.beginPath();
+        this.context.strokeStyle = this.color;
+        this.context.fillStyle = this.fillColor;
+        this.context.lineWidth = this.lineWidth;
+        this.context.globalAlpha = this.alpha;
+        for (var i = 0, len = commands.length; i < len; i++) {
+            var comm = commands[i];
+            switch (comm[0]) {
+            case 'M':
+                this.context.moveTo(comm[1], comm[2]);
+                break;
+            case 'L':
+                this.context.lineTo(comm[1], comm[2]);
+                break;
+            case 'C':
+                this.context.bezierCurveTo(comm[1], comm[2], comm[3], comm[4], comm[5], comm[6]);
+                break;
+            case 'Q':
+                this.context.quadraticCurveTo(comm[1], comm[2], comm[3], comm[4]);
+                break;
+            case 'Z':
+                this.context.closePath();
+                break;
+            }
+        }
+        this.context.fill();
+        if (doStroke) {
+            this.context.stroke();
+        }
         this.restoreTransform();
     };
 

@@ -47,8 +47,8 @@ define(function (require, exports, module) {
         MERGE_MINWIDTH  = 30,
         MERGE_MINHEIGHT = 25,
         EXTRACT_MINWIDTH  = 30,
-        EXTRACT_MINHEIGHT = 25;    
-    
+        EXTRACT_MINHEIGHT = 25;
+
     /**
      * FCModelElement
      * @constructor
@@ -91,7 +91,7 @@ define(function (require, exports, module) {
         return "FlowchartDiagram";
     };
 
-    
+
     /**
      * FCProcess
      * @constructor
@@ -734,21 +734,12 @@ define(function (require, exports, module) {
     FCDocumentView.prototype.drawDocument = function (canvas, rect) {
         var h = Math.floor(rect.getHeight() / 6),
             g = Math.floor(rect.getWidth() / 3);
-        canvas.transform();
-        canvas.context.beginPath();
-        canvas.context.strokeStyle = canvas.color;
-        canvas.context.fillStyle = canvas.fillColor;
-        canvas.context.lineWidth = canvas.lineWidth;
-        canvas.context.globalAlpha = canvas.alpha;
-        canvas.context.moveTo(rect.x1, rect.y1);
-        canvas.context.lineTo(rect.x2, rect.y1);
-        canvas.context.lineTo(rect.x2, rect.y2);
-        canvas.context.bezierCurveTo(rect.x2 - g, rect.y2 - (h * 2), rect.x1 + g, rect.y2 + (h * 1.5), rect.x1, rect.y2 - h);
-        canvas.context.lineTo(rect.x1, rect.y1);
-        canvas.context.closePath();
-        canvas.context.fill();
-        canvas.context.stroke();
-        canvas.restoreTransform();        
+        canvas.fillPath([['M', rect.x1, rect.y1],
+                         ['L', rect.x2, rect.y1],
+                         ['L', rect.x2, rect.y2],
+                         ['C', rect.x2 - g, rect.y2 - (h * 2), rect.x1 + g, rect.y2 + (h * 1.5), rect.x1, rect.y2 - h],
+                         ['L', rect.x1, rect.y1],
+                         ['Z']], true);
     };
 
     FCDocumentView.prototype.drawObject = function (canvas) {
@@ -853,23 +844,14 @@ define(function (require, exports, module) {
         var r = new Rect(this.left, this.top, this.getRight(), this.getBottom()),
             m = (r.y1 + r.y2) / 2,
             g = Math.floor(this.width / 6);
-        canvas.transform();
-        canvas.context.beginPath();
-        canvas.context.strokeStyle = canvas.color;
-        canvas.context.fillStyle = canvas.fillColor;
-        canvas.context.lineWidth = canvas.lineWidth;
-        canvas.context.globalAlpha = canvas.alpha;
-        canvas.context.moveTo(r.x1, m);
-        canvas.context.lineTo(r.x1 + g, r.y1);
-        canvas.context.lineTo(r.x2 - g, r.y1);
-        canvas.context.quadraticCurveTo(r.x2, r.y1, r.x2, m);
-        canvas.context.quadraticCurveTo(r.x2, r.y2, r.x2 - g, r.y2);
-        canvas.context.lineTo(r.x1 + g, r.y2);
-        canvas.context.lineTo(r.x1, m);
-        canvas.context.closePath();
-        canvas.context.fill();
-        canvas.context.stroke();
-        canvas.restoreTransform();        
+        canvas.fillPath([['M', r.x1, m],
+                         ['L', r.x1 + g, r.y1],
+                         ['L', r.x2 - g, r.y1],
+                         ['Q', r.x2, r.y1, r.x2, m],
+                         ['Q', r.x2, r.y2, r.x2 - g, r.y2],
+                         ['L', r.x1 + g, r.y2],
+                         ['L', r.x1, m],
+                         ['Z']], true);
         FCGeneralNodeView.prototype.drawObject.call(this, canvas);
     };
 
@@ -995,22 +977,13 @@ define(function (require, exports, module) {
     FCPunchedTapeView.prototype.drawObject = function (canvas) {
         var r = new Rect(this.left, this.top, this.getRight(), this.getBottom()),
             h = Math.floor(r.getHeight() / 6),
-            g = Math.floor(r.getWidth() / 3);        
-        canvas.transform();
-        canvas.context.beginPath();
-        canvas.context.strokeStyle = canvas.color;
-        canvas.context.fillStyle = canvas.fillColor;
-        canvas.context.lineWidth = canvas.lineWidth;
-        canvas.context.globalAlpha = canvas.alpha;
-        canvas.context.moveTo(r.x1, r.y1);
-        canvas.context.bezierCurveTo(r.x1 + g, r.y1 + (h * 2), r.x2 - g, r.y1 - (h * 1.5), r.x2, r.y1 + h);
-        canvas.context.lineTo(r.x2, r.y2);
-        canvas.context.bezierCurveTo(r.x2 - g, r.y2 - (h * 2), r.x1 + g, r.y2 + (h * 1.5), r.x1, r.y2 - h);
-        canvas.context.lineTo(r.x1, r.y1);        
-        canvas.context.closePath();
-        canvas.context.fill();
-        canvas.context.stroke();
-        canvas.restoreTransform();        
+            g = Math.floor(r.getWidth() / 3);
+        canvas.fillPath([['M', r.x1, r.y1],
+                         ['C', r.x1 + g, r.y1 + (h * 2), r.x2 - g, r.y1 - (h * 1.5), r.x2, r.y1 + h],
+                         ['L', r.x2, r.y2],
+                         ['C', r.x2 - g, r.y2 - (h * 2), r.x1 + g, r.y2 + (h * 1.5), r.x1, r.y2 - h],
+                         ['L', r.x1, r.y1],
+                         ['Z']], true);
         FCGeneralNodeView.prototype.drawObject.call(this, canvas);
     };
 
@@ -1329,24 +1302,15 @@ define(function (require, exports, module) {
             kappa = 0.5522848,
             ox = g * kappa,       // control point offset horizontal
             oy = (h / 2) * kappa; // control point offset vertical
-        
-        canvas.transform();
-        canvas.context.beginPath();
-        canvas.context.strokeStyle = canvas.color;
-        canvas.context.fillStyle = canvas.fillColor;
-        canvas.context.lineWidth = canvas.lineWidth;
-        canvas.context.globalAlpha = canvas.alpha;        
-        canvas.context.moveTo(r.x2, r.y1);
-        canvas.context.bezierCurveTo(r.x2 - ox, r.y1, r.x2 - g, ym - oy, r.x2 - g, ym);
-        canvas.context.bezierCurveTo(r.x2 - g, ym + oy, r.x2 - ox, r.y2, r.x2, r.y2);
-        canvas.context.lineTo(r.x1 + g, r.y2);
-        canvas.context.bezierCurveTo(r.x1 + g - ox, r.y2, r.x1, ym + oy, r.x1, ym);
-        canvas.context.bezierCurveTo(r.x1, ym - oy, r.x1 + g - ox, r.y1, r.x1 + g, r.y1);
-        canvas.context.lineTo(r.x2, r.y1);
-        canvas.context.closePath();
-        canvas.context.fill();
-        canvas.context.stroke();
-        canvas.restoreTransform();        
+
+        canvas.fillPath([['M', r.x2, r.y1],
+                         ['C', r.x2 - ox, r.y1, r.x2 - g, ym - oy, r.x2 - g, ym],
+                         ['C', r.x2 - g, ym + oy, r.x2 - ox, r.y2, r.x2, r.y2],
+                         ['L', r.x1 + g, r.y2],
+                         ['C', r.x1 + g - ox, r.y2, r.x1, ym + oy, r.x1, ym],
+                         ['C', r.x1, ym - oy, r.x1 + g - ox, r.y1, r.x1 + g, r.y1],
+                         ['L', r.x2, r.y1],
+                         ['Z']], true);
         FCGeneralNodeView.prototype.drawObject.call(this, canvas);
     };
 
@@ -1379,29 +1343,18 @@ define(function (require, exports, module) {
             kappa = 0.5522848,
             ox = (w / 2) * kappa, // control point offset horizontal
             oy = g * kappa;       // control point offset vertical
-        
-        canvas.transform();
-        canvas.context.beginPath();
-        canvas.context.strokeStyle = canvas.color;
-        canvas.context.fillStyle = canvas.fillColor;
-        canvas.context.lineWidth = canvas.lineWidth;
-        canvas.context.globalAlpha = canvas.alpha;        
-        canvas.context.moveTo(r.x1, r.y1 + g);
-        canvas.context.bezierCurveTo(r.x1, r.y1 + g - oy, xm - ox, r.y1, xm, r.y1);
-        canvas.context.bezierCurveTo(xm + ox, r.y1, r.x2, r.y1 + g - oy, r.x2, r.y1 + g);
-        canvas.context.lineTo(r.x2, r.y2 - g);
-        canvas.context.bezierCurveTo(r.x2, r.y2 - g + oy, xm + ox, r.y2, xm, r.y2);
-        canvas.context.bezierCurveTo(xm - ox, r.y2, r.x1, r.y2 - g + oy, r.x1, r.y2 - g);
-        canvas.context.lineTo(r.x1, r.y1 + g);        
-        canvas.context.closePath();
-        canvas.context.fill();
-        canvas.context.stroke();
-        canvas.context.beginPath();
-        canvas.context.moveTo(r.x1, r.y1 + g);
-        canvas.context.bezierCurveTo(r.x1, r.y1 + g + oy, xm - ox, r.y1 + (g * 2), xm, r.y1 + (g * 2));
-        canvas.context.bezierCurveTo(xm + ox, r.y1 + (g * 2), r.x2, r.y1 + g + oy, r.x2, r.y1 + g);
-        canvas.context.stroke();        
-        canvas.restoreTransform();        
+
+        canvas.fillPath([['M', r.x1, r.y1 + g],
+                         ['C', r.x1, r.y1 + g - oy, xm - ox, r.y1, xm, r.y1],
+                         ['C', xm + ox, r.y1, r.x2, r.y1 + g - oy, r.x2, r.y1 + g],
+                         ['L', r.x2, r.y2 - g],
+                         ['C', r.x2, r.y2 - g + oy, xm + ox, r.y2, xm, r.y2],
+                         ['C', xm - ox, r.y2, r.x1, r.y2 - g + oy, r.x1, r.y2 - g],
+                         ['L', r.x1, r.y1 + g],
+                         ['Z']], true);
+        canvas.path([['M', r.x1, r.y1 + g],
+                     ['C', r.x1, r.y1 + g + oy, xm - ox, r.y1 + (g * 2), xm, r.y1 + (g * 2)],
+                     ['C', xm + ox, r.y1 + (g * 2), r.x2, r.y1 + g + oy, r.x2, r.y1 + g]]);
         FCGeneralNodeView.prototype.drawObject.call(this, canvas);
     };
 
@@ -1435,28 +1388,17 @@ define(function (require, exports, module) {
             ox = g * kappa,       // control point offset horizontal
             oy = (h / 2) * kappa; // control point offset vertical
 
-        canvas.transform();
-        canvas.context.beginPath();
-        canvas.context.strokeStyle = canvas.color;
-        canvas.context.fillStyle = canvas.fillColor;
-        canvas.context.lineWidth = canvas.lineWidth;
-        canvas.context.globalAlpha = canvas.alpha;        
-        canvas.context.moveTo(r.x2 - g, r.y1);
-        canvas.context.bezierCurveTo(r.x2 - g + ox, r.y1, r.x2, ym - oy, r.x2, ym);
-        canvas.context.bezierCurveTo(r.x2, ym + oy, r.x2 - g + ox, r.y2, r.x2 - g, r.y2);
-        canvas.context.lineTo(r.x1 + g, r.y2);
-        canvas.context.bezierCurveTo(r.x1 + g - ox, r.y2, r.x1, ym + oy, r.x1, ym);
-        canvas.context.bezierCurveTo(r.x1, ym - oy, r.x1 + g - ox, r.y1, r.x1 + g, r.y1);
-        canvas.context.lineTo(r.x2 - g, r.y1);
-        canvas.context.closePath();
-        canvas.context.fill();
-        canvas.context.stroke();
-        canvas.context.beginPath();
-        canvas.context.moveTo(r.x2 - g, r.y1);
-        canvas.context.bezierCurveTo(r.x2 - g - ox, r.y1, r.x2 - (g * 2), ym - oy, r.x2 - (g * 2), ym);
-        canvas.context.bezierCurveTo(r.x2 - (g * 2), ym + oy, r.x2 - g - ox, r.y2, r.x2 - g, r.y2);
-        canvas.context.stroke();
-        canvas.restoreTransform();        
+        canvas.fillPath([['M', r.x2 - g, r.y1],
+                         ['C', r.x2 - g + ox, r.y1, r.x2, ym - oy, r.x2, ym],
+                         ['C', r.x2, ym + oy, r.x2 - g + ox, r.y2, r.x2 - g, r.y2],
+                         ['L', r.x1 + g, r.y2],
+                         ['C', r.x1 + g - ox, r.y2, r.x1, ym + oy, r.x1, ym],
+                         ['C', r.x1, ym - oy, r.x1 + g - ox, r.y1, r.x1 + g, r.y1],
+                         ['L', r.x2 - g, r.y1],
+                         ['Z']], true);
+        canvas.path([['M', r.x2 - g, r.y1],
+                     ['C', r.x2 - g - ox, r.y1, r.x2 - (g * 2), ym - oy, r.x2 - (g * 2), ym],
+                     ['C', r.x2 - (g * 2), ym + oy, r.x2 - g - ox, r.y2, r.x2 - g, r.y2]]);
         FCGeneralNodeView.prototype.drawObject.call(this, canvas);
     };
 
